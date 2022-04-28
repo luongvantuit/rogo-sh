@@ -25,7 +25,7 @@ export const ROUTES: (PathRouteProps | LayoutRouteProps | IndexRouteProps)[] = [
 ];
 
 export default class AppRouter extends React.PureComponent {
-    TAG: string = "AppRouter";
+    TAG: string = AppRouter.name;
 
     render(): React.ReactNode {
         Logger.debug(this.TAG, `Render --> ${AppRouter.name}`);
