@@ -23,7 +23,13 @@ export class DashboardScreen extends React.PureComponent {
         return (
             <React.Fragment>
                 <HeaderComponent />
-                <RoomBoardComponent displayName="" roomId="" isUsed={true} />
+                <RoomBoardComponent
+                    displayName="A - 201"
+                    roomId="1"
+                    isUsed={true}
+                    doNotDisturb={true}
+                    howMuchPeople={2}
+                />
             </React.Fragment>
         );
     }
