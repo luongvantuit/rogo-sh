@@ -7,8 +7,8 @@ import {
     Route,
     Routes,
 } from "react-router-dom";
-import {DashboardScreen} from "../screen/DashboardScreen";
-import {StartPageScreen} from "../screen/StartPageScreen";
+import {DashboardScreen} from "../screens/DashboardScreen";
+import {StartPageScreen} from "../screens/StartPageScreen";
 import { Logger } from "../utils/Logger";
 
 export const ROUTES: (PathRouteProps | LayoutRouteProps | IndexRouteProps)[] = [
