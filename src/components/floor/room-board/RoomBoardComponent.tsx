@@ -5,7 +5,7 @@ import { DoNotDisturbComponent } from "./DoNotDisturbComponent";
 import Lighting from "../../../assets/icons/lighting.png";
 import NotLighting from "../../../assets/icons/not-lighting.png";
 import { IsUsedComponent } from "./IsUsedComponent";
-import { QuantityUserComponent } from "./QuanityUserComponent";
+import { QuantityUserComponent } from "./QuantityUserComponent";
 
 export enum ROOM_BOARD_COLOR {
     NORMAL = "#FFFFFF",
@@ -13,7 +13,7 @@ export enum ROOM_BOARD_COLOR {
     DO_NOT_DISTURB = "#FF5D5E",
 }
 
-export type RoomBoardProps = {
+export type RoomBoardComponentProps = {
     displayName: string;
     roomId: string;
     isUsed?: boolean;
@@ -21,11 +21,11 @@ export type RoomBoardProps = {
     lighting?: boolean;
     howMuchPeople?: number;
 };
-export type RoomBoardState = {};
+export type RoomBoardComponentState = {};
 
 export class RoomBoardComponent extends React.PureComponent<
-    RoomBoardProps,
-    RoomBoardState
+    RoomBoardComponentProps,
+    RoomBoardComponentState
 > {
     private static TAG: string = RoomBoardComponent.name;
     render(): React.ReactNode {
@@ -51,7 +51,7 @@ export class RoomBoardComponent extends React.PureComponent<
         return (
             <div
                 className={
-                    "w-[356px] h-[140px] rounded-[10px] rogo-smart-hotel-drop-shadow flex flex-row p-[16px]"
+                    "h-[140px] rounded-[10px] rogo-smart-hotel-drop-shadow flex flex-row p-[16px]"
                 }
                 style={{
                     backgroundColor: getRoomBoardColor(),
