@@ -21,7 +21,11 @@ export class RoomBoardComponent extends React.PureComponent<
                 <a
                     href={`${process.env.PUBLIC_URL}/room/detail/${this.props.roomId}`}
                 >
-                    <img src={Forward} alt="Forward" className="" />
+                    <img
+                        src={Forward}
+                        alt="Forward"
+                        className="w-[24px] h-[24px] rogo-smart-hotel-drop-shadow"
+                    />
                 </a>
             </div>
         );
