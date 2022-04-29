@@ -1,6 +1,6 @@
 import React from "react";
 import {
-    HashRouter,
+    BrowserRouter,
     IndexRouteProps,
     LayoutRouteProps,
     PathRouteProps,
@@ -25,29 +25,18 @@ export const ROUTES: (PathRouteProps | LayoutRouteProps | IndexRouteProps)[] = [
 ];
 
 export default class AppRouter extends React.PureComponent {
-    TAG: string = AppRouter.name;
+    private static TAG: string = AppRouter.name;
 
     render(): React.ReactNode {
-        Logger.debug(this.TAG, `Render --> ${AppRouter.name}`);
+        Logger.debug(AppRouter.TAG, `Render --> ${AppRouter.name}`);
         return (
-            <React.Fragment>
-                <HashRouter basename={process.env.PUBLIC_URL}>
-                    <Routes>
-                        {ROUTES.map((v, i) => {
-                            return (
-                                <React.Fragment
-                                    key={`${this.TAG} Fragment ${i}`}
-                                >
-                                    <Route
-                                        {...v}
-                                        key={`${this.TAG} Route ${i}`}
-                                    />
-                                </React.Fragment>
-                            );
-                        })}
-                    </Routes>
-                </HashRouter>
-            </React.Fragment>
+            <BrowserRouter basename={process.env.PUBLIC_URL}>
+                <Routes>
+                    {ROUTES.map((v, i) => {
+                        return <Route {...v} key={i} />;
+                    })}
+                </Routes>
+            </BrowserRouter>
         );
     }
 }
