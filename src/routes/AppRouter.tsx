@@ -7,8 +7,9 @@ import {
     Route,
     Routes,
 } from "react-router-dom";
-import {DashboardScreen} from "../screens/DashboardScreen";
-import {StartPageScreen} from "../screens/StartPageScreen";
+import { DashboardScreen } from "../screens/DashboardScreen";
+import RoomDetailScreen from "../screens/RoomDetailScreen";
+import { StartPageScreen } from "../screens/StartPageScreen";
 import { Logger } from "../utils/Logger";
 
 export const ROUTES: (PathRouteProps | LayoutRouteProps | IndexRouteProps)[] = [
@@ -20,6 +21,11 @@ export const ROUTES: (PathRouteProps | LayoutRouteProps | IndexRouteProps)[] = [
     {
         path: "/dashboard",
         element: <DashboardScreen />,
+        caseSensitive: true,
+    },
+    {
+        path: "/room/detail/:roomId",
+        element: <RoomDetailScreen />,
         caseSensitive: true,
     },
 ];
