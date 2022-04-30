@@ -63,3 +63,17 @@ export const DATA_ROOM: {
         ],
     },
 ];
+
+export function getRoomById(roomId: string) {
+    for (let i = 0; i < DATA_ROOM.length; i++) {
+        const floor = DATA_ROOM[i];
+        for (let y = 0; y < floor.listRooms.length; y++) {
+            const room = floor.listRooms[y];
+            if (room.roomId === roomId) {
+                return room;
+            }
+        }
+    }
+
+    return null;
+}
