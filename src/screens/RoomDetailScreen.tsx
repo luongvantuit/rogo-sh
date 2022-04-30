@@ -38,6 +38,6 @@ export class RoomDetailScreen extends React.PureComponent<
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default (props: RoomDetailScreenProps) => (
+export default React.memo((props: RoomDetailScreenProps) => (
     <RoomDetailScreen {...props} params={useParams()} />
-);
+));
