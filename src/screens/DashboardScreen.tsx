@@ -1,7 +1,7 @@
 import React from "react";
 import { FloorComponent } from "../components/floor/FloorComponent";
 import { HeaderComponent } from "../components/header/HeaderComponent";
-import UndrawReadingTime from "../assets/undraw-reading-time.svg";
+// import UndrawReadingTime from "../assets/undraw-reading-time.svg";
 import { Logger } from "../utils/Logger";
 // Fake data
 import { DATA_ROOM } from "../assets/data";
@@ -34,11 +34,6 @@ export class DashboardScreen extends React.PureComponent {
                 {DATA_ROOM.map((v, i) => {
                     return <FloorComponent {...v} key={i} />;
                 })}
-                <img
-                    src={UndrawReadingTime}
-                    alt="Undraw Reading Time"
-                    className="xl:my-[32px] my-[16px] xl:w-[640px]  w-[512px]"
-                />
             </React.Fragment>
         );
     }

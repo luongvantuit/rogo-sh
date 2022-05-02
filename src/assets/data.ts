@@ -14,6 +14,7 @@ export const DATA_ROOM: {
                 howMuchPeople: 2,
                 isUsed: true,
                 lighting: false,
+                location: "Tầng 2, Toà A",
             },
             {
                 displayName: "A - 202",
