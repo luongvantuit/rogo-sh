@@ -6,11 +6,13 @@ import { DashboardButtonComponent } from "../components/dashboard/DashboardButto
 import { RoomBoardComponentProps } from "../components/floor/room-board/RoomBoardComponent";
 import { HeaderComponent } from "../components/header/HeaderComponent";
 import { Logger } from "../utils/Logger";
+import Location from "../assets/icons/location.png";
 
 export type RoomDetailScreenProps = { params?: any };
 
 export type RoomDetailScreenState = {
     location?: string;
+    checkIn?: boolean;
 } & RoomBoardComponentProps;
 
 export class RoomDetailScreen extends React.PureComponent<
@@ -43,32 +45,60 @@ export class RoomDetailScreen extends React.PureComponent<
         return (
             <React.Fragment>
                 <HeaderComponent />
-                <QRCode
-                    value={JSON.stringify({
-                        roomId: this.state?.roomId,
-                        location: this.state?.location,
-                    })}
-                />
-                <DashboardButtonComponent
-                    text="Check Out"
-                    color="#4B99E6"
-                    border
-                    disable={
-                        this.state?.howMuchPeople !== 0 && this.state?.isUsed
-                    }
-                />
-                <DashboardButtonComponent
-                    text="Check In"
-                    color="#4B99E6"
-                    disable={
-                        this.state?.howMuchPeople === 0 && this.state?.isUsed
-                    }
-                />
-                <DashboardButtonComponent
-                    text="Booking"
-                    color="#40AD87"
-                    disable={this.state?.isUsed}
-                />
+
+                <div className="flex flex-row mt-[64px]">
+                    <div className="flex flex-1 mx-[16px]">
+                        <div className="bg-white rogo-smart-hotel-drop-shadow w-auto h-[154px] flex flex-1 rounded-lg py-[16px] px-[32px] flex-col justify-center">
+                            <p className="text-[#39374E] font-black text-[32px]">
+                                {this.state?.displayName}
+                            </p>
+                            <div className="flex flex-row items-end">
+                                <img
+                                    src={Location}
+                                    alt="Location"
+                                    className="w-[24px] h-[24px]"
+                                />
+                                <p className="font-semibold text-[12px]">
+                                    {this.state?.location}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex flex-col">
+                        <DashboardButtonComponent
+                            text="Check In"
+                            color="#4B99E6"
+                            disable={this.state?.checkIn || !this.state?.isUsed}
+                        />
+                        <span className="my-[12px]" />
+                        <DashboardButtonComponent
+                            text="Check Out"
+                            color="#4B99E6"
+                            border
+                            disable={
+                                !this.state?.checkIn || !this.state?.isUsed
+                            }
+                        />
+                    </div>
+                    <div className="flex flex-col mx-[16px]">
+                        <div className="w-[320px] h-[320px] bg-white mb-[16px] rounded-lg border-[2px] border-[#4B99E6] flex justify-center items-center">
+                            <QRCode
+                                value={JSON.stringify({
+                                    roomId: this.state?.roomId,
+                                    location: this.state?.location,
+                                })}
+                                download
+                                bgColor="#FFFFFF"
+                            />
+                        </div>
+                        <DashboardButtonComponent
+                            text="Booking"
+                            color="#40AD87"
+                            disable={this.state?.isUsed}
+                        />
+                        <span className="my-[8px]" />
+                    </div>
+                </div>
             </React.Fragment>
         );
     }
