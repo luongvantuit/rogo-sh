@@ -1,34 +1,11 @@
 import React from "react";
-import {
-    BrowserRouter,
-    IndexRouteProps,
-    LayoutRouteProps,
-    PathRouteProps,
-    Route,
-    Routes,
-} from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { DashboardScreen } from "../screens/DashboardScreen";
 import RoomDetailScreen from "../screens/RoomDetailScreen";
 import { HomeScreen } from "../screens/HomeScreen";
 import { Logger } from "../utils/Logger";
-
-export const ROUTES: (PathRouteProps | LayoutRouteProps | IndexRouteProps)[] = [
-    {
-        path: "/",
-        element: <HomeScreen />,
-        caseSensitive: true,
-    },
-    {
-        path: "/dashboard",
-        element: <DashboardScreen />,
-        caseSensitive: true,
-    },
-    {
-        path: "/room/detail/:roomId",
-        element: <RoomDetailScreen />,
-        caseSensitive: true,
-    },
-];
+import { NotificationsScreen } from "../screens/NotificationsScreen";
+import { ProfileScreen } from "../screens/ProfileScreen";
 
 export default class AppRouter extends React.PureComponent {
     private static TAG: string = AppRouter.name;
@@ -38,9 +15,27 @@ export default class AppRouter extends React.PureComponent {
         return (
             <BrowserRouter basename={process.env.PUBLIC_URL}>
                 <Routes>
-                    {ROUTES.map((v, i) => {
-                        return <Route {...v} key={i} />;
-                    })}
+                    <Route path="/" element={<HomeScreen />} caseSensitive />
+                    <Route
+                        path="/dashboard"
+                        element={<DashboardScreen />}
+                        caseSensitive
+                    />
+                    <Route
+                        path="/room/detail/:roomId"
+                        element={<RoomDetailScreen />}
+                        caseSensitive
+                    />
+                    <Route
+                        path="/notifications"
+                        element={<NotificationsScreen />}
+                        caseSensitive
+                    />
+                    <Route
+                        path="/profile"
+                        element={<ProfileScreen />}
+                        caseSensitive
+                    />
                 </Routes>
             </BrowserRouter>
         );
