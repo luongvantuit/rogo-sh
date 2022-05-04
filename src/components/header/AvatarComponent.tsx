@@ -1,5 +1,5 @@
 import React from "react";
-import Avatar from "../../assets/avatar.jpeg";
+import Avatar from "../../assets/avatar.jpg";
 
 export class AvatarComponent extends React.PureComponent {
     render(): React.ReactNode {
@@ -8,7 +8,7 @@ export class AvatarComponent extends React.PureComponent {
                 <img
                     src={Avatar}
                     alt="Avatar --> User"
-                    className="w-[48px] h-[48px] rounded-[24px]"
+                    className="w-[48px] h-[48px] rounded-[8px]"
                 />
             </React.Fragment>
         );

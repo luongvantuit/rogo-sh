@@ -1,21 +1,17 @@
 import React from "react";
 import { AvatarComponent } from "./AvatarComponent";
 import { LogoComponent } from "./LogoComponent";
-import Menu from "../../assets/icons/menu.svg";
+import { NotificationComponent } from "./NotificationComponent";
 
 export class HeaderComponent extends React.PureComponent {
     render(): React.ReactNode {
         return (
             <React.Fragment>
-                <header className="p-[14px] w-auto flex-row flex justify-between">
+                <header className="h-[124px] w-auto flex-row flex justify-between items-center px-[57px]">
                     <LogoComponent />
-                    <div className="flex flex-row">
+                    <div className="flex flex-row items-center">
+                        <NotificationComponent />
                         <AvatarComponent />
-                        <img
-                            src={Menu}
-                            alt={"Menu"}
-                            className="pl-[14px] w-[48px] h-[48px]"
-                        />
                     </div>
                 </header>
             </React.Fragment>

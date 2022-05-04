@@ -9,13 +9,13 @@ import {
 } from "react-router-dom";
 import { DashboardScreen } from "../screens/DashboardScreen";
 import RoomDetailScreen from "../screens/RoomDetailScreen";
-import { StartPageScreen } from "../screens/StartPageScreen";
+import { HomeScreen } from "../screens/HomeScreen";
 import { Logger } from "../utils/Logger";
 
 export const ROUTES: (PathRouteProps | LayoutRouteProps | IndexRouteProps)[] = [
     {
         path: "/",
-        element: <StartPageScreen />,
+        element: <HomeScreen />,
         caseSensitive: true,
     },
     {
