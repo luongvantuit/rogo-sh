@@ -1,4 +1,5 @@
 import React from "react";
+import { HeaderComponent } from "../components/header/HeaderComponent";
 import { Logger } from "../utils/Logger";
 
 export class DashboardScreen extends React.PureComponent {
@@ -24,7 +25,7 @@ export class DashboardScreen extends React.PureComponent {
         Logger.debug(DashboardScreen.TAG, `Render --> ${DashboardScreen.name}`);
         return (
             <React.Fragment>
-          
+                <HeaderComponent />
             </React.Fragment>
         );
     }

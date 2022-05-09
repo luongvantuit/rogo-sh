@@ -3,7 +3,7 @@ import { DATA_ROOM } from "../assets/data";
 import { FloorComponent } from "../components/floor/FloorComponent";
 import { HeaderComponent } from "../components/header/HeaderComponent";
 
-function FloorScreenComponent() {
+function RoomScreenComponent() {
     return (
         <React.Fragment>
             <HeaderComponent />
@@ -14,4 +14,4 @@ function FloorScreenComponent() {
     );
 }
 
-export const FloorScreen = React.memo(FloorScreenComponent);
+export const RoomScreen = React.memo(RoomScreenComponent);

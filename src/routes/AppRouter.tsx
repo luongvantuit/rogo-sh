@@ -6,6 +6,7 @@ import { HomeScreen } from "../screens/HomeScreen";
 import { Logger } from "../utils/Logger";
 import { NotificationsScreen } from "../screens/NotificationsScreen";
 import { ProfileScreen } from "../screens/ProfileScreen";
+import { RoomScreen } from "../screens/RoomScreen";
 
 export default class AppRouter extends React.PureComponent {
     private static TAG: string = AppRouter.name;
@@ -34,6 +35,12 @@ export default class AppRouter extends React.PureComponent {
                     <Route
                         path="/profile"
                         element={<ProfileScreen />}
+                        caseSensitive
+                    />
+
+                    <Route
+                        path="/room/:hotelIdl"
+                        element={<RoomScreen />}
                         caseSensitive
                     />
                 </Routes>

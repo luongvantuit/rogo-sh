@@ -4,10 +4,7 @@ import Favicon from "../../assets/favicon.png";
 export class LogoComponent extends React.PureComponent {
     render(): React.ReactNode {
         return (
-            <a
-                className="flex flex-row items-center"
-                href={process.env.PUBLIC_URL}
-            >
+            <a className="flex flex-row items-center" href="/">
                 <img
                     src={Favicon}
                     alt="Favicon - Logo Rogo"
