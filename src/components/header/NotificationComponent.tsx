@@ -9,7 +9,7 @@ export class NotificationComponent extends React.PureComponent<NotificationCompo
     render(): React.ReactNode {
         return (
             <div className="w-[34px] h-[34px] mx-[16px]">
-                <a href={`${process.env.PUBLIC_URL}/notifications`}>
+                <a href="/notifications">
                     <div className="relative top-0 left-0 right-0 bottom-0">
                         <div className="w-[34px] h-[34px] flex justify-center items-center">
                             <img
