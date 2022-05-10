@@ -39,7 +39,7 @@ export default class AppRouter extends React.PureComponent {
                     />
 
                     <Route
-                        path="/room/:hotelIdl"
+                        path="/room"
                         element={<RoomScreen />}
                         caseSensitive
                     />
