@@ -1,7 +1,7 @@
-import { RoomDetailScreenState } from "../screens/RoomDetailScreen";
+import { RoomScreenState } from "../screens/RoomScreen";
 
 export const DATA_ROOM: {
-    listRooms: RoomDetailScreenState[];
+    listRooms: RoomScreenState[];
     displayNameFloor: string;
 }[] = [
     {

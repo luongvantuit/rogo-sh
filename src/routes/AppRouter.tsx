@@ -1,12 +1,12 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { DashboardScreen } from "../screens/DashboardScreen";
-import RoomDetailScreen from "../screens/RoomDetailScreen";
+import {RoomScreen} from "../screens/RoomScreen";
 import { HomeScreen } from "../screens/HomeScreen";
 import { Logger } from "../utils/Logger";
 import { NotificationsScreen } from "../screens/NotificationsScreen";
 import { ProfileScreen } from "../screens/ProfileScreen";
-import { RoomScreen } from "../screens/RoomScreen";
+import { HotelScreen } from "../screens/HotelScreen";
 
 export default class AppRouter extends React.PureComponent {
     private static TAG: string = AppRouter.name;
@@ -23,8 +23,8 @@ export default class AppRouter extends React.PureComponent {
                         caseSensitive
                     />
                     <Route
-                        path="/room/detail/:roomId"
-                        element={<RoomDetailScreen />}
+                        path="/room/:roomId"
+                        element={<RoomScreen />}
                         caseSensitive
                     />
                     <Route
@@ -39,8 +39,8 @@ export default class AppRouter extends React.PureComponent {
                     />
 
                     <Route
-                        path="/room"
-                        element={<RoomScreen />}
+                        path="/hotel/:hotelId"
+                        element={<HotelScreen />}
                         caseSensitive
                     />
                 </Routes>
