@@ -1,11 +1,12 @@
 import React from "react";
-import { HotelApi } from "../api/Hotel";
+import { HotelApi } from "../api/HotelApi";
 import { HeaderComponent } from "../components/header/HeaderComponent";
 import { IHotel } from "../types/IHotel";
 import { Logger } from "../utils/Logger";
 
 export const DashboardScreen = React.memo(() => {
     const TAG = DashboardScreen.name;
+    const TITLE = "Rogo Solutions - Dashboard";
 
     Logger.debug(TAG, `Render --> ${DashboardScreen.name}`);
     const [hotels, setHotels] = React.useState<IHotel[]>([]);
@@ -17,6 +18,12 @@ export const DashboardScreen = React.memo(() => {
                 setHotels(data);
             }
         });
+    }, []);
+
+    React.useEffect(() => {
+        if (document) {
+            document.title = TITLE;
+        }
     });
 
     return (

@@ -25,7 +25,7 @@ export default class AppRouter extends React.PureComponent {
                         caseSensitive
                     />
                     <Route
-                        path="/room/detail/:hotelId/:roomId"
+                        path="/room/:hotelId/:roomId"
                         element={<RoomScreen />}
                         caseSensitive
                     />

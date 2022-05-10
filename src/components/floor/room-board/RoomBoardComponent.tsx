@@ -1,11 +1,11 @@
 import React from "react";
 import Forward from "../../../assets/icons/forward.png";
 import { Logger } from "../../../utils/Logger";
-import { DoNotDisturbComponent } from "./DoNotDisturbComponent";
-import Lighting from "../../../assets/icons/lighting.png";
-import NotLighting from "../../../assets/icons/not-lighting.png";
+// import { DoNotDisturbComponent } from "./DoNotDisturbComponent";
+// import Lighting from "../../../assets/icons/lighting.png";
+// import NotLighting from "../../../assets/icons/not-lighting.png";
 import { IsUsedComponent } from "./IsUsedComponent";
-import { QuantityUserComponent } from "./QuantityUserComponent";
+// import { QuantityUserComponent } from "./QuantityUserComponent";
 
 export enum ROOM_BOARD_COLOR {
     NORMAL = "#FFFFFF",
@@ -16,6 +16,7 @@ export enum ROOM_BOARD_COLOR {
 export type RoomBoardComponentProps = {
     displayName: string;
     roomId: string;
+    hotelId: string;
     isUsed?: boolean;
     doNotDisturb?: boolean;
     lighting?: boolean;
@@ -82,7 +83,7 @@ export class RoomBoardComponent extends React.PureComponent<
                                 }
                             />
                         </div>
-                        <div className="flex flex-col justify-center items-end">
+                        {/* <div className="flex flex-col justify-center items-end">
                             <img
                                 src={(() => {
                                     if (this.props.lighting) {
@@ -101,14 +102,14 @@ export class RoomBoardComponent extends React.PureComponent<
                                         : "#FFFFFF"
                                 }
                             />
-                        </div>
+                        </div> */}
                     </div>
                     <div className="flex-row flex justify-between items-end">
-                        <QuantityUserComponent
+                        {/* <QuantityUserComponent
                             quantityUser={this.props.howMuchPeople || 0}
-                        />
+                        /> */}
                         <a
-                            href={`${process.env.PUBLIC_URL}/room/detail/${this.props.roomId}`}
+                            href={`/room/${this.props.hotelId}/${this.props.roomId}`}
                         >
                             <img
                                 src={Forward}

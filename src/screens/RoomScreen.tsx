@@ -1,12 +1,12 @@
 import React from "react";
-import QRCode from "react-qr-code";
+// import QRCode from "react-qr-code";
 import { useParams } from "react-router-dom";
-import { getRoomById } from "../assets/data";
-import { DashboardButtonComponent } from "../components/dashboard/DashboardButtonComponent";
+// import { getRoomById } from "../assets/data";
+// import { DashboardButtonComponent } from "../components/dashboard/DashboardButtonComponent";
 import { RoomBoardComponentProps } from "../components/floor/room-board/RoomBoardComponent";
 import { HeaderComponent } from "../components/header/HeaderComponent";
 import { Logger } from "../utils/Logger";
-import Location from "../assets/icons/location.png";
+// import Location from "../assets/icons/location.png";
 
 export type RoomScreenProps = { params?: any };
 
@@ -28,13 +28,13 @@ export class RoomDetailScreen extends React.PureComponent<
     }
 
     componentDidMount() {
-        this.setState(getRoomById(this.props.params.roomId));
-        this.setTitle(this.state?.displayName);
+        // this.setState(getRoomById(this.props.params.roomId));
+        // this.setTitle(this.state?.displayName);
     }
 
     componentDidUpdate() {
-        this.setState(getRoomById(this.props.params.roomId));
-        this.setTitle(this.state?.displayName);
+        // this.setState(getRoomById(this.props.params.roomId));
+        // this.setTitle(this.state?.displayName);
     }
 
     render(): React.ReactNode {
@@ -46,7 +46,7 @@ export class RoomDetailScreen extends React.PureComponent<
             <React.Fragment>
                 <HeaderComponent />
 
-                <div className="flex flex-row mt-[64px]">
+                {/* <div className="flex flex-row mt-[64px]">
                     <div className="flex flex-1 mx-[16px]">
                         <div className="bg-white rogo-smart-hotel-drop-shadow w-auto h-[154px] flex flex-1 rounded-lg py-[16px] px-[32px] flex-col justify-center">
                             <p className="text-[#39374E] font-black text-[32px]">
@@ -98,7 +98,7 @@ export class RoomDetailScreen extends React.PureComponent<
                         />
                         <span className="my-[8px]" />
                     </div>
-                </div>
+                </div> */}
             </React.Fragment>
         );
     }
