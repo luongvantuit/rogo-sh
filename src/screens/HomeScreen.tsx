@@ -1,43 +1,50 @@
 import React from "react";
+import { RoomApi } from "../api/RoomApi";
 import { HeaderComponent } from "../components/header/HeaderComponent";
-import { Logger } from "../utils/Logger";
-import HomeBackground from "../assets/home-background.jpg";
+import { IRoom } from "../types/IRoom";
+import HomeBackground from "../assets/home_background.jpeg";
 
-export class HomeScreen extends React.PureComponent {
-    private static TAG: string = HomeScreen.name;
-    private static TITLE_DEFAULT: string = "Rogo Solutions - Home";
+export const HomeScreen = React.memo(() => {
+    const [rooms, setRooms] = React.useState<IRoom[]>([]);
 
-    private setTitle(): void {
-        if (document) {
-            document.title = HomeScreen.TITLE_DEFAULT;
-        }
-    }
+    React.useEffect(() => {
+        RoomApi.getListRoomsOfHotel().then(async (response) => {
+            if (response.ok) {
+                const data = (await response.json())["data"];
+                setRooms(data);
+            }
+        });
+    }, []);
 
-    componentDidMount() {
-        this.setTitle();
-    }
+    React.useEffect(() => {
+        document.title = "Rogo Solutions - Home";
+    }, []);
 
-    componentDidUpdate() {
-        this.setTitle();
-    }
-
-    render(): React.ReactNode {
-        Logger.debug(HomeScreen.TAG, `Render --> ${HomeScreen.name}`);
-        return (
-            <React.Fragment>
-                <HeaderComponent />
-                <div className="relative">
-                    <img src={HomeBackground} alt="Home Background" className="duration-200" />
-                    <a
-                        className="absolute left-[57px] bottom-[64px] text-white w-[280px] h-[72px] group"
-                        href={`${process.env.PUBLIC_URL}/dashboard`}
-                    >
-                        <p className="text-center text-[48px] font-black group-hover:border-b-4 group-hover:border-b-[#FE3567] duration-150 border-b-[#FFFFFF]">
-                            Dashboard
-                        </p>
-                    </a>
+    return (
+        <React.Fragment>
+            <div className="w-auto relative left-0 right-0">
+                <img
+                    src={HomeBackground}
+                    alt="Home Background"
+                    className="absolute"
+                />
+                <div className="absolute left-0 right-0 top-0">
+                    <HeaderComponent colorTextBanner="#FFFFFF" />
+                    <div className="grid grid-cols-4 px-[32px] pt-[16px] gap-[8px]">
+                        {rooms.map((room, index) => {
+                            return (
+                                <React.Fragment key={index}>
+                                    <div className="rounded-[8px] bg-white shadow-sm p-[8px]">
+                                        <a href={`/room/${room._id}`}>
+                                            {room.name}
+                                        </a>
+                                    </div>
+                                </React.Fragment>
+                            );
+                        })}
+                    </div>
                 </div>
-            </React.Fragment>
-        );
-    }
-}
+            </div>
+        </React.Fragment>
+    );
+});
