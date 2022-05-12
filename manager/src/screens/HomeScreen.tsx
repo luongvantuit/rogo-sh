@@ -5,6 +5,10 @@ import Hero from "../assets/hero.jpg";
 import HomeAbout from "../assets/home-about.png";
 
 export const HomeScreen = React.memo(() => {
+    React.useEffect(() => {
+        document.title = "Rogo Solutions - Home";
+    }, []);
+
     return (
         <React.Fragment>
             <Header />
