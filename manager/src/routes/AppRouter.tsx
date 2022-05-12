@@ -5,7 +5,7 @@ import { HomeScreen } from "../screens/HomeScreen";
 import { NotificationsScreen } from "../screens/NotificationsScreen";
 import { ProfileScreen } from "../screens/ProfileScreen";
 import { NotFoundScreen } from "../screens/NotFoundScreen";
-import { BookingScreen } from "../screens/BookingScreen";
+import { BookScreen } from "../screens/BookScreen";
 
 export default class AppRouter extends React.PureComponent {
     render(): React.ReactNode {
@@ -36,8 +36,8 @@ export default class AppRouter extends React.PureComponent {
                     />
 
                     <Route
-                        path="/booking/:roomId"
-                        element={<BookingScreen />}
+                        path="/book/:roomId"
+                        element={<BookScreen />}
                         caseSensitive
                     />
                 </Routes>
