@@ -8,7 +8,8 @@ export const HomeScreen = React.memo(() => {
     const [rooms, setRooms] = React.useState<IRoom[]>([]);
 
     React.useEffect(() => {
-        RoomApi.getListRoomsOfHotel().then(async (response) => {
+        document.title = "Rogo Solutions - Home";
+        RoomApi.getListRooms().then(async (response) => {
             if (response.ok) {
                 const data = (await response.json())["data"];
                 setRooms(data);

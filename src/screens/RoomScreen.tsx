@@ -13,9 +13,10 @@ export const RoomScreen = React.memo(() => {
             if (response.ok) {
                 const data = (await response.json())["data"];
                 setRoom(data);
+                document.title = `Rogo Solutions - Room ${room?.name}`;
             }
         });
-    }, [roomId]);
+    }, [room?.name, roomId]);
 
     return <React.Fragment></React.Fragment>;
 });
