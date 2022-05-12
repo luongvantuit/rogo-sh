@@ -1,14 +1,27 @@
 import React from "react";
-import Logo from "../assets/logo.png";
 
 export const Header = React.memo(() => {
     return (
-        <header className="h-[48px] w-auto bg-[#212529]">
-            <div className="flex flex-row items-center">
-                <img src={Logo} alt="Banner" className="w-[24px] h-[24px]" />
-                <p className="text-white">Rogo</p>
+        <header className="h-[48px] bg-white flex flex-row px-[156px] items-center justify-between">
+            {
+                // Show information base of hotel
+            }
+            <div></div>
+
+            <div className="flex flew-row text-[#212529] text-[16px] font-medium">
+                <a
+                    href="/login"
+                    className="px-[16px] py-[6px] hover:bg-[#FFC764] hover:text-white duration-200 rounded-sm"
+                >
+                    Login
+                </a>
+                <a
+                    href="/register"
+                    className="px-[16px] py-[6px] hover:bg-[#FFC764] hover:text-white duration-200 rounded-sm"
+                >
+                    Register
+                </a>
             </div>
-            <nav></nav>
         </header>
     );
 });
