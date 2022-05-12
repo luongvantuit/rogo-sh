@@ -1,5 +1,10 @@
 import React from "react";
+import { Header } from "../components/Header";
 
 export const HomeScreen = React.memo(() => {
-    return <React.Fragment></React.Fragment>;
+    return (
+        <React.Fragment>
+            <Header />
+        </React.Fragment>
+    );
 });
