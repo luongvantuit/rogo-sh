@@ -1,8 +1,7 @@
 import React from "react";
-import { Header } from "../components/Header";
-import { HeaderNav } from "../components/HeaderNav";
 import Hero from "../assets/hero.jpg";
 import HomeAbout from "../assets/home-about.png";
+import { HeaderNav } from "../components/HeaderNav";
 
 export const HomeScreen = React.memo(() => {
     React.useEffect(() => {
@@ -11,7 +10,6 @@ export const HomeScreen = React.memo(() => {
 
     return (
         <React.Fragment>
-            <Header />
             <HeaderNav navActive="home" />
             <section
                 className="w-auto h-[800px] bg-cover bg-no-repeat justify-center items-center flex flex-col px-[156px] py-[86px]"
@@ -31,7 +29,7 @@ export const HomeScreen = React.memo(() => {
                     <p className="text-[#FFC764] font-medium text-lg">
                         ABOUT US
                     </p>
-                    <p className="text-5xl font-normal my-[24px]">
+                    <p className="text-5xl font-normal my-[24px] text-[#212529]">
                         Welcome to Rogo - Manager rooms
                     </p>
                 </div>

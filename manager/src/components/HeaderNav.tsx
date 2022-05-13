@@ -1,21 +1,17 @@
 import React from "react";
 import Logo from "../assets/logo.png";
 
+export type NavActive = "news" | "home" | "dashboard" | "about" | "contact";
+
 export const HeaderNav = React.memo(
-    ({
-        navActive,
-    }: {
-        navActive?: "news" | "home" | "dashboard" | "about" | "contact";
-    }) => {
+    ({ navActive }: { navActive?: NavActive }) => {
         const NAV_LINK_ACTIVE =
             "text-base font-medium px-[16px] py-[12px] mx-[24px] text-[#FFC764]";
 
         const NAV_LINK_NORMAL =
             "text-base font-medium px-[16px] py-[12px] mx-[24px] hover:text-[#FFC764] text-white duration-200";
 
-        const navClassName = (
-            nav: "news" | "home" | "dashboard" | "about" | "contact"
-        ) => {
+        const navClassName = (nav: NavActive) => {
             if (nav === navActive) {
                 return NAV_LINK_ACTIVE;
             }
@@ -30,7 +26,7 @@ export const HeaderNav = React.memo(
                         alt="Banner"
                         className="w-[48px] h-[48px]"
                     />
-                    <p className="text-[24px] text-[#FFC764] font-bold mx-[8px]">
+                    <p className="text-[24px] text-[#FFC764] font-semibold mx-[8px]">
                         Rogo
                     </p>
                 </a>
@@ -55,7 +51,7 @@ export const HeaderNav = React.memo(
 
                     <a
                         href="/book"
-                        className="bg-white rounded-sm shadow-sm px-[16px] py-[12px] text-lg font-semibold"
+                        className="bg-white rounded-sm shadow-sm px-[16px] py-[12px] text-lg font-medium text-[#212529]"
                     >
                         Book Now
                         <i className="fa-solid fa-arrow-right-long mx-[8px] text-[#FFC764] text-lg" />
