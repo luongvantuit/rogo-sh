@@ -1,12 +1,10 @@
 import React from "react";
-import AppRouter from "./routes/AppRouter";
+import { AppRouter } from "./routes/AppRouter";
 
-export default class App extends React.PureComponent {
-    render(): React.ReactNode {
-        return (
-            <React.Fragment>
-                <AppRouter />
-            </React.Fragment>
-        );
-    }
-}
+export const App = React.memo(() => {
+    return (
+        <React.Fragment>
+            <AppRouter />
+        </React.Fragment>
+    );
+});
