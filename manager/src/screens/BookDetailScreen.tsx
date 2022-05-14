@@ -19,8 +19,11 @@ export const BookDetailScreen = React.memo(() => {
 
     const [room, setRoom] = React.useState<IRoom>();
     const [timeCheckIn, setTimeCheckIn] = React.useState<string>(currentDate);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [timeCheckOut, setTimeCheckOut] = React.useState<string>(currentDate);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [person, setPerson] = React.useState<number>(1);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [cMND, setCMND] = React.useState<string>("");
 
     React.useEffect(() => {
