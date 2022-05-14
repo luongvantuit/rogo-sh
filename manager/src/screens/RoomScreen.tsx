@@ -1,24 +1,40 @@
 import React from "react";
 import { HeaderNav } from "../components/HeaderNav";
 import BreadcrumbBg from "../assets/breadcrumb-bg.jpg";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { IRoom } from "../types/IRoom";
 import { RoomApi } from "../api/RoomApi";
 import QRCode from "react-qr-code";
+import { IBooking } from "../types/IBooking";
+import { BookingApi } from "../api/BookingApi";
 
 export const RoomScreen = React.memo(() => {
     const { roomId } = useParams();
+    const navigate = useNavigate();
 
     const [room, setRoom] = React.useState<IRoom>();
+    const [booking, setBooking] = React.useState<IBooking>();
 
     React.useEffect(() => {
         RoomApi.getDetailRoom(roomId).then(async (response) => {
             if (response.ok) {
                 const data = (await response.json())["data"];
                 setRoom(data);
+                if (!room?.is_available) {
+                    BookingApi.getDetailBooking(roomId).then(
+                        async (response) => {
+                            if (response.ok) {
+                                const dataBooking: IBooking[] = (
+                                    await response.json()
+                                )["data"];
+                                setBooking(dataBooking[dataBooking.length - 1]);
+                            }
+                        }
+                    );
+                }
             }
         });
-    }, [roomId]);
+    }, [room?.is_available, roomId]);
 
     return (
         <React.Fragment>
@@ -61,9 +77,36 @@ export const RoomScreen = React.memo(() => {
                 {(() => {
                     if (!room?.is_available) {
                         return (
-                            <div className="w-[300px] h-[300px] flex justify-center items-center bg-white shadow-lg">
-                                <QRCode value="1" />
-                            </div>
+                            <React.Fragment>
+                                <div className="w-[300px] h-[300px] flex justify-center items-center bg-white shadow-lg">
+                                    <QRCode
+                                        value={JSON.stringify({
+                                            room_id: booking?.room_id,
+                                            checkin: booking?.checkin,
+                                            checkout: booking?.checkout,
+                                        })}
+                                    />
+                                </div>
+                                <button
+                                    className="bg-[#FFC764] text-[#212529] w-[300px] text-center my-[32px] py-[16px] tracking-[4px] shadow-md"
+                                    onClick={() => {
+                                        BookingApi.checkOut(
+                                            booking?.room_id,
+                                            new Date().toISOString()
+                                        ).then(async (response) => {
+                                            if (response.ok) {
+                                                const data = (
+                                                    await response.json()
+                                                )["data"];
+                                                console.log(data);
+                                                navigate("/dashboard");
+                                            }
+                                        });
+                                    }}
+                                >
+                                    CHECK OUT
+                                </button>
+                            </React.Fragment>
                         );
                     }
                 })()}

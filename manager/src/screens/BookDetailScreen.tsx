@@ -1,20 +1,24 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { RoomApi } from "../api/RoomApi";
 import { HeaderNav } from "../components/HeaderNav";
 import { IRoom } from "../types/IRoom";
 import Hero from "../assets/hero.jpg";
+import { BookingApi } from "../api/BookingApi";
 
 export const BookDetailScreen = React.memo(() => {
     const { roomId } = useParams();
+    const navigate = useNavigate();
 
     const currentDate = (() => {
         const date: Date = new Date();
         return `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? "0" : ""}${
             date.getMonth() + 1
-        }-${
-            date.getDate() < 10 ? "0" : ""
-        }${date.getDate()}T${date.getHours()}:${date.getMinutes()}`;
+        }-${date.getDate() < 10 ? "0" : ""}${date.getDate()}T${
+            date.getHours() < 10 ? "0" : ""
+        }${date.getHours()}:${
+            date.getMinutes() < 10 ? "0" : ""
+        }${date.getMinutes()}`;
     })();
 
     const [room, setRoom] = React.useState<IRoom>();
@@ -34,6 +38,7 @@ export const BookDetailScreen = React.memo(() => {
             }
         });
     }, [roomId]);
+
     return (
         <React.Fragment>
             <HeaderNav />
@@ -51,6 +56,17 @@ export const BookDetailScreen = React.memo(() => {
                     className="shadow-sm flex flex-row"
                     onSubmit={(event) => {
                         event.preventDefault();
+                        BookingApi.checkIn(
+                            room?._id,
+                            new Date(timeCheckIn).toISOString(),
+                            new Date(timeCheckOut).toISOString()
+                        ).then(async (response) => {
+                            if (response.ok) {
+                                const data = (await response.json())["data"];
+                                console.log(data);
+                                navigate(`/room/${roomId}`);
+                            }
+                        });
                     }}
                 >
                     <div className="bg-white flex flex-1 flex-col p-[32px]">
@@ -67,6 +83,7 @@ export const BookDetailScreen = React.memo(() => {
                                         setTimeCheckIn(event.target.value);
                                     }}
                                     min={currentDate}
+                                    defaultValue={currentDate}
                                 />
                             </div>
                             <div className="ml-[32px]">
@@ -86,6 +103,7 @@ export const BookDetailScreen = React.memo(() => {
                                     onChange={(event) => {
                                         setTimeCheckOut(event.target.value);
                                     }}
+                                    defaultValue={currentDate}
                                 />
                             </div>
 
@@ -101,6 +119,7 @@ export const BookDetailScreen = React.memo(() => {
                                     onChange={(event) => {
                                         setPerson(parseInt(event.target.value));
                                     }}
+                                    defaultValue={1}
                                 />
                             </div>
                         </div>

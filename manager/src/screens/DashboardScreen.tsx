@@ -44,13 +44,13 @@ export const DashboardScreen = React.memo(() => {
                         <React.Fragment key={index}>
                             <div className="bg-white rounded-sm shadow-sm my-[16px] border-2 flex border-[#FFC764]">
                                 <div className="flex flex-1 p-[16px] flex-col">
-                                    <p className="tracking-widest text-[32px] font-bold text-[#FFC764]">
+                                    <p className="tracking-widest text-[48px] font-bold text-[#FFC764]">
                                         {room?.name}
                                     </p>
                                     {(() => {
                                         if (room?.is_available) {
                                             return (
-                                                <p className="font-bold py-[12px] text-[24px] text-[#212529]">
+                                                <p className="font-bold py-[8px] text-[24px] text-[#212529]">
                                                     Available
                                                 </p>
                                             );
