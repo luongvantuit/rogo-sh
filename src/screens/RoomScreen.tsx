@@ -106,6 +106,13 @@ export const RoomScreen = React.memo(() => {
                                 >
                                     CHECK OUT
                                 </button>
+                                {(() => {
+                                    if (booking?.not_disturb) {
+                                        return (
+                                            <p className="bg-[#212529] text-white w-[300px] text-center mb-[32px] py-[16px] tracking-[4px] shadow-md">{`NOT DISTURB IN ${booking.time_not_disturb}H`}</p>
+                                        );
+                                    }
+                                })()}
                             </React.Fragment>
                         );
                     }

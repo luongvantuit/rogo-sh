@@ -38,37 +38,40 @@ export const DashboardScreen = React.memo(() => {
                     <p className="text-[#777c81]">Dashboard</p>
                 </div>
             </section>
-            <section className="mx-[320px] my-[32px] flex flex-col">
-                {rooms.map((room, index) => {
-                    return (
-                        <React.Fragment key={index}>
-                            <div className="bg-white rounded-sm shadow-sm my-[16px] border-2 flex border-[#FFC764]">
-                                <div className="flex flex-1 p-[16px] flex-col">
-                                    <p className="tracking-widest text-[48px] font-bold text-[#FFC764]">
-                                        {room?.name}
-                                    </p>
-                                    {(() => {
-                                        if (room?.is_available) {
-                                            return (
-                                                <p className="font-bold py-[8px] text-[24px] text-[#212529]">
-                                                    Available
-                                                </p>
-                                            );
-                                        }
-                                    })()}
-                                    <p className="text-[#212529] tracking-[4px]">{`${room?.price}$`}</p>
+            <section></section>
+            <section className="mx-[320px] my-[32px]">
+                <div className="grid grid-cols-3 gap-x-[16px] gap-y-[12px]">
+                    {rooms.map((room, index) => {
+                        return (
+                            <React.Fragment key={index}>
+                                <div className="bg-white rounded-sm shadow-sm my-[16px] border-2 flex border-[#FFC764]">
+                                    <div className="flex flex-1 p-[16px] flex-col">
+                                        <p className="tracking-widest text-[48px] font-bold text-[#FFC764]">
+                                            {room?.name}
+                                        </p>
+                                        {(() => {
+                                            if (room?.is_available) {
+                                                return (
+                                                    <p className="font-bold py-[8px] text-[24px] text-[#212529]">
+                                                        Available
+                                                    </p>
+                                                );
+                                            }
+                                        })()}
+                                        <p className="text-[#212529] tracking-[4px]">{`${room?.price}$`}</p>
+                                    </div>
+                                    <a
+                                        href={`/room/${room?._id}`}
+                                        className="bg-[#212529] px-[24px] flex justify-center items-center hover:bg-[#FFC764] duration-300"
+                                    >
+                                        <i className="fa-solid fa-arrow-right-long text-white text-[24px]" />
+                                    </a>
                                 </div>
-                                <a
-                                    href={`/room/${room?._id}`}
-                                    className="bg-[#212529] px-[24px] flex justify-center items-center hover:bg-[#FFC764] duration-300"
-                                >
-                                    <i className="fa-solid fa-arrow-right-long text-white text-[24px]" />
-                                </a>
-                            </div>
-                        </React.Fragment>
-                    );
-                })}
-                <div className="flex flex-row justify-center items-center">
+                            </React.Fragment>
+                        );
+                    })}
+                </div>
+                <div className="flex flex-row justify-center items-center mt-[32px]">
                     <div className="bg-[#FFC764] w-[48px] h-[48px] rounded-sm shadow-sm hover:bg-[#FBD083]">
                         <p className="text-white text-center leading-[48px]">
                             1
