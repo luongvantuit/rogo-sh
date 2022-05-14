@@ -10,7 +10,7 @@ export async function fetchApi({
     method?: "GET" | "POST" | "PUT" | "DELETE";
 }) {
     const urlApi: string =
-        process.env.REACT_APP_URL_API || "https://hotel.rogo.com.vn";
+        process.env.REACT_APP_API_URL || "https://hotel.rogo.com.vn";
     const versionApi: string = process.env.REACT_VERSION_API || "v1";
     return await fetch(`${urlApi}/${versionApi}${path}`, {
         method: method,
