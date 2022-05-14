@@ -46,18 +46,18 @@ export const DashboardScreen = React.memo(() => {
                             <React.Fragment key={index}>
                                 <div className="bg-white rounded-sm shadow-sm my-[16px] border-2 flex border-[#FFC764]">
                                     <div className="flex flex-1 p-[16px] flex-col">
-                                        <p className="tracking-widest text-[48px] font-bold text-[#FFC764]">
+                                        <p className="text-[54px] font-bold text-[#FFC764] tracking-[4px]">
                                             {room?.name}
                                         </p>
-                                        {(() => {
-                                            if (room?.is_available) {
-                                                return (
-                                                    <p className="font-bold py-[8px] text-[24px] text-[#212529]">
-                                                        Available
-                                                    </p>
-                                                );
-                                            }
-                                        })()}
+                                        <p className="font-bold py-[8px] text-[18px] text-[#212529 tracking-[4px]">
+                                            {(() => {
+                                                if (room?.is_available) {
+                                                    return "Available";
+                                                }
+                                                return "Busy";
+                                            })().toUpperCase()}
+                                        </p>
+
                                         <p className="text-[#212529] tracking-[4px]">{`${room?.price}$`}</p>
                                     </div>
                                     <a
