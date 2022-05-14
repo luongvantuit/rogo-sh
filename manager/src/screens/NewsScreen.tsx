@@ -17,7 +17,7 @@ export const NewsScreen = React.memo(() => {
                 </p>
                 <div className="flex flex-row items-center text-[18px] font-light">
                     <a href="/" className="text-white ">
-                        <p className="mx-[8px] inline">{"Home\\"}</p>
+                        <p className="mx-[8px] inline">Home \</p>
                     </a>
                     <p className="text-[#777c81]">Blog</p>
                 </div>

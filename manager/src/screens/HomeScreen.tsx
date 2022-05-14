@@ -24,7 +24,7 @@ export const HomeScreen = React.memo(() => {
                     Experience the greatest for you holidays.
                 </p>
             </section>
-            <section className="my-[-80px] mx-[156px] flex flex-row justify-between">
+            <section className="mt-[-80px] mx-[156px] flex flex-row justify-between">
                 <div className="py-[156px] flex flex-col px-[32px]">
                     <p className="text-[#FFC764] font-medium text-lg">
                         ABOUT US
