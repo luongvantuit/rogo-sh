@@ -56,6 +56,7 @@ mqttClient.connect({
 });
 
 export const App = React.memo(() => {
+    var timeOutShowNotification: NodeJS.Timeout | undefined = undefined;
     const [showNotification, setShowNotification] =
         React.useState<boolean>(false);
     const [notificationContent, setNotificationContent] =
@@ -63,8 +64,9 @@ export const App = React.memo(() => {
 
     const classNameNotificationContainer = () => {
         if (showNotification) {
-        } else {
+            return "fixed top-[64px] right-[64px] bg-[#FFC764] justify-center duration-300 flex flex-row";
         }
+        return "hidden";
     };
 
     React.useEffect(() => {
@@ -72,20 +74,42 @@ export const App = React.memo(() => {
             mqtt = new Mqtt((message) => {
                 if (showNotification) {
                     setShowNotification(false);
+                    if (timeOutShowNotification) {
+                        clearTimeout(timeOutShowNotification);
+                    }
                 }
-                console.log({
-                    topic: message.destinationName,
-                    msg: message.payloadString,
-                });
                 setNotificationContent(message.payloadString);
                 setShowNotification(true);
+                // eslint-disable-next-line react-hooks/exhaustive-deps
+                timeOutShowNotification = setTimeout(() => {
+                    setShowNotification(false);
+                    clearTimeout(timeOutShowNotification);
+                    timeOutShowNotification = undefined;
+                }, 5000);
             });
         }
-    }, []);
+    }, [showNotification]);
 
     return (
         <React.Fragment>
             <AppRouter />
+            <div className={classNameNotificationContainer()}>
+                <p className="px-[24px] py-[18px] text-[16px] tracking-[4px] text-[#212529]">
+                    {notificationContent}
+                </p>
+                <button
+                    className="bg-[#EFA92E]"
+                    onClick={() => {
+                        setShowNotification(false);
+                        if (timeOutShowNotification) {
+                            clearTimeout(timeOutShowNotification);
+                            timeOutShowNotification = undefined;
+                        }
+                    }}
+                >
+                    <i className="fa-solid fa-xmark text-white text-[16px]] px-[16px]" />
+                </button>
+            </div>
         </React.Fragment>
     );
 });
