@@ -1,7 +1,9 @@
 import React from "react";
 import Logo from "../assets/logo.png";
 
-export type NavActive = "news" | "home" | "dashboard" | "about" | "contact";
+// export type NavActive = "news" | "home" | "dashboard" | "about" | "contact";
+
+export type NavActive = "dashboard";
 
 export const HeaderNav = React.memo(
     ({ navActive }: { navActive?: NavActive }) => {
@@ -31,7 +33,7 @@ export const HeaderNav = React.memo(
                     </p>
                 </a>
                 <nav>
-                    <a href="/" className={navClassName("home")}>
+                    {/* <a href="/" className={navClassName("home")}>
                         Home
                     </a>
                     <a href="/dashboard" className={navClassName("dashboard")}>
@@ -47,15 +49,17 @@ export const HeaderNav = React.memo(
 
                     <a href="/contact" className={navClassName("contact")}>
                         Contact
+                    </a> */}
+                    <a href="/" className={navClassName("dashboard")}>
+                        Dashboard
                     </a>
-
-                    <a
+                    {/* <a
                         href="/book"
                         className="bg-white rounded-sm shadow-sm px-[16px] py-[12px] text-lg font-medium text-[#212529]"
                     >
                         Book Now
                         <i className="fa-solid fa-arrow-right-long mx-[8px] text-[#FFC764] text-lg" />
-                    </a>
+                    </a> */}
                 </nav>
             </header>
         );

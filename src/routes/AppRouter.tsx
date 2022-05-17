@@ -1,27 +1,27 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { RoomScreen } from "../screens/RoomScreen";
-import { HomeScreen } from "../screens/HomeScreen";
+// import { HomeScreen } from "../screens/HomeScreen";
 import { NotificationsScreen } from "../screens/NotificationsScreen";
-import { ProfileScreen } from "../screens/ProfileScreen";
+// import { ProfileScreen } from "../screens/ProfileScreen";
 import { NotFoundScreen } from "../screens/NotFoundScreen";
 import { BookScreen } from "../screens/BookScreen";
 import { BookDetailScreen } from "../screens/BookDetailScreen";
-import { LoginScreen } from "../screens/LoginScreen";
-import { RegisterScreen } from "../screens/RegisterScreen";
-import { AboutUsScreen } from "../screens/AboutUsScreen";
-import { NewsScreen } from "../screens/NewsScreen";
-import { ContactScreen } from "../screens/ContactScreen";
-import { Header } from "../components/Header";
+// import { LoginScreen } from "../screens/LoginScreen";
+// import { RegisterScreen } from "../screens/RegisterScreen";
+// import { AboutUsScreen } from "../screens/AboutUsScreen";
+// import { NewsScreen } from "../screens/NewsScreen";
+// import { ContactScreen } from "../screens/ContactScreen";
+// import { Header } from "../components/Header";
 import { DashboardScreen } from "../screens/DashboardScreen";
 
 export const AppRouter = React.memo(() => {
     return (
         <React.Fragment>
-            <Header />
+            {/* <Header /> */}
             <BrowserRouter basename={process.env.PUBLIC_URL}>
                 <Routes>
-                    <Route path="/" element={<HomeScreen />} caseSensitive />
+                    {/* <Route path="/" element={<HomeScreen />} caseSensitive /> */}
                     <Route
                         path="/room/:roomId"
                         element={<RoomScreen />}
@@ -32,11 +32,11 @@ export const AppRouter = React.memo(() => {
                         element={<NotificationsScreen />}
                         caseSensitive
                     />
-                    <Route
+                    {/* <Route
                         path="/profile"
                         element={<ProfileScreen />}
                         caseSensitive
-                    />
+                    /> */}
 
                     <Route
                         path="*"
@@ -56,7 +56,7 @@ export const AppRouter = React.memo(() => {
                         caseSensitive
                     />
 
-                    <Route
+                    {/* <Route
                         path="/login"
                         element={<LoginScreen />}
                         caseSensitive
@@ -77,16 +77,16 @@ export const AppRouter = React.memo(() => {
                         path="/news"
                         element={<NewsScreen />}
                         caseSensitive
-                    />
+                    /> */}
 
-                    <Route
+                    {/* <Route
                         path="/contact"
                         element={<ContactScreen />}
                         caseSensitive
-                    />
+                    /> */}
 
                     <Route
-                        path="/dashboard"
+                        path="/"
                         element={<DashboardScreen />}
                         caseSensitive
                     />

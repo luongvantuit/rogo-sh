@@ -32,10 +32,10 @@ export const DashboardScreen = React.memo(() => {
                     Floors Manager
                 </p>
                 <div className="flex flex-row items-center text-[18px] font-light">
-                    <a href="/" className="text-white ">
+                    {/* <a href="/" className="text-white ">
                         <p className="mx-[8px] inline">Home \</p>
                     </a>
-                    <p className="text-[#777c81]">Dashboard</p>
+                    <p className="text-[#777c81]">Dashboard</p> */}
                 </div>
             </section>
             <section></section>

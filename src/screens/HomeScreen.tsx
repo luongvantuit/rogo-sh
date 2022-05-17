@@ -1,7 +1,7 @@
 import React from "react";
-import Hero from "../assets/hero.jpg";
-import HomeAbout from "../assets/home-about.png";
-import { HeaderNav } from "../components/HeaderNav";
+// import Hero from "../assets/hero.jpg";
+// import HomeAbout from "../assets/home-about.png";
+// import { HeaderNav } from "../components/HeaderNav";
 
 export const HomeScreen = React.memo(() => {
     React.useEffect(() => {
@@ -10,7 +10,7 @@ export const HomeScreen = React.memo(() => {
 
     return (
         <React.Fragment>
-            <HeaderNav navActive="home" />
+            {/* <HeaderNav navActive="home" />
             <section
                 className="w-auto h-[800px] bg-cover bg-no-repeat justify-center items-center flex flex-col px-[156px] py-[86px]"
                 style={{
@@ -34,7 +34,7 @@ export const HomeScreen = React.memo(() => {
                     </p>
                 </div>
                 <img src={HomeAbout} alt="Home about" />
-            </section>
+            </section> */}
         </React.Fragment>
     );
 });

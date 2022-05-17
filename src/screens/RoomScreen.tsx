@@ -49,10 +49,13 @@ export const RoomScreen = React.memo(() => {
                     {room?.name}
                 </p>
                 <div className="flex flex-row items-center text-[18px] font-light">
-                    <a href="/" className="text-white ">
+                    {/* <a href="/" className="text-white ">
                         <p className="mr-[8px] inline">Home \</p>
                     </a>
                     <a href="/dashboard" className="text-white ">
+                        <p className="mr-[8px] inline">Dashboard \</p>
+                    </a> */}
+                    <a href="/" className="text-white ">
                         <p className="mr-[8px] inline">Dashboard \</p>
                     </a>
                     <p className="text-[#777c81]">{room?.name}</p>

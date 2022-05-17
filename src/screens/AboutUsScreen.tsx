@@ -1,11 +1,11 @@
 import React from "react";
-import { HeaderNav } from "../components/HeaderNav";
-import BreadcrumbBg from "../assets/breadcrumb-bg.jpg";
+// import { HeaderNav } from "../components/HeaderNav";
+// import BreadcrumbBg from "../assets/breadcrumb-bg.jpg";
 
 export const AboutUsScreen = React.memo(() => {
     return (
         <React.Fragment>
-            <HeaderNav navActive="about" />
+            {/* <HeaderNav navActive="about" />
             <section
                 className="h-[360px] flex flex-col justify-center items-center"
                 style={{
@@ -21,7 +21,7 @@ export const AboutUsScreen = React.memo(() => {
                     </a>
                     <p className="text-[#777c81]">About Us</p>
                 </div>
-            </section>
+            </section> */}
         </React.Fragment>
     );
 });
