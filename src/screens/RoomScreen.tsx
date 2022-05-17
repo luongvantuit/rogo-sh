@@ -18,7 +18,7 @@ export const RoomScreen = React.memo(() => {
     React.useEffect(() => {
         RoomApi.getDetailRoom(roomId).then(async (response) => {
             if (response.ok) {
-                const data = (await response.json())["data"];
+                const data: IRoom = (await response.json())["data"];
                 setRoom(data);
                 if (!room?.is_available) {
                     BookingApi.getDetailBooking(roomId).then(
@@ -35,6 +35,12 @@ export const RoomScreen = React.memo(() => {
             }
         });
     }, [room?.is_available, roomId]);
+
+    React.useEffect(() => {
+        if (room) {
+            document.title = `Rogo Solutions - Room ${room.name}`;
+        }
+    }, [room]);
 
     return (
         <React.Fragment>

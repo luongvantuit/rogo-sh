@@ -19,6 +19,10 @@ export const DashboardScreen = React.memo(() => {
         });
     }, [floor]);
 
+    React.useEffect(() => {
+        document.title = "Rogo Solutions - Dashboard";
+    }, []);
+
     return (
         <React.Fragment>
             <HeaderNav navActive="dashboard" />
