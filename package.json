@@ -15,7 +15,11 @@
     "license": "MIT",
     "config": {
         "forge": {
-            "packagerConfig": {},
+            "packagerConfig": {
+                "icon": "favicon.icns",
+                "name": "Rogo Smart Hotel",
+                "appBundleId" : "org.rogo.sh"
+            },
             "makers": [
                 {
                     "name": "@electron-forge/maker-squirrel",
