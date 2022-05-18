@@ -1,17 +1,16 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { RoomApi } from "../api/RoomApi";
-import { HeaderNav } from "../components/HeaderNav";
-import { IRoom } from "../types/IRoom";
+import { RoomApi } from "../api/room-api.js";
+import { HeaderNav } from "../components/HeaderNav.jsx";
 import Hero from "../assets/hero.jpg";
-import { BookingApi } from "../api/BookingApi";
+import { BookingApi } from "../api/booking-api.js";
 
 export const BookDetailScreen = React.memo(() => {
     const { roomId } = useParams();
     const navigate = useNavigate();
 
     const currentDate = (() => {
-        const date: Date = new Date();
+        const date = new Date();
         return `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? "0" : ""}${
             date.getMonth() + 1
         }-${date.getDate() < 10 ? "0" : ""}${date.getDate()}T${
@@ -21,14 +20,15 @@ export const BookDetailScreen = React.memo(() => {
         }${date.getMinutes()}`;
     })();
 
-    const [room, setRoom] = React.useState<IRoom>();
-    const [timeCheckIn, setTimeCheckIn] = React.useState<string>(currentDate);
+    const [room, setRoom] = React.useState();
+    const [timeCheckIn, setTimeCheckIn] = React.useState < string > currentDate;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [timeCheckOut, setTimeCheckOut] = React.useState<string>(currentDate);
+    const [timeCheckOut, setTimeCheckOut] =
+        React.useState < string > currentDate;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [person, setPerson] = React.useState<number>(1);
+    const [person, setPerson] = React.useState < number > 1;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [cMND, setCMND] = React.useState<string>("");
+    const [cMND, setCMND] = React.useState < string > "";
 
     React.useEffect(() => {
         RoomApi.getDetailRoom(roomId).then(async (response) => {

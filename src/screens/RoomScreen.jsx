@@ -1,32 +1,30 @@
 import React from "react";
-import { HeaderNav } from "../components/HeaderNav";
+import { HeaderNav } from "../components/HeaderNav.jsx";
 import BreadcrumbBg from "../assets/breadcrumb-bg.jpg";
 import { useNavigate, useParams } from "react-router-dom";
-import { IRoom } from "../types/IRoom";
-import { RoomApi } from "../api/RoomApi";
+import { RoomApi } from "../api/room-api.js";
 import QRCode from "react-qr-code";
-import { IBooking } from "../types/IBooking";
-import { BookingApi } from "../api/BookingApi";
+import { BookingApi } from "../api/booking-api.js";
 
 export const RoomScreen = React.memo(() => {
     const { roomId } = useParams();
     const navigate = useNavigate();
 
-    const [room, setRoom] = React.useState<IRoom>();
-    const [booking, setBooking] = React.useState<IBooking>();
+    const [room, setRoom] = React.useState();
+    const [booking, setBooking] = React.useState();
 
     React.useEffect(() => {
         RoomApi.getDetailRoom(roomId).then(async (response) => {
             if (response.ok) {
-                const data: IRoom = (await response.json())["data"];
+                const data = (await response.json())["data"];
                 setRoom(data);
                 if (!room?.is_available) {
                     BookingApi.getDetailBooking(roomId).then(
                         async (response) => {
                             if (response.ok) {
-                                const dataBooking: IBooking[] = (
-                                    await response.json()
-                                )["data"];
+                                const dataBooking = (await response.json())[
+                                    "data"
+                                ];
                                 setBooking(dataBooking[dataBooking.length - 1]);
                             }
                         }
@@ -61,7 +59,7 @@ export const RoomScreen = React.memo(() => {
                     <a href="/dashboard" className="text-white ">
                         <p className="mr-[8px] inline">Dashboard \</p>
                     </a> */}
-                    <a href="/" className="text-white ">
+                    <a href="#/" className="text-white ">
                         <p className="mr-[8px] inline">Dashboard \</p>
                     </a>
                     <p className="text-[#777c81]">{room?.name}</p>

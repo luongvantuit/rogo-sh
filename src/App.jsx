@@ -1,32 +1,29 @@
 import React from "react";
-import { AppRouter } from "./routes/AppRouter";
+import { AppRouter } from "./routes/AppRouter.jsx";
 import pahoMqtt from "paho-mqtt";
 
 class Mqtt {
-    onMessage: (message: pahoMqtt.Message) => void;
+    onMessage;
 
-    constructor(onMessage: (message: pahoMqtt.Message) => void) {
+    constructor(onMessage) {
         this.onMessage = onMessage;
     }
 
-    public hasMessage(message: pahoMqtt.Message) {
+    hasMessage(message) {
         this.onMessage(message);
     }
 }
 
-var mqtt: Mqtt;
+var mqtt;
 
 const clientId = (() => {
     return `rogo__hotel__${(Math.random() + 1).toString(36)}`;
 })();
 
 const { mqttBrokerHost, mqttBrokerPort, mqttBrokerPath } = (() => {
-    const mqttBrokerHost: string =
-        process.env.REACT_APP_BROKER_HOST || "hotel.rogo.com.vn";
-    const mqttBrokerPort: number = parseInt(
-        process.env.REACT_APP_BROKER_PORT || "8083"
-    );
-    const mqttBrokerPath: string = process.env.REACT_APP_BROKER_PATH || "/mqtt";
+    const mqttBrokerHost = "hotel.rogo.com.vn";
+    const mqttBrokerPort = 8083;
+    const mqttBrokerPath = "/mqtt";
     return {
         mqttBrokerHost: mqttBrokerHost,
         mqttBrokerPort: mqttBrokerPort,
@@ -56,11 +53,9 @@ mqttClient.connect({
 });
 
 export const App = React.memo(() => {
-    var timeOutShowNotification: NodeJS.Timeout | undefined = undefined;
-    const [showNotification, setShowNotification] =
-        React.useState<boolean>(false);
-    const [notificationContent, setNotificationContent] =
-        React.useState<string>();
+    var timeOutShowNotification = undefined;
+    const [showNotification, setShowNotification] = React.useState(false);
+    const [notificationContent, setNotificationContent] = React.useState();
 
     const classNameNotificationContainer = () => {
         if (showNotification) {

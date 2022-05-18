@@ -1,4 +1,4 @@
-import { fetchApi } from "./Base";
+import { fetchApi } from "./base.js";
 
 export class RoomApi {
     static async add() {}
@@ -9,7 +9,7 @@ export class RoomApi {
         return await fetchApi({ path: "/room/get/626d51b0f78be771c6812dac" });
     }
 
-    static async getDetailRoom(roomId?: string) {
+    static async getDetailRoom(roomId) {
         return await fetchApi({
             path: "/room/get/626d51b0f78be771c6812dac/" + roomId,
         });

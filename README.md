@@ -1,11 +1,11 @@
-# __Rogo Smart Hotel__
-
-Prototype manager rooms
+# __Reception__
 
 ## __Library__
 
-- __ReactJS__
+- Electron
 
-- __Paho MQTT__
+- Paho MQTT
 
-- __TaildwindCSS__
+- ReactJS
+
+- Tailwind CSS (CSS framework)

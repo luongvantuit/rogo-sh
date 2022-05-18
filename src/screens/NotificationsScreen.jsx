@@ -1,5 +1,5 @@
 import React from "react";
 
-export const RegisterScreen = React.memo(() => {
+export const NotificationsScreen = React.memo(() => {
     return <React.Fragment></React.Fragment>;
 });

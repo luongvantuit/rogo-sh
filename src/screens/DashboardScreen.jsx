@@ -1,19 +1,18 @@
 import React from "react";
-import { HeaderNav } from "../components/HeaderNav";
+import { HeaderNav } from "../components/HeaderNav.jsx";
 import BreadcrumbBg from "../assets/breadcrumb-bg.jpg";
-import { IRoom } from "../types/IRoom";
-import { RoomApi } from "../api/RoomApi";
+import { RoomApi } from "../api/room-api.js";
 import { useSearchParams } from "react-router-dom";
 
 export const DashboardScreen = React.memo(() => {
     const [searchParams] = useSearchParams();
-    const floor: number = parseInt(searchParams.get("floor") ?? "1");
+    const floor = parseInt(searchParams.get("floor") ?? "1");
 
-    const [rooms, setRooms] = React.useState<IRoom[]>([]);
+    const [rooms, setRooms] = React.useState([]);
     React.useEffect(() => {
         RoomApi.getListRooms().then(async (response) => {
             if (response.ok) {
-                const data: IRoom[] = (await response.json())["data"];
+                const data = (await response.json())["data"];
                 setRooms(data);
             }
         });
@@ -65,7 +64,7 @@ export const DashboardScreen = React.memo(() => {
                                         <p className="text-[#212529] tracking-[4px]">{`${room?.price}$`}</p>
                                     </div>
                                     <a
-                                        href={`/room/${room?._id}`}
+                                        href={`#/room/${room?._id}`}
                                         className="bg-[#212529] px-[24px] flex justify-center items-center hover:bg-[#FFC764] duration-300"
                                     >
                                         <i className="fa-solid fa-arrow-right-long text-white text-[24px]" />

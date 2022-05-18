@@ -1,11 +1,7 @@
-import { fetchApi } from "./Base";
+import { fetchApi } from "./base.js";
 
 export class BookingApi {
-    static async checkIn(
-        roomId?: string,
-        timeCheckIn?: string,
-        timeCheckOut?: string
-    ) {
+    static async checkIn(roomId, timeCheckIn, timeCheckOut) {
         return fetchApi({
             path: "/booking/add",
             body: JSON.stringify({
@@ -21,7 +17,7 @@ export class BookingApi {
         });
     }
 
-    static async checkOut(roomId?: string, timeCheckOut?: string) {
+    static async checkOut(roomId, timeCheckOut) {
         return fetchApi({
             path: "/booking/checkout",
             body: JSON.stringify({
@@ -35,7 +31,7 @@ export class BookingApi {
         });
     }
 
-    static async getDetailBooking(roomId?: string) {
+    static async getDetailBooking(roomId) {
         return fetchApi({
             path: `/booking/get/626d51b0f78be771c6812dac/${roomId}`,
             method: "GET",

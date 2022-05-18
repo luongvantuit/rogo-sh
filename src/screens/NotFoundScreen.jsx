@@ -1,6 +1,6 @@
 import React from "react";
-import { HeaderNav } from "../components/HeaderNav";
-import Hero from "../assets/hero.jpg";
+import { HeaderNav } from "../components/HeaderNav.jsx";
+import Hero from "../assets/breadcrumb-bg.jpg"
 
 export const NotFoundScreen = React.memo(() => {
     React.useEffect(() => {
@@ -19,7 +19,7 @@ export const NotFoundScreen = React.memo(() => {
                     404 - PAGE NOT FOUND
                 </p>
                 <a
-                    href="/"
+                    href="#/"
                     className="bg-white px-[24px] py-[12px] rounded-sm shadow-sm text-[18px] group hover:bg-[#FFC764] duration-500"
                 >
                     <p className="inline font-semibold group-hover:text-white text-[#212529] mx-[4px] tracking-widest">
