@@ -47,7 +47,7 @@ export const DashboardScreen = React.memo(() => {
                     <section
                         className={(() => {
                             if (room) {
-                                return "lg:mx-[180px] mx-[120px] mt-[-40px]";
+                                return "lg:mx-[60px] 2xl:mx-[100px] mt-[-40px]";
                             }
                         })()}
                     >
@@ -108,13 +108,13 @@ export const DashboardScreen = React.memo(() => {
                             }
                         })()}
                     </section>
-                    <section className="lg:mx-[180px] mx-[120px] my-[32px]">
+                    <section className="lg:mx-[60px] 2xl:mx-[100px] mx-[20px] my-[32px]">
                         <div className="grid 2xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-[16px] gap-y-[12px]">
                             {rooms.map((room, index) => {
                                 return (
                                     <React.Fragment key={index}>
                                         <div
-                                            className="bg-white rounded-sm shadow-md my-[16px] border-[1px] flex"
+                                            className="bg-white rounded-md shadow-md my-[16px] border-[1px] flex "
                                             onClick={() => {
                                                 setRoom(room);
                                             }}

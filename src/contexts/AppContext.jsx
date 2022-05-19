@@ -1,6 +1,7 @@
 import React from "react";
 import { auth } from "../firebase/firebase-auth";
 import { User } from "firebase/auth";
+import Logo from "../assets/logo.png";
 
 class FbAuthentication {
     /**
@@ -65,7 +66,18 @@ export const AppContextComponent = React.memo(({ children }) => {
                 if (initial) {
                     return children;
                 } else {
-                    return <p>Loading...</p>;
+                    return (
+                        <div className="flex flex-col justify-center items-center h-[480px]">
+                            <img
+                                src={Logo}
+                                alt=""
+                                className="w-[120px] h-[120px]"
+                            />
+                            <p className="tracking-[4px] font-bold text-[24px] text-[#212529]">
+                                Loading...
+                            </p>
+                        </div>
+                    );
                 }
             })()}
         </AppContext.Provider>
