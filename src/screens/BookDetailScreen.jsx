@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { RoomApi } from "../api/room-api.js";
 import { HeaderNav } from "../components/HeaderNav.jsx";
 import Hero from "../assets/hero.jpg";
@@ -7,7 +7,6 @@ import { BookingApi } from "../api/booking-api.js";
 
 export const BookDetailScreen = React.memo(() => {
     const { roomId } = useParams();
-    const navigate = useNavigate();
 
     const currentDate = (() => {
         const date = new Date();
@@ -21,14 +20,13 @@ export const BookDetailScreen = React.memo(() => {
     })();
 
     const [room, setRoom] = React.useState();
-    const [timeCheckIn, setTimeCheckIn] = React.useState < string > currentDate;
+    const [timeCheckIn, setTimeCheckIn] = React.useState(currentDate);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [timeCheckOut, setTimeCheckOut] =
-        React.useState < string > currentDate;
+    const [timeCheckOut, setTimeCheckOut] = React.useState(currentDate);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [person, setPerson] = React.useState < number > 1;
+    const [person, setPerson] = React.useState(1);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [cMND, setCMND] = React.useState < string > "";
+    const [cMND, setCMND] = React.useState("");
 
     React.useEffect(() => {
         RoomApi.getDetailRoom(roomId).then(async (response) => {
@@ -63,8 +61,7 @@ export const BookDetailScreen = React.memo(() => {
                         ).then(async (response) => {
                             if (response.ok) {
                                 const data = (await response.json())["data"];
-                                console.log(data);
-                                navigate(`/room/${roomId}`);
+                                window.location = `#/room/${roomId}`;
                             }
                         });
                     }}

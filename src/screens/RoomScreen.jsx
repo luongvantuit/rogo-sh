@@ -1,14 +1,13 @@
 import React from "react";
 import { HeaderNav } from "../components/HeaderNav.jsx";
 import BreadcrumbBg from "../assets/breadcrumb-bg.jpg";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { RoomApi } from "../api/room-api.js";
 import QRCode from "react-qr-code";
 import { BookingApi } from "../api/booking-api.js";
 
 export const RoomScreen = React.memo(() => {
     const { roomId } = useParams();
-    const navigate = useNavigate();
 
     const [room, setRoom] = React.useState();
     const [booking, setBooking] = React.useState();
@@ -68,7 +67,7 @@ export const RoomScreen = React.memo(() => {
                     if (room?.is_available) {
                         return (
                             <a
-                                href={`/book/${roomId}`}
+                                href={`#/book/${roomId}`}
                                 className="flex flex-row justify-center bg-[#FFC764] my-[16px] text-white tracking-[4px] text-[24px] font-normal shadow-sm"
                             >
                                 <p className="px-[24px] py-[12px]">BOOK</p>
@@ -88,6 +87,7 @@ export const RoomScreen = React.memo(() => {
                                 <div className="w-[300px] h-[300px] flex justify-center items-center bg-white shadow-lg">
                                     <QRCode
                                         value={JSON.stringify({
+                                            user_id: booking?.user_id,
                                             room_id: booking?.room_id,
                                             checkin: booking?.checkin,
                                             checkout: booking?.checkout,
@@ -105,8 +105,7 @@ export const RoomScreen = React.memo(() => {
                                                 const data = (
                                                     await response.json()
                                                 )["data"];
-                                                console.log(data);
-                                                navigate("/dashboard");
+                                                window.location = "#/";
                                             }
                                         });
                                     }}
