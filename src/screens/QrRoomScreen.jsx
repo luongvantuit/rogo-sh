@@ -46,10 +46,11 @@ export const QrRoomScreen = React.memo(() => {
         if (user) {
             auth.currentUser.getIdToken().then((value) => {
                 setToken(value);
+                console.log(value);
             });
         }
     }, []);
-    
+
     return (
         <React.Fragment>
             <section
@@ -61,15 +62,7 @@ export const QrRoomScreen = React.memo(() => {
                 <p className="text-[#FFC764] text-[64px] font-normal tracking-widest">
                     {`Room ${room?.name}`}
                 </p>
-                <a
-                    href="#/"
-                    className="bg-white px-[24px] py-[12px] rounded-sm shadow-sm text-[18px] group hover:bg-[#FFC764] duration-400"
-                >
-                    <p className="inline font-semibold group-hover:text-white text-[#212529] mx-[4px] tracking-widest">
-                        GO TO HOME
-                    </p>
-                    <i className="fa-solid fa-arrow-right-long mx-[8px] text-lg group-hover:text-white text-[#212529]" />
-                </a>
+
                 {(() => {
                     if (room?.is_available) {
                         return (
@@ -113,6 +106,15 @@ export const QrRoomScreen = React.memo(() => {
                         );
                     }
                 })()}
+                <a
+                    href="#/"
+                    className="w-[300px] my-[32px] px-[24px] py-[12px] rounded-sm shadow-sm text-[18px] group hover:bg-[#FFC764] duration-500 flex flex-row justify-center bg-[#212529]"
+                >
+                    <p className="inline text-white mx-[4px] tracking-widest">
+                        GO TO HOME
+                    </p>
+                    <i className="fa-solid fa-arrow-right-long mx-[8px] text-lg text-white" />
+                </a>
             </section>
         </React.Fragment>
     );
