@@ -1,6 +1,6 @@
 import React from "react";
 import { HeaderNav } from "../components/HeaderNav.jsx";
-import Hero from "../assets/breadcrumb-bg.jpg"
+import Hero from "../assets/breadcrumb-bg.jpg";
 
 export const NotFoundScreen = React.memo(() => {
     React.useEffect(() => {
@@ -16,7 +16,7 @@ export const NotFoundScreen = React.memo(() => {
                 }}
             >
                 <p className="text-[#FFC764] my-[64px] font-medium tracking-[4px] text-[48px]">
-                    404 - PAGE NOT FOUND
+                    404 - NOT FOUND
                 </p>
                 <a
                     href="#/"

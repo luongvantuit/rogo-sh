@@ -1,5 +1,5 @@
 const rules = require("./webpack.rules");
-const webpack = require('webpack')
+const webpack = require("webpack");
 
 rules.push({
     test: /\.css$/,
@@ -31,12 +31,12 @@ module.exports = {
 
     plugins: [
         new webpack.ProvidePlugin({
-            Buffer: ['buffer', 'Buffer'],
+            Buffer: ["buffer", "Buffer"],
         }),
         // fix "process is not defined" error:
         // (do "npm install process" before running the build)
         new webpack.ProvidePlugin({
-            process: 'process/browser',
+            process: "process/browser",
         }),
     ],
 };

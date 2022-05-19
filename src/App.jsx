@@ -1,6 +1,7 @@
 import React from "react";
 import { AppRouter } from "./routes/AppRouter.jsx";
 import pahoMqtt from "paho-mqtt";
+import { AppContextComponent } from "./contexts/AppContext.jsx";
 
 class Mqtt {
     onMessage;
@@ -43,9 +44,10 @@ mqttClient.connect({
         mqttClient.subscribe("/call_reception", {
             onSuccess: () => {
                 mqttClient.onMessageArrived = (message) => {
-                    if (mqtt) {
-                        mqtt.hasMessage(message);
+                    if (!mqtt) {
+                        mqtt = new Mqtt();
                     }
+                    mqtt.hasMessage(message);
                 };
             },
         });
@@ -53,58 +55,34 @@ mqttClient.connect({
 });
 
 export const App = React.memo(() => {
-    var timeOutShowNotification = undefined;
-    const [showNotification, setShowNotification] = React.useState(false);
-    const [notificationContent, setNotificationContent] = React.useState();
-
-    const classNameNotificationContainer = () => {
-        if (showNotification) {
-            return "fixed top-[64px] right-[64px] bg-[#FFC764] justify-center duration-300 flex flex-row";
-        }
-        return "hidden";
-    };
-
     React.useEffect(() => {
         if (!mqtt) {
             mqtt = new Mqtt((message) => {
-                if (showNotification) {
-                    setShowNotification(false);
-                    if (timeOutShowNotification) {
-                        clearTimeout(timeOutShowNotification);
-                    }
+                if (Notification.permission == "granted") {
+                    new Notification("Reception", {
+                        body: message.payloadString,
+                    });
                 }
-                setNotificationContent(message.payloadString);
-                setShowNotification(true);
-                // eslint-disable-next-line react-hooks/exhaustive-deps
-                timeOutShowNotification = setTimeout(() => {
-                    setShowNotification(false);
-                    clearTimeout(timeOutShowNotification);
-                    timeOutShowNotification = undefined;
-                }, 5000);
             });
+        } else if (!mqtt?.onMessage) {
+            mqtt.onMessage = (message) => {
+                if (Notification.permission == "granted") {
+                    new Notification("Customer", {
+                        body: message.payloadString,
+                    });
+                }
+            };
         }
-    }, [showNotification]);
+    }, [mqtt]);
+    if (Notification.permission != "granted") {
+        Notification.requestPermission();
+    }
 
     return (
         <React.Fragment>
-            <AppRouter />
-            <div className={classNameNotificationContainer()}>
-                <p className="px-[24px] py-[18px] text-[16px] tracking-[4px] text-[#212529]">
-                    {notificationContent}
-                </p>
-                <button
-                    className="bg-[#EFA92E]"
-                    onClick={() => {
-                        setShowNotification(false);
-                        if (timeOutShowNotification) {
-                            clearTimeout(timeOutShowNotification);
-                            timeOutShowNotification = undefined;
-                        }
-                    }}
-                >
-                    <i className="fa-solid fa-xmark text-white text-[16px]] px-[16px]" />
-                </button>
-            </div>
+            <AppContextComponent>
+                <AppRouter />
+            </AppContextComponent>
         </React.Fragment>
     );
 });
