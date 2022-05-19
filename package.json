@@ -47,7 +47,7 @@
                     "@electron-forge/plugin-webpack",
                     {
                         "mainConfig": "./webpack.main.config.js",
-                        "devContentSecurityPolicy": "connect-src 'self' https://hotel.rogo.com.vn ws://hotel.rogo.com.vn:8083/mqtt https://fonts.googleapis.com https://cdnjs.cloudflare.com https://identitytoolkit.googleapis.com/ 'unsafe-eval'",
+                        "devContentSecurityPolicy": "connect-src 'self' https://hotel.rogo.com.vn ws://hotel.rogo.com.vn:8083/mqtt https://fonts.googleapis.com https://cdnjs.cloudflare.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com  'unsafe-eval'",
                         "renderer": {
                             "config": "./webpack.renderer.config.js",
                             "entryPoints": [
