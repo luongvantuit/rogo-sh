@@ -6,6 +6,7 @@ import { NotFoundScreen } from "../screens/NotFoundScreen.jsx";
 import { BookDetailScreen } from "../screens/BookDetailScreen.jsx";
 import { DashboardScreen } from "../screens/DashboardScreen.jsx";
 import { LoginScreen } from "../screens/LoginScreen.jsx";
+import { RoomsNotDisturbScreen } from "../screens/RoomsNotDisturbScreen.jsx";
 
 export const AppRouter = React.memo(() => {
     return (
@@ -43,6 +44,12 @@ export const AppRouter = React.memo(() => {
                     <Route
                         path="/login"
                         element={<LoginScreen />}
+                        caseSensitive
+                    />
+
+                    <Route
+                        path="/not-disturb"
+                        element={<RoomsNotDisturbScreen />}
                         caseSensitive
                     />
                 </Routes>

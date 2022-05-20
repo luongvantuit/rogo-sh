@@ -60,8 +60,7 @@ export const BookDetailScreen = React.memo(() => {
                             new Date(timeCheckOut).toISOString()
                         ).then(async (response) => {
                             if (response.ok) {
-                                const data = (await response.json())["data"];
-                                window.location = `#/room/${roomId}`;
+                                window.location = `#/qrcode/${roomId}`;
                             }
                         });
                     }}
@@ -138,6 +137,15 @@ export const BookDetailScreen = React.memo(() => {
                         BOOK NOW
                     </button>
                 </form>
+                <a
+                    href="#/"
+                    className="w-[300px] my-[32px] px-[24px] py-[12px] rounded-sm shadow-sm text-[18px] group bg-[#FFC764] duration-500 flex flex-row justify-center"
+                >
+                    <p className="inline text-white mx-[4px] tracking-widest">
+                        GO TO HOME
+                    </p>
+                    <i className="fa-solid fa-arrow-right-long mx-[8px] text-lg text-white" />
+                </a>
             </section>
         </React.Fragment>
     );

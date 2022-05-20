@@ -1,25 +1,40 @@
 import React from "react";
 // import { HeaderNav } from "../components/HeaderNav.jsx";
-import BreadcrumbBg from "../assets/breadcrumb-bg.jpg";
+// import BreadcrumbBg from "../assets/breadcrumb-bg.jpg";
 import { RoomApi } from "../api/room-api.js";
 import { useSearchParams } from "react-router-dom";
 import { SliderBar } from "../components/SliderBar.jsx";
 import { AppContext } from "../contexts/AppContext.jsx";
+import { BookingApi } from "../api/booking-api.js";
 
 export const DashboardScreen = React.memo(() => {
     const [searchParams] = useSearchParams();
     const floor = parseInt(searchParams.get("floor") ?? "1");
 
-    const [rooms, setRooms] = React.useState([]);
+    const [rooms, setRooms] = React.useState();
     const [room, setRoom] = React.useState();
-
+    const [maxFloor, setMaxFloor] = React.useState(0);
     const user = React.useContext(AppContext);
 
     React.useEffect(() => {
-        RoomApi.getListRooms().then(async (response) => {
+        RoomApi.getListRoomsFilterOfHotel().then(async (response) => {
             if (response.ok) {
-                const data = (await response.json())["data"];
-                setRooms(data);
+                const data = await response.json();
+                const roomsMap = new Map();
+                let temp = 0;
+                for (let index = 0; index < data.length; index++) {
+                    const element = data[index];
+                    if (element?.floor > temp) {
+                        temp = element?.floor;
+                    }
+                    if (roomsMap.get(element?.floor)) {
+                        roomsMap.get(element?.floor).push(element);
+                    } else {
+                        roomsMap.set(element?.floor, [element]);
+                    }
+                }
+                setMaxFloor(temp);
+                setRooms(roomsMap);
             }
         });
     }, [floor]);
@@ -34,7 +49,7 @@ export const DashboardScreen = React.memo(() => {
             <div className="flex flex-row">
                 <SliderBar />
                 <div className="block w-full">
-                    <section
+                    {/* <section
                         className="h-[240px] flex flex-col justify-center items-center"
                         style={{
                             backgroundImage: `url(${BreadcrumbBg})`,
@@ -43,19 +58,20 @@ export const DashboardScreen = React.memo(() => {
                         <p className="text-white text-[64px] font-normal tracking-widest">
                             Floors Manager
                         </p>
-                    </section>
+                    </section> */}
                     <section
                         className={(() => {
                             if (room) {
-                                return "lg:mx-[60px] 2xl:mx-[100px] mt-[-40px]";
+                                // return "lg:mx-[60px] 2xl:mx-[100px] mt-[-40px]";
+                                return "lg:mx-[60px] 2xl:mx-[100px] mt-[40px]";
                             }
                         })()}
                     >
                         {(() => {
                             if (room) {
                                 return (
-                                    <div className="p-[32px] shadow-md border-[1px] bg-white flex flex-row justify-between">
-                                        <div>
+                                    <div className="p-[32px] shadow-md border-[1px] bg-white flex flex-row justify-between rounded-md">
+                                        <div className="flex flex-col">
                                             <p
                                                 className={(() => {
                                                     if (room?.is_available) {
@@ -74,8 +90,55 @@ export const DashboardScreen = React.memo(() => {
                                                     return "Busy";
                                                 })()}
                                             </p>
+                                            <p className="text-[#212529] tracking-[2px]">{`${room?.price}$`}</p>
+                                            {(() => {
+                                                if (
+                                                    room?.checkin_data
+                                                        ?.length !== 0 &&
+                                                    room.checkin_data[
+                                                        room.checkin_data
+                                                            .length - 1
+                                                    ].not_disturb
+                                                ) {
+                                                    return (
+                                                        <p className="tracking-[4px] text-[#212529] text-[24px]">
+                                                            NOT DISTURB
+                                                        </p>
+                                                    );
+                                                }
+                                            })()}
                                         </div>
-                                        <div className="flex flex-col justify-between">
+                                        <div>
+                                            {(() => {
+                                                if (!room?.is_available) {
+                                                    return (
+                                                        <React.Fragment>
+                                                            <button
+                                                                className="tracking-[4px] bg-[#FFC764] p-[16px] rounded-md shadow-sm"
+                                                                onClick={() => {
+                                                                    BookingApi.checkOut(
+                                                                        room?.id
+                                                                    ).then(
+                                                                        (
+                                                                            response
+                                                                        ) => {
+                                                                            if (
+                                                                                response.ok
+                                                                            ) {
+                                                                                window.location.reload();
+                                                                            }
+                                                                        }
+                                                                    );
+                                                                }}
+                                                            >
+                                                                CHECK OUT
+                                                            </button>
+                                                        </React.Fragment>
+                                                    );
+                                                }
+                                            })()}
+                                        </div>
+                                        <div className="flex flex-col justify-between items-end">
                                             <button
                                                 onClick={() => {
                                                     setRoom(null);
@@ -89,7 +152,7 @@ export const DashboardScreen = React.memo(() => {
                                                         <button
                                                             onClick={() => {
                                                                 if (user) {
-                                                                    window.location = `#/qrcode/${room._id}`;
+                                                                    window.location = `#/qrcode/${room.id}`;
                                                                 } else {
                                                                     window.location =
                                                                         "#/login";
@@ -99,6 +162,17 @@ export const DashboardScreen = React.memo(() => {
                                                         >
                                                             <i className="fa-solid fa-qrcode" />
                                                         </button>
+                                                    );
+                                                } else {
+                                                    return (
+                                                        <React.Fragment>
+                                                            <a
+                                                                href={`#/book/${room.id}`}
+                                                                className="bg-[#FFC764] tracking-[4px] px-[16px] py-[12px] rounded-md shadow-sm"
+                                                            >
+                                                                BOOK
+                                                            </a>
+                                                        </React.Fragment>
                                                     );
                                                 }
                                             })()}
@@ -110,7 +184,7 @@ export const DashboardScreen = React.memo(() => {
                     </section>
                     <section className="lg:mx-[60px] 2xl:mx-[100px] mx-[20px] my-[32px]">
                         <div className="grid 2xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-[16px] gap-y-[12px]">
-                            {rooms.map((room, index) => {
+                            {rooms?.get(floor).map((room, index) => {
                                 return (
                                     <React.Fragment key={index}>
                                         <div
@@ -142,6 +216,22 @@ export const DashboardScreen = React.memo(() => {
                                                         return "Busy";
                                                     })()}
                                                 </p>
+                                                {(() => {
+                                                    if (
+                                                        room?.checkin_data
+                                                            ?.length !== 0 &&
+                                                        room.checkin_data[
+                                                            room.checkin_data
+                                                                .length - 1
+                                                        ].not_disturb
+                                                    ) {
+                                                        return (
+                                                            <p className="tracking-[4px] text-[#212529] text-[24px]">
+                                                                NOT DISTURB
+                                                            </p>
+                                                        );
+                                                    }
+                                                })()}
 
                                                 <p className="text-[#212529] tracking-[2px]">{`${room?.price}$`}</p>
                                             </div>
@@ -151,7 +241,19 @@ export const DashboardScreen = React.memo(() => {
                             })}
                         </div>
                         <div className="flex flex-row justify-center items-center mt-[32px]">
-                            <div className="bg-[#212529] w-[48px] h-[48px] rounded-sm shadow-sm hover:bg-[#FBD083]">
+                            <button
+                                className="text-[#212529] mx-[16px]"
+                                onClick={() => {
+                                    if (floor > 1) {
+                                        window.location = `#/?floor=${
+                                            floor - 1
+                                        }`;
+                                    }
+                                }}
+                            >
+                                <i className="fa-solid fa-arrow-left-long" />
+                            </button>
+                            <div className="bg-[#212529] w-[48px] h-[48px] rounded-sm shadow-sm ">
                                 <p className="text-white text-center leading-[48px] text-[18px] font-bold">
                                     {floor}
                                 </p>
@@ -159,7 +261,11 @@ export const DashboardScreen = React.memo(() => {
                             <button
                                 className="text-[#212529] mx-[16px]"
                                 onClick={() => {
-                                    window.location = `#/?floor=${floor + 1}`;
+                                    if (floor < maxFloor) {
+                                        window.location = `#/?floor=${
+                                            floor + 1
+                                        }`;
+                                    }
                                 }}
                             >
                                 <i className="fa-solid fa-arrow-right-long" />

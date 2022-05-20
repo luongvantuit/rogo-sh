@@ -46,7 +46,6 @@ export const QrRoomScreen = React.memo(() => {
         if (user) {
             auth.currentUser.getIdToken().then((value) => {
                 setToken(value);
-                console.log(value);
             });
         }
     }, []);
@@ -95,11 +94,15 @@ export const QrRoomScreen = React.memo(() => {
                             <React.Fragment>
                                 <div className="w-[300px] h-[300px] flex justify-center items-center bg-white shadow-lg">
                                     <QRCode
-                                        value={JSON.stringify({
-                                            userId: booking?.user_id,
-                                            roomId: booking?.room_id,
-                                            token: token,
-                                        })}
+                                        value={(() => {
+                                            const data = JSON.stringify({
+                                                userId: booking?.user_id,
+                                                roomId: booking?.room_id,
+                                                token: token,
+                                            });
+                                            console.log(data);
+                                            return data;
+                                        })()}
                                     />
                                 </div>
                             </React.Fragment>
