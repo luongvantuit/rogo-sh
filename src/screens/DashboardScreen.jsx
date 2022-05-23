@@ -1,11 +1,9 @@
 import React from "react";
-// import { HeaderNav } from "../components/HeaderNav.jsx";
-// import BreadcrumbBg from "../assets/breadcrumb-bg.jpg";
 import { RoomApi } from "../api/room-api.js";
 import { useSearchParams } from "react-router-dom";
-import { SliderBar } from "../components/SliderBar.jsx";
 import { AppContext } from "../contexts/AppContext.jsx";
 import { BookingApi } from "../api/booking-api.js";
+import { Container } from "../components/Container.jsx";
 
 export const DashboardScreen = React.memo(() => {
     const [searchParams] = useSearchParams();
@@ -44,22 +42,8 @@ export const DashboardScreen = React.memo(() => {
     }, []);
 
     return (
-        <React.Fragment>
-            {/* <HeaderNav navActive="dashboard" /> */}
-            <div className="flex flex-row">
-                <SliderBar />
-                <div className="block w-full">
-                    {/* <section
-                        className="h-[240px] flex flex-col justify-center items-center"
-                        style={{
-                            backgroundImage: `url(${BreadcrumbBg})`,
-                        }}
-                    >
-                        <p className="text-white text-[64px] font-normal tracking-widest">
-                            Floors Manager
-                        </p>
-                    </section> */}
-                    <section
+        <Container>
+            {/* <section
                         className={(() => {
                             if (room) {
                                 // return "lg:mx-[60px] 2xl:mx-[100px] mt-[-40px]";
@@ -181,8 +165,8 @@ export const DashboardScreen = React.memo(() => {
                                 );
                             }
                         })()}
-                    </section>
-                    <section className="lg:mx-[60px] 2xl:mx-[100px] mx-[20px] my-[32px]">
+                    </section> */}
+            {/* <section className="lg:mx-[60px] 2xl:mx-[100px] mx-[20px] my-[32px]">
                         <div className="grid 2xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-[16px] gap-y-[12px]">
                             {rooms?.get(floor).map((room, index) => {
                                 return (
@@ -271,9 +255,7 @@ export const DashboardScreen = React.memo(() => {
                                 <i className="fa-solid fa-arrow-right-long" />
                             </button>
                         </div>
-                    </section>
-                </div>
-            </div>
-        </React.Fragment>
+                    </section> */}
+        </Container>
     );
 });

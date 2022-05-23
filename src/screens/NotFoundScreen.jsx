@@ -1,5 +1,5 @@
 import React from "react";
-import { HeaderNav } from "../components/HeaderNav.jsx";
+// import { HeaderNav } from "../components/HeaderNav.jsx";
 import Hero from "../assets/breadcrumb-bg.jpg";
 
 export const NotFoundScreen = React.memo(() => {
@@ -8,7 +8,7 @@ export const NotFoundScreen = React.memo(() => {
     }, []);
     return (
         <React.Fragment>
-            <HeaderNav />
+            {/* <HeaderNav /> */}
             <span
                 className="h-[800px] bg-cover bg-no-repeat flex flex-col justify-center w-auto items-center"
                 style={{

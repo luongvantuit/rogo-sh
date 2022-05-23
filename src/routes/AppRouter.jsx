@@ -13,7 +13,7 @@ export const AppRouter = React.memo(() => {
         <React.Fragment>
             <HashRouter>
                 <Routes>
-                    <Route
+                    {/* <Route
                         path="/qrcode/:roomId"
                         element={<QrRoomScreen />}
                         caseSensitive
@@ -33,7 +33,7 @@ export const AppRouter = React.memo(() => {
                         path="/book/:roomId"
                         element={<BookDetailScreen />}
                         caseSensitive
-                    />
+                    /> */}
 
                     <Route
                         path="/"
@@ -41,7 +41,7 @@ export const AppRouter = React.memo(() => {
                         caseSensitive
                     />
 
-                    <Route
+                    {/* <Route
                         path="/login"
                         element={<LoginScreen />}
                         caseSensitive
@@ -51,7 +51,7 @@ export const AppRouter = React.memo(() => {
                         path="/not-disturb"
                         element={<RoomsNotDisturbScreen />}
                         caseSensitive
-                    />
+                    /> */}
                 </Routes>
             </HashRouter>
         </React.Fragment>

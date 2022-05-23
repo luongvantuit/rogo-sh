@@ -2,6 +2,8 @@ import React from "react";
 import { AppRouter } from "./routes/AppRouter.jsx";
 import pahoMqtt from "paho-mqtt";
 import { AppContextComponent } from "./contexts/AppContext.jsx";
+import { Provider } from "react-redux";
+import { sliderBarStore } from "./stores/slider-bar-store.js";
 
 class Mqtt {
     onMessage;
@@ -81,7 +83,9 @@ export const App = React.memo(() => {
     return (
         <React.Fragment>
             <AppContextComponent>
-                <AppRouter />
+                <Provider store={sliderBarStore}>
+                    <AppRouter />
+                </Provider>
             </AppContextComponent>
         </React.Fragment>
     );

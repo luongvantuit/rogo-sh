@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { RoomApi } from "../api/room-api.js";
-import { HeaderNav } from "../components/HeaderNav.jsx";
+// import { HeaderNav } from "../components/HeaderNav.jsx";
 import Hero from "../assets/hero.jpg";
 import { BookingApi } from "../api/booking-api.js";
 
@@ -39,7 +39,7 @@ export const BookDetailScreen = React.memo(() => {
 
     return (
         <React.Fragment>
-            <HeaderNav />
+            {/* <HeaderNav /> */}
             <section
                 className="w-auto h-[720px] bg-cover bg-no-repeat flex flex-col justify-center items-center"
                 style={{
