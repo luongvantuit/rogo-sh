@@ -7,7 +7,7 @@ export const Container = React.memo(({ children }) => {
         <React.Fragment>
             <div className="flex flex-row">
                 <SliderBar />
-                <div className="block w-full">
+                <div className="block">
                     <Header />
                     {children}
                 </div>

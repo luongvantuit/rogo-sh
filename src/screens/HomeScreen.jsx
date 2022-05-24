@@ -5,7 +5,7 @@ import { AppContext } from "../contexts/AppContext.jsx";
 import { BookingApi } from "../api/booking-api.js";
 import { Container } from "../components/Container.jsx";
 
-export const DashboardScreen = React.memo(() => {
+export const HomeScreen = React.memo(() => {
     const [searchParams] = useSearchParams();
     const floor = parseInt(searchParams.get("floor") ?? "1");
 

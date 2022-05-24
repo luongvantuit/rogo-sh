@@ -1,5 +1,4 @@
 import React from "react";
-import Logo from "../assets/logo.png";
 import { toggle } from "../slices/slider-bar-slice";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -7,12 +6,12 @@ export const Header = React.memo(() => {
     const sliderBarState = useSelector((state) => state.sliderBarState.value);
     const dispatch = useDispatch();
     return (
-        <header className="w-full items-center flex-row flex p-[16px] sticky top-0">
+        <header className="items-center flex-row flex p-[16px] sticky top-0">
             <button
                 onClick={() => {
                     dispatch(toggle());
                 }}
-                className="bg-[#212529] w-[48px] h-[48px] shadow-md rounded-md"
+                className="bg-[#212529] w-[48px] h-[48px] shadow-md rounded-md md:block hidden duration-500 drop-shadow-md"
             >
                 <i
                     className={(() => {
@@ -24,6 +23,7 @@ export const Header = React.memo(() => {
                     })()}
                 ></i>
             </button>
+            <p className="font-extrabold  md:mx-[16px] mr-[16px] text-[32px] drop-shadow-md text-[#212529]">Hi!</p>
         </header>
     );
 });

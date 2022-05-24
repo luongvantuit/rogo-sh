@@ -4,7 +4,7 @@ import { QrRoomScreen } from "../screens/QrRoomScreen.jsx";
 import { NotificationsScreen } from "../screens/NotificationsScreen.jsx";
 import { NotFoundScreen } from "../screens/NotFoundScreen.jsx";
 import { BookDetailScreen } from "../screens/BookDetailScreen.jsx";
-import { DashboardScreen } from "../screens/DashboardScreen.jsx";
+import { HomeScreen } from "../screens/HomeScreen.jsx";
 import { LoginScreen } from "../screens/LoginScreen.jsx";
 import { RoomsNotDisturbScreen } from "../screens/RoomsNotDisturbScreen.jsx";
 
@@ -37,7 +37,7 @@ export const AppRouter = React.memo(() => {
 
                     <Route
                         path="/"
-                        element={<DashboardScreen />}
+                        element={<HomeScreen />}
                         caseSensitive
                     />
 

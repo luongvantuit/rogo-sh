@@ -67,14 +67,14 @@ export const AppContextComponent = React.memo(({ children }) => {
                     return children;
                 } else {
                     return (
-                        <div className="flex flex-col justify-center items-center h-[480px]">
+                        <div className="flex flex-col justify-center items-center w-screen h-screen">
                             <img
                                 src={Logo}
                                 alt=""
-                                className="w-[120px] h-[120px]"
+                                className="w-[120px] h-[120px] p-[16px] rounded-md shadow-md transition drop-shadow-md"
                             />
-                            <p className="tracking-[4px] font-bold text-[24px] text-[#212529]">
-                                Loading...
+                            <p className="tracking-[2px] font-bold text-[32px] text-gray-400 my-[16px] drop-shadow-md">
+                                Rogo Solutions
                             </p>
                         </div>
                     );

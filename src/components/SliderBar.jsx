@@ -10,17 +10,24 @@ export const SliderBar = React.memo(() => {
     const sliderBarState = useSelector((state) => state.sliderBarState.value);
 
     return (
-        <div className="md:flex flex-col hidden md:w-[320px] w-[120px] p-[16px] border-r-1 h-screen shadow-md">
-            <div className="flex flex-row items-center mb-[16px]">
-                <img
-                    src={Logo}
-                    alt=""
-                    className="w-[48px] h-[48px]"
-                />
-            </div>
-            <div className="h-full justify-between flex flex-col">
-                <nav></nav>
-            </div>
-        </div>
+        <nav
+            className={(() => {
+                if (!sliderBarState) {
+                    return "w-[80px] h-screen duration-500 shadow-md";
+                }
+                return "md:w-[320px] w-[80px] h-screen duration-500 shadow-md";
+            })()}
+        >
+            <img
+                src={Logo}
+                alt=""
+                className={(() => {
+                    if (!sliderBarState) {
+                        return "w-[48px] h-[48px] m-[16px] shadow-md drop-shadow-md p-[6px] duration-500 rounded-md";
+                    }
+                    return "w-[48px] h-[48px] m-[16px] md:shadow-none shadow-md md:drop-shadow-none drop-shadow-md md:p-0 p-[6px] duration-500 md:rounded-none rounded-md";
+                })()}
+            />
+        </nav>
     );
 });

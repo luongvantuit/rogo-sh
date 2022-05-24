@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const sliderBarSlice = createSlice({
     name: "slider-bar-slice",
     initialState: {
-        value: false,
+        value: true,
     },
     reducers: {
         toggle: (state) => {
