@@ -42,7 +42,7 @@ export const HomeScreen = React.memo(() => {
     }, []);
 
     return (
-        <Container>
+        <Container navActivate="home">
             {/* <section
                         className={(() => {
                             if (room) {
