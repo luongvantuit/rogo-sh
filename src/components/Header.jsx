@@ -11,7 +11,7 @@ export const Header = React.memo(() => {
 
 
     return (
-        <header className="flex flex-1 flex-row p-[16px] sticky top-0 justify-between items-center">
+        <header className="flex flex-row p-[16px] sticky top-0 justify-between items-center bg-white">
             <div className="flex flex-row justify-center items-center">
                 <button
                     onClick={() => {
@@ -36,7 +36,7 @@ export const Header = React.memo(() => {
             <div>
                 {(() => {
                     if (user) {
-                        return <img src={user?.photoURL || `https://www.gravatar.com/avatar/${user.uid}?d=identicon`} alt="" className="ring-gray-500"/>
+                        return <img src={user?.photoURL || `https://www.gravatar.com/avatar/${user.uid}?d=identicon`} alt="" className="ring-gray-500 rounded-md w-[48px] h-[48px] p-1 ring-1"/>
                     } else {
                         return <a href="#/login" className="px-[16px] text-white bg-[#212529] rounded-md shadow-md drop-shadow-md h-[48px] block leading-[48px] hover:opacity-90">LOGIN</a>
                     }

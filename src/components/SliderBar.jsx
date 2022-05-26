@@ -14,9 +14,9 @@ export const SliderBar = React.memo(({ navActivate }) => {
         <nav
             className={(() => {
                 if (!sliderBarState) {
-                    return "w-[80px] h-screen duration-500 shadow-md";
+                    return "w-[80px] duration-500";
                 }
-                return "md:w-[240px] w-[80px] h-screen duration-500 shadow-md";
+                return "md:w-[240px] w-[80px] h-screen duration-500";
             })()}
         >
             <img
@@ -43,7 +43,7 @@ export const SliderBar = React.memo(({ navActivate }) => {
             />
             <SliderBarNavItem
                 icon="fa-solid fa-moon"
-                href="#"
+                href="#/not-disturb"
                 text="Not Disturb"
                 activate={navActivate === "not-disturb"}
             />

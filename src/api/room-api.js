@@ -1,33 +1,40 @@
 import { fetchApi } from "./base.js";
 
 export class RoomApi {
-    static async add() {}
 
-    static async update() {}
 
-    static async getListRoomsIsAvailableOfHotel() {
-        return await fetchApi({ path: "/room/get/626d51b5f78be771c6812dae" });
-    }
 
-    static async getDetailRoom(roomId) {
+    static async getDetailRoom(token, roomId, key = 'default') {
         return await fetchApi({
-            path: "/room/get/626d51b5f78be771c6812dae/" + roomId,
+            path: `/room/get_detail/${roomId}?key=${key}`,
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
         });
     }
 
-    static async getListRoomsFilterOfHotel(filter) {
+    static async getFilterRoom(token, filter, key = 'default') {
         return await fetchApi({
-            path: "/room/filter/626d51b5f78be771c6812dae",
+            path: `/room/filter?key=${key}`,
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
             },
             body: JSON.stringify(filter),
+            method: 'POST'
         });
     }
 
-    static async getAllRoomsOfHotel() {
+    static async getRoomWithCheckInData(token, filter, key = 'default') {
         return await fetchApi({
-            path: "/room/get_all_room/626d51b5f78be771c6812dae",
+            path: `/room/checkin_data?key=${key}`,
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(filter),
+            method: 'POST'
         });
     }
+
 }
