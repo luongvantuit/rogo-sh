@@ -258,14 +258,15 @@ export const HomeScreen = React.memo(() => {
         }
       })()}
 
-      <div className="flex flex-row justify-center items-center mt-[32px]">
+      <div className="flex flex-row justify-center items-center my-[32px] ">
         <button
-          className="text-[#212529] mx-[16px]"
+          className="text-[#212529] mx-[16px] disabled:opacity-60"
           onClick={() => {
             if (floor > 1) {
               window.location = `#/?floor=${floor - 1}`;
             }
           }}
+          disabled={!(floor > 1)}
         >
           <i className="fa-solid fa-arrow-left-long" />
         </button>
@@ -275,12 +276,13 @@ export const HomeScreen = React.memo(() => {
           </p>
         </div>
         <button
-          className="text-[#212529] mx-[16px]"
+          className="text-[#212529] mx-[16px] disabled:opacity-60"
           onClick={() => {
             if (floor < maxFloor) {
               window.location = `#/?floor=${floor + 1}`;
             }
           }}
+          disabled={!(floor < maxFloor)}
         >
           <i className="fa-solid fa-arrow-right-long" />
         </button>
