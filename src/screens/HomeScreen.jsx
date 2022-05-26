@@ -20,6 +20,7 @@ export const HomeScreen = React.memo(() => {
   React.useEffect(() => {
     if (user) {
       auth.currentUser.getIdToken().then(async (token) => {
+        console.log(token);
         await RoomApi.getRoomWithCheckInData(token).then(async (response) => {
           if (response.ok) {
             const data = await response.json();
@@ -97,9 +98,19 @@ export const HomeScreen = React.memo(() => {
                     }
                   })()}
                 </div>
-                <div>
+                <div className="flex flex-col">
                   {(() => {
                     if (!room?.is_available) {
+                      const dateCheckIn = new Date(
+                        room?.checkin_data[
+                          room?.checkin_data.length - 1
+                        ]?.checkin
+                      );
+                      const dateCheckOut = new Date(
+                        room?.checkin_data[
+                          room?.checkin_data.length - 1
+                        ]?.checkout
+                      );
                       return (
                         <React.Fragment>
                           <button
@@ -118,6 +129,8 @@ export const HomeScreen = React.memo(() => {
                           >
                             CHECK OUT
                           </button>
+                          <p className="">{`Time Check In : ${dateCheckIn.getHours()}:${dateCheckIn.getMinutes()} - ${dateCheckIn.getDay()}/${dateCheckIn.getMonth()}/${dateCheckIn.getFullYear()}`}</p>
+                          <p className="">{`Time Check Out : ${dateCheckOut.getHours()}:${dateCheckOut.getMinutes()} - ${dateCheckOut.getDay()}/${dateCheckOut.getMonth()}/${dateCheckOut.getFullYear()}`}</p>
                         </React.Fragment>
                       );
                     }

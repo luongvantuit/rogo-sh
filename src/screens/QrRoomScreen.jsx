@@ -11,6 +11,8 @@ export const QrRoomScreen = React.memo(() => {
   const { roomId } = useParams();
   const [searchParams] = useSearchParams();
 
+  console.log(searchParams.get("code"));
+
   const [room, setRoom] = React.useState();
   //   const [booking, setBooking] = React.useState();
   const user = React.useContext(AppContext);
