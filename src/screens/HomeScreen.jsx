@@ -135,7 +135,7 @@ export const HomeScreen = React.memo(() => {
                                       }${dateCheckOut?.getMinutes()}`}
                                     />
                                     <button
-                                      className="mx-[12px] drop-shadow-md shadow-md rounded-md h-[48px] px-[16px] bg-[#FFC764] duration-500 hover:opacity-90 text-white"
+                                      className="mx-[12px] drop-shadow-md shadow-md rounded-md h-[48px] px-[16px] bg-[#FFC764] duration-500 hover:opacity-90 text-[#212529]"
                                       onClick={(e) => {
                                         // NEED API FOR UPDATE TIME OUT
                                         setEdit(false);
