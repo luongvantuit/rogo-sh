@@ -11,11 +11,23 @@ export const HomeScreen = React.memo(() => {
   const floor = parseInt(searchParams.get("floor") ?? "1");
 
   const [loading, setLoading] = React.useState(true);
+  const [edit, setEdit] = React.useState(false);
 
   const [rooms, setRooms] = React.useState();
   const [room, setRoom] = React.useState();
   const [maxFloor, setMaxFloor] = React.useState(0);
   const user = React.useContext(AppContext);
+
+  const currentDate = (() => {
+    const date = new Date();
+    return `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? "0" : ""}${
+      date.getMonth() + 1
+    }-${date.getDate() < 10 ? "0" : ""}${date.getDate()}T${
+      date.getHours() < 10 ? "0" : ""
+    }${date.getHours()}:${
+      date.getMinutes() < 10 ? "0" : ""
+    }${date.getMinutes()}`;
+  })();
 
   React.useEffect(() => {
     if (user) {
@@ -75,7 +87,7 @@ export const HomeScreen = React.memo(() => {
                   >
                     {room?.name}
                   </p>
-                  <p className="font-bold py-[8px] text-[18px] text-[#212529 tracking-[2px]">
+                  <p className="font-bold py-[8px] text-[18px] text-[#212529]">
                     {(() => {
                       if (room?.is_available) {
                         return "Available";
@@ -83,22 +95,6 @@ export const HomeScreen = React.memo(() => {
                       return "Busy";
                     })()}
                   </p>
-                  <p className="text-[#212529] tracking-[2px]">{`${room?.price}$`}</p>
-                  {(() => {
-                    if (
-                      room?.checkin_data?.length !== 0 &&
-                      room?.checkin_data[room?.checkin_data?.length - 1]
-                        ?.not_disturb
-                    ) {
-                      return (
-                        <p className="tracking-[4px] text-[#212529] text-[24px]">
-                          NOT DISTURB
-                        </p>
-                      );
-                    }
-                  })()}
-                </div>
-                <div className="flex flex-col">
                   {(() => {
                     if (!room?.is_available) {
                       const dateCheckIn = new Date(
@@ -113,8 +109,97 @@ export const HomeScreen = React.memo(() => {
                       );
                       return (
                         <React.Fragment>
+                          <p className="bg-white w-[320px] h-[48px] leading-[48px] tracking-wide text-[#212529] text-center my-[6px] shadow-md rounded-md drop-shadow-md">{`CHECK IN AT ${dateCheckIn.getHours()}:${dateCheckIn.getMinutes()} - ${dateCheckIn.getDay()}/${dateCheckIn.getMonth()}/${dateCheckIn.getFullYear()}`}</p>
+                          <div className="flex flex-row items-center">
+                            {(() => {
+                              if (edit) {
+                                return (
+                                  <React.Fragment>
+                                    <input
+                                      type="datetime-local"
+                                      className="my-[16px] px-[16px] py-[12px] border-2 rounded-none border-[#FFC764] outline-none focus:ring-[2px] focus:ring-[#FBD083] focus:rounded-sm tracking-widest text-[#212529]"
+                                      onChange={(event) => {}}
+                                      min={currentDate}
+                                      defaultValue={`${dateCheckOut?.getFullYear()}-${
+                                        dateCheckOut?.getMonth() + 1 < 10
+                                          ? "0"
+                                          : ""
+                                      }${dateCheckOut?.getMonth() + 1}-${
+                                        dateCheckOut?.getDate() < 10 ? "0" : ""
+                                      }${dateCheckOut?.getDate()}T${
+                                        dateCheckOut?.getHours() < 10 ? "0" : ""
+                                      }${dateCheckOut?.getHours()}:${
+                                        dateCheckOut?.getMinutes() < 10
+                                          ? "0"
+                                          : ""
+                                      }${dateCheckOut?.getMinutes()}`}
+                                    />
+                                    <button
+                                      className="mx-[12px] drop-shadow-md shadow-md rounded-md h-[48px] px-[16px] bg-[#FFC764] duration-500 hover:opacity-90 text-white"
+                                      onClick={(e) => {
+                                        // NEED API FOR UPDATE TIME OUT
+                                        setEdit(false);
+                                      }}
+                                    >
+                                      CONFIRM
+                                    </button>
+                                  </React.Fragment>
+                                );
+                              } else {
+                                return (
+                                  <React.Fragment>
+                                    <p className="bg-[#212529] w-[320px] h-[48px] leading-[48px] tracking-wide text-white text-center my-[6px] shadow-md rounded-md drop-shadow-md">{`CHECK OUT AT ${dateCheckOut.getHours()}:${dateCheckOut.getMinutes()} - ${dateCheckOut.getDay()}/${dateCheckOut.getMonth()}/${dateCheckOut.getFullYear()}`}</p>
+                                    <button
+                                      className="mx-[12px] drop-shadow-md shadow-md rounded-md h-[48px] w-[48px] bg-[#212529] duration-500 hover:opacity-90"
+                                      onClick={(e) => {
+                                        setEdit(true);
+                                      }}
+                                    >
+                                      <i className="fa-solid fa-pen-to-square text-white"></i>
+                                    </button>
+                                  </React.Fragment>
+                                );
+                              }
+                            })()}
+                          </div>
+                        </React.Fragment>
+                      );
+                    }
+                  })()}
+                  {(() => {
+                    if (
+                      room?.checkin_data?.length !== 0 &&
+                      room?.checkin_data[room?.checkin_data?.length - 1]
+                        ?.not_disturb
+                    ) {
+                      return (
+                        <p className="tracking-[4px] text-[#212529] text-[24px] mt-[8px]">
+                          {`NOT DISTURB ${
+                            room?.checkin_data[room?.checkin_data?.length - 1]
+                              ?.time_not_disturb
+                          }M`}
+                        </p>
+                      );
+                    }
+                  })()}
+                  <p className="text-[#212529] my-[8px]">{`${room?.price}$`}</p>
+                </div>
+                <div className="flex flex-col justify-between items-end">
+                  <button
+                    onClick={() => {
+                      setRoom(null);
+                      setEdit(false);
+                    }}
+                    className="bg-[#212529] w-[48px] h-[48px] shadow-md rounded-md md:block hidden duration-500 drop-shadow-md hover:opacity-90"
+                  >
+                    <i className="fa-solid fa-x text-white"></i>
+                  </button>
+                  {(() => {
+                    if (!room?.is_available) {
+                      return (
+                        <React.Fragment>
                           <button
-                            className="tracking-[4px] bg-[#FFC764] p-[16px] rounded-md shadow-sm"
+                            className="tracking-[4px] bg-[#FFC764] p-[16px] rounded-md shadow-md drop-shadow-md hover:opacity-90"
                             onClick={() => {
                               auth.currentUser.getIdToken().then((token) => {
                                 BookingApi.checkOut(token, room?.id).then(
@@ -129,45 +214,16 @@ export const HomeScreen = React.memo(() => {
                           >
                             CHECK OUT
                           </button>
-                          <p className="">{`Time Check In : ${dateCheckIn.getHours()}:${dateCheckIn.getMinutes()} - ${dateCheckIn.getDay()}/${dateCheckIn.getMonth()}/${dateCheckIn.getFullYear()}`}</p>
-                          <p className="">{`Time Check Out : ${dateCheckOut.getHours()}:${dateCheckOut.getMinutes()} - ${dateCheckOut.getDay()}/${dateCheckOut.getMonth()}/${dateCheckOut.getFullYear()}`}</p>
                         </React.Fragment>
                       );
-                    }
-                  })()}
-                </div>
-                <div className="flex flex-col justify-between items-end">
-                  <button
-                    onClick={() => {
-                      setRoom(null);
-                    }}
-                  >
-                    <i className="fa-solid fa-x text-red-600"></i>
-                  </button>
-                  {(() => {
-                    if (!room?.is_available) {
-                      // return (
-                      //   <button
-                      //     onClick={() => {
-                      //       if (user) {
-                      //         window.location = `#/qrcode/${room.id}`;
-                      //       } else {
-                      //         window.location = "#/login";
-                      //       }
-                      //     }}
-                      //     className="text-[#212529] text-[24px]"
-                      //   >
-                      //     <i className="fa-solid fa-qrcode" />
-                      //   </button>
-                      // );
                     } else {
                       return (
                         <React.Fragment>
                           <a
-                            href={`#/book/${room.id}`}
-                            className="bg-[#FFC764] tracking-[4px] px-[16px] py-[12px] rounded-md shadow-sm"
+                            href={`#/checkin/${room.id}`}
+                            className="bg-[#FFC764] tracking-[4px] px-[16px] py-[12px] rounded-md shadow-md drop-shadow-md hover:opacity-90"
                           >
-                            BOOK
+                            CHECK IN
                           </a>
                         </React.Fragment>
                       );
@@ -244,14 +300,18 @@ export const HomeScreen = React.memo(() => {
                                 ?.not_disturb
                             ) {
                               return (
-                                <p className="tracking-[4px] text-[#212529] text-[24px]">
-                                  NOT DISTURB
+                                <p className="text-[#212529] text-[24px]">
+                                  {`NOT DISTURB ${
+                                    room?.checkin_data[
+                                      room?.checkin_data?.length - 1
+                                    ]?.time_not_disturb
+                                  }M`}
                                 </p>
                               );
                             }
                           })()}
 
-                          <p className="text-[#212529] tracking-[2px]">{`${room?.price}$`}</p>
+                          <p className="text-[#212529]">{`${room?.price}$`}</p>
                         </div>
                       </div>
                     </React.Fragment>

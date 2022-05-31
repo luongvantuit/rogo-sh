@@ -3,7 +3,7 @@ import { Route, Routes, HashRouter } from "react-router-dom";
 import { QrRoomScreen } from "../screens/QrRoomScreen.jsx";
 import { NotificationsScreen } from "../screens/NotificationsScreen.jsx";
 import { NotFoundScreen } from "../screens/NotFoundScreen.jsx";
-import { BookDetailScreen } from "../screens/BookDetailScreen.jsx";
+import { CheckInRoomScreen } from "../screens/CheckInRoomScreen.jsx";
 import { HomeScreen } from "../screens/HomeScreen.jsx";
 import { LoginScreen } from "../screens/LoginScreen.jsx";
 import { RoomsNotDisturbScreen } from "../screens/RoomsNotDisturbScreen.jsx";
@@ -30,8 +30,8 @@ export const AppRouter = React.memo(() => {
                     />*/}
 
           <Route
-            path="/book/:roomId"
-            element={<BookDetailScreen />}
+            path="/checkin/:roomId"
+            element={<CheckInRoomScreen />}
             caseSensitive
           />
 

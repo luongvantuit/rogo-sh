@@ -7,7 +7,7 @@ import { BookingApi } from "../api/booking-api.js";
 import { AppContext } from "../contexts/AppContext.jsx";
 import { auth } from "../firebase/firebase-auth.js";
 
-export const BookDetailScreen = React.memo(() => {
+export const CheckInRoomScreen = React.memo(() => {
   const { roomId } = useParams();
 
   const currentDate = (() => {
@@ -146,7 +146,7 @@ export const BookDetailScreen = React.memo(() => {
             type="submit"
             className="bg-[#212529] text-white tracking-widest px-[16px]"
           >
-            BOOK NOW
+            CHECK IN
           </button>
         </form>
         <a

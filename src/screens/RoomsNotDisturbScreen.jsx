@@ -65,7 +65,7 @@ export const RoomsNotDisturbScreen = React.memo(() => {
                       <div className="w-[600px] flex flex-row justify-between p-[16px] shadow-md bg-white drop-shadow-md rounded-md">
                         <div className="flex flex-col">
                           <p className="tracking-[4px] text-[48px] font-bold text-[#212529]">{room.name}</p>
-                          <p className="text-[#212529] text-[18px] tracking-[4px]">{`${room?.checkin_data[room?.checkin_data?.length - 1]?.time_not_disturb}H`}</p>
+                          <p className="text-[#212529] text-[18px] tracking-[4px]">{`${room?.checkin_data[room?.checkin_data?.length - 1]?.time_not_disturb}M`}</p>
                         </div>
                         <div></div>
                       </div>
