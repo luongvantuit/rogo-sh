@@ -32,7 +32,6 @@ export const HomeScreen = React.memo(() => {
   React.useEffect(() => {
     if (user) {
       auth.currentUser.getIdToken().then(async (token) => {
-        console.log(token);
         await RoomApi.getRoomWithCheckInData(token).then(async (response) => {
           if (response.ok) {
             const data = await response.json();
