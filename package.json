@@ -23,10 +23,10 @@
           "config": {
             "repository": {
               "owner": "luongvantuit",
-              "name": "rogo-sh",
-              "draft": true
+              "name": "rogo-sh"
             }
-          }
+          },
+          "draft": true
         }
       ],
       "makers": [
