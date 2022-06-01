@@ -46,9 +46,7 @@
         },
         {
           "name": "@electron-forge/maker-deb",
-          "config": {
-            "maintainer": "Tú"
-          }
+          "config": {}
         },
         {
           "name": "@electron-forge/maker-rpm",
@@ -85,6 +83,7 @@
     "@electron-forge/maker-squirrel": "^6.0.0-beta.61",
     "@electron-forge/maker-zip": "^6.0.0-beta.61",
     "@electron-forge/plugin-webpack": "6.0.0-beta.61",
+    "@electron-forge/publisher-github": "^6.0.0-beta.63",
     "@vercel/webpack-asset-relocator-loader": "1.7.0",
     "autoprefixer": "^10.4.7",
     "babel-loader": "^8.2.5",
@@ -96,7 +95,6 @@
     "tailwindcss": "^3.0.24"
   },
   "dependencies": {
-    "@electron-forge/publisher-github": "^6.0.0-beta.63",
     "@reduxjs/toolkit": "^1.8.1",
     "assert": "^2.0.0",
     "browserify-zlib": "^0.2.0",
