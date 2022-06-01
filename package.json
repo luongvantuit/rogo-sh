@@ -23,7 +23,8 @@
           "config": {
             "repository": {
               "owner": "luongvantuit",
-              "name": "rogo-sh"
+              "name": "rogo-sh",
+              "draft": true
             }
           }
         }
