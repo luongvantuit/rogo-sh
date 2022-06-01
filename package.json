@@ -27,10 +27,15 @@
           }
         }
       ],
+      "make_targets": {
+        "win32": ["squirrel"]
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
-          "config": {}
+          "config": {
+            "name": "rogo_sh"
+          }
         },
         {
           "name": "@electron-forge/maker-zip",
