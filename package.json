@@ -15,11 +15,7 @@
   "license": "MIT",
   "config": {
     "forge": {
-      "packagerConfig": {
-        "icon": "favicon.icns",
-        "name": "Rogo Smart Hotel",
-        "appBundleId": "org.rogo.sh"
-      },
+      "packagerConfig": {},
       "publishers": [
         {
           "name": "@electron-forge/publisher-github",
@@ -88,7 +84,7 @@
     "autoprefixer": "^10.4.7",
     "babel-loader": "^8.2.5",
     "css-loader": "^6.0.0",
-    "electron": "18.2.3",
+    "electron": "^19.0.1",
     "node-loader": "^2.0.0",
     "postcss": "^8.4.13",
     "style-loader": "^3.0.0",
