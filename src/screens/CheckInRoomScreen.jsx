@@ -144,19 +144,19 @@ export const CheckInRoomScreen = React.memo(() => {
           </div>
           <button
             type="submit"
-            className="bg-[#212529] text-white tracking-widest px-[16px]"
+            className="bg-[#FFC764] text-[#212529] tracking-widest px-[16px]"
           >
             CHECK IN
           </button>
         </form>
         <a
           href="#/"
-          className="w-[300px] my-[32px] px-[24px] py-[12px] rounded-sm shadow-sm text-[18px] group bg-[#FFC764] duration-500 flex flex-row justify-center"
+          className="w-[300px] my-[32px] px-[24px] py-[12px] rounded-sm shadow-sm text-[18px] group bg-white duration-500 flex flex-row justify-center"
         >
-          <p className="inline text-white mx-[4px] tracking-widest">
+          <p className="inline text-[#212529] mx-[4px] tracking-widest">
             GO TO HOME
           </p>
-          <i className="fa-solid fa-arrow-right-long mx-[8px] text-lg text-white" />
+          <i className="fa-solid fa-arrow-right-long mx-[8px] text-lg text-[#212529]" />
         </a>
       </section>
     </React.Fragment>

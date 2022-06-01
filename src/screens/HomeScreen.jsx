@@ -182,6 +182,16 @@ export const HomeScreen = React.memo(() => {
                     }
                   })()}
                   <p className="text-[#212529] my-[8px]">{`${room?.price}$`}</p>
+                  {(() => {
+                    if (!room?.is_available) {
+                      return (
+                        <div className="flex flex-row my-[8px] text-[#212529] items-center">
+                          <p>1</p>
+                          <i class="fa-solid fa-users mx-[8px]"></i>
+                        </div>
+                      );
+                    }
+                  })()}
                 </div>
                 <div className="flex flex-col justify-between items-end">
                   <button
@@ -197,22 +207,27 @@ export const HomeScreen = React.memo(() => {
                     if (!room?.is_available) {
                       return (
                         <React.Fragment>
-                          <button
-                            className="tracking-[4px] bg-[#FFC764] p-[16px] rounded-md shadow-md drop-shadow-md hover:opacity-90"
-                            onClick={() => {
-                              auth.currentUser.getIdToken().then((token) => {
-                                BookingApi.checkOut(token, room?.id).then(
-                                  (response) => {
-                                    if (response.ok) {
-                                      window.location.reload();
+                          <div className="flex flex-row">
+                            <button
+                              className="tracking-[4px] bg-[#FFC764] px-[16px] text-center rounded-md shadow-md drop-shadow-md hover:opacity-90 h-[48px] leading-[48px]"
+                              onClick={() => {
+                                auth.currentUser.getIdToken().then((token) => {
+                                  BookingApi.checkOut(token, room?.id).then(
+                                    (response) => {
+                                      if (response.ok) {
+                                        window.location.reload();
+                                      }
                                     }
-                                  }
-                                );
-                              });
-                            }}
-                          >
-                            CHECK OUT
-                          </button>
+                                  );
+                                });
+                              }}
+                            >
+                              CHECK OUT
+                            </button>
+                            <button className="h-[48px] w-[48px] bg-[#212529] rounded-md drop-shadow-sm mx-[8px] shadow-md">
+                              <i className="fa-solid fa-qrcode text-white"></i>
+                            </button>
+                          </div>
                         </React.Fragment>
                       );
                     } else {
@@ -220,7 +235,7 @@ export const HomeScreen = React.memo(() => {
                         <React.Fragment>
                           <a
                             href={`#/checkin/${room.id}`}
-                            className="bg-[#FFC764] tracking-[4px] px-[16px] py-[12px] rounded-md shadow-md drop-shadow-md hover:opacity-90"
+                            className="tracking-[4px] bg-[#FFC764] px-[16px] text-center rounded-md shadow-md drop-shadow-md hover:opacity-90 h-[48px] leading-[48px]"
                           >
                             CHECK IN
                           </a>
