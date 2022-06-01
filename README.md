@@ -20,7 +20,7 @@ node --version
 
 **v16.15.0**
 
-- **$** Recommended package manager Yarn
+- Recommended package manager Yarn
 
 If, yarn isn't available run:
 
