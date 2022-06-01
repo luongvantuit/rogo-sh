@@ -1,6 +1,6 @@
 {
-  "name": "rogo_sh",
-  "productName": "rogo_sh",
+  "name": "rogo-sh",
+  "productName": "rogo-sh",
   "version": "1.0.0",
   "description": "My Electron application description",
   "main": ".webpack/main",
@@ -11,6 +11,7 @@
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\""
   },
+  "author": "Lương Văn Tú",
   "keywords": [],
   "license": "MIT",
   "config": {
@@ -31,7 +32,7 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "rogo_sh"
+            "name": "rogo-sh"
           }
         },
         {
