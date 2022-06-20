@@ -3,7 +3,6 @@ import BreadcrumbBg from "../assets/breadcrumb-bg.jpg";
 import { useParams, useSearchParams } from "react-router-dom";
 import { RoomApi } from "../api/room-api.js";
 import QRCode from "react-qr-code";
-import { BookingApi } from "../api/booking-api.js";
 import { AppContext } from "../contexts/AppContext.jsx";
 import { auth } from "../firebase/firebase-auth";
 
@@ -11,27 +10,17 @@ export const QrRoomScreen = React.memo(() => {
   const { roomId } = useParams();
   const [searchParams] = useSearchParams();
 
-  console.log(searchParams.get("code"));
-
   const [room, setRoom] = React.useState();
-  //   const [booking, setBooking] = React.useState();
   const user = React.useContext(AppContext);
 
   React.useEffect(() => {
     if (user) {
       auth.currentUser.getIdToken().then((token) => {
+        console.log("Test" + roomId);
         RoomApi.getDetailRoom(token, roomId).then(async (response) => {
           if (response.ok) {
             const data = (await response.json())["data"];
             setRoom(data);
-            // if (!room?.is_available) {
-            //   BookingApi.getDetailBooking(roomId).then(async (response) => {
-            //     if (response.ok) {
-            //       const dataBooking = (await response.json())["data"];
-            //       setBooking(dataBooking[dataBooking.length - 1]);
-            //     }
-            //   });
-            // }
           }
         });
       });
@@ -43,14 +32,6 @@ export const QrRoomScreen = React.memo(() => {
       document.title = `Rogo Solutions - Room ${room.name}`;
     }
   }, [room]);
-
-  React.useEffect(() => {
-    if (user) {
-      auth.currentUser.getIdToken().then((value) => {
-        setToken(value);
-      });
-    }
-  }, []);
 
   return (
     <React.Fragment>

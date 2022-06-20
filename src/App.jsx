@@ -4,89 +4,102 @@ import pahoMqtt from "paho-mqtt";
 import { AppContextComponent } from "./contexts/AppContext.jsx";
 import { Provider } from "react-redux";
 import { sliderBarStore } from "./stores/slider-bar-store.js";
+import { auth } from "./firebase/firebase-auth.js";
+import { RoomApi } from "./api/room-api.js";
 
 class Mqtt {
-    onMessage;
+  onMessage;
 
-    constructor(onMessage) {
-        this.onMessage = onMessage;
-    }
+  /**
+   *
+   * @param {(message: pahoMqtt.Message)=>void} onMessage
+   */
+  constructor(onMessage) {
+    this.onMessage = onMessage;
+  }
 
-    hasMessage(message) {
-        this.onMessage(message);
-    }
+  hasMessage(message) {
+    this.onMessage(message);
+  }
 }
 
-var mqtt;
+/**
+ * @type {Mqtt}
+ */
+export var mqtt;
 
 const clientId = (() => {
-    return `rogo__hotel__${(Math.random() + 1).toString(36)}`;
+  return `rogo__hotel__${(Math.random() + 1).toString(36)}`;
 })();
 
 const { mqttBrokerHost, mqttBrokerPort, mqttBrokerPath } = (() => {
-    const mqttBrokerHost = "hotel.rogo.com.vn";
-    const mqttBrokerPort = 8083;
-    const mqttBrokerPath = "/mqtt";
-    return {
-        mqttBrokerHost: mqttBrokerHost,
-        mqttBrokerPort: mqttBrokerPort,
-        mqttBrokerPath: mqttBrokerPath,
-    };
+  const mqttBrokerHost = "hotel.rogo.com.vn";
+  const mqttBrokerPort = 8083;
+  const mqttBrokerPath = "/mqtt";
+  return {
+    mqttBrokerHost: mqttBrokerHost,
+    mqttBrokerPort: mqttBrokerPort,
+    mqttBrokerPath: mqttBrokerPath,
+  };
 })();
 
-const mqttClient = new pahoMqtt.Client(
-    mqttBrokerHost,
-    mqttBrokerPort,
-    mqttBrokerPath,
-    clientId
+/**
+ * @type {pahoMqtt.Client}
+ */
+export const mqttClient = new pahoMqtt.Client(
+  mqttBrokerHost,
+  mqttBrokerPort,
+  mqttBrokerPath,
+  clientId
 );
 
 mqttClient.connect({
-    onSuccess: () => {
-        mqttClient.subscribe("/call_reception", {
-            onSuccess: () => {
-                mqttClient.onMessageArrived = (message) => {
-                    if (!mqtt) {
-                        mqtt = new Mqtt();
-                    }
-                    mqtt.hasMessage(message);
-                };
-            },
-        });
-    },
+  onSuccess: () => {
+    mqttClient.subscribe("/call_reception", {
+      onSuccess: () => {
+        mqttClient.onMessageArrived = (message) => {
+          mqtt.hasMessage(message);
+        };
+      },
+    });
+    mqttClient.subscribe("/dnd", {
+      onSuccess: () => {},
+    });
+  },
 });
 
 export const App = React.memo(() => {
-    React.useEffect(() => {
-        if (!mqtt) {
-            mqtt = new Mqtt((message) => {
-                if (Notification.permission == "granted") {
-                    new Notification("Reception", {
-                        body: message.payloadString,
-                    });
-                }
+  React.useEffect(() => {
+    if (!mqtt) {
+      mqtt = new Mqtt((message) => {
+        if (message.destinationName === "/call_reception") {
+          const user = auth.currentUser;
+          if (user) {
+            user.getIdToken().then((token) => {
+              RoomApi.getFilterRoom(token, {
+                rogo_location_id: message.payloadString.split(":")[1].trim(),
+              }).then(async (response) => {
+                const data = (await response.json())["data"][0];
+                new Notification(data.name, {
+                  body: "Call Reception!",
+                });
+              });
             });
-        } else if (!mqtt?.onMessage) {
-            mqtt.onMessage = (message) => {
-                if (Notification.permission == "granted") {
-                    new Notification("Customer", {
-                        body: message.payloadString,
-                    });
-                }
-            };
+          }
+        } else {
+          console.log(message.payloadString);
         }
-    }, [mqtt]);
-    if (Notification.permission != "granted") {
-        Notification.requestPermission();
+      });
     }
+  }, [mqtt]);
 
-    return (
-        <React.Fragment>
-            <AppContextComponent>
-                <Provider store={sliderBarStore}>
-                    <AppRouter />
-                </Provider>
-            </AppContextComponent>
-        </React.Fragment>
-    );
+  return (
+    <React.Fragment>
+      <AppContextComponent>
+        <Provider store={sliderBarStore}>
+          <AppRouter />
+        </Provider>
+      </AppContextComponent>
+    </React.Fragment>
+  );
 });

@@ -187,7 +187,7 @@ export const HomeScreen = React.memo(() => {
                       return (
                         <div className="flex flex-row my-[8px] text-[#212529] items-center">
                           <p>1</p>
-                          <i class="fa-solid fa-users mx-[8px]"></i>
+                          <i className="fa-solid fa-users mx-[8px]"></i>
                         </div>
                       );
                     }
