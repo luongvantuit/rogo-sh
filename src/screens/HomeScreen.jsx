@@ -2,13 +2,34 @@ import React from "react";
 import { RoomApi } from "../api/room-api.js";
 import { useSearchParams } from "react-router-dom";
 import { AppContext } from "../contexts/AppContext.jsx";
-import { BookingApi } from "../api/booking-api.js";
 import { Container } from "../components/Container.jsx";
 import { auth } from "../firebase/firebase-auth.js";
+import {BookingApi} from "../api/booking-api.js"
+
+export class UpdateStatusRoom {
+  hasChange;
+  notify;
+
+  constructor(hasChange, notify) {
+    this.hasChange = hasChange;
+    this.notify = notify;
+  }
+
+  onChange = (locationId) => {
+    this.hasChange();
+    this.notify(locationId);
+  };
+}
+
+/**
+ * @type {UpdateStatusRoom}
+ */
+export var updateStatusRoom;
 
 export const HomeScreen = React.memo(() => {
   const [searchParams] = useSearchParams();
   const floor = parseInt(searchParams.get("floor") ?? "1");
+  const locationId = searchParams.get("locationId");
 
   const [loading, setLoading] = React.useState(true);
   const [edit, setEdit] = React.useState(false);
@@ -29,31 +50,54 @@ export const HomeScreen = React.memo(() => {
     }${date.getMinutes()}`;
   })();
 
-  React.useEffect(() => {
-    if (user) {
-      auth.currentUser.getIdToken().then(async (token) => {
-        await RoomApi.getRoomWithCheckInData(token).then(async (response) => {
-          if (response.ok) {
-            const data = await response.json();
-            const roomsMap = new Map();
-            let temp = 0;
-            for (let index = 0; index < data.length; index++) {
-              const element = data[index];
-              if (element?.floor > temp) {
-                temp = element?.floor;
-              }
-              if (roomsMap.get(element?.floor)) {
-                roomsMap.get(element?.floor).push(element);
-              } else {
-                roomsMap.set(element?.floor, [element]);
+  const loadDataRoom = () => {
+    auth.currentUser.getIdToken().then(async (token) => {
+      await RoomApi.getRoomWithCheckInData(token).then(async (response) => {
+        if (response.ok) {
+          const data = await response.json();
+          const roomsMap = new Map();
+          let roomTemp = null;
+          let temp = 0;
+          for (let index = 0; index < data.length; index++) {
+            const element = data[index];
+            if (locationId) {
+              if (element.rogo_location_id === locationId) {
+                roomTemp = element;
               }
             }
-            setMaxFloor(temp);
-            setRooms(roomsMap);
-            setLoading(false);
+            if (element?.floor > temp) {
+              temp = element?.floor;
+            }
+            if (roomsMap.get(element?.floor)) {
+              roomsMap.get(element?.floor).push(element);
+            } else {
+              roomsMap.set(element?.floor, [element]);
+            }
           }
-        });
+          setRoom(roomTemp);
+          setMaxFloor(temp);
+          setRooms(roomsMap);
+        }
       });
+    });
+  };
+
+  React.useEffect(() => {
+    if (user) {
+      loadDataRoom();
+      setLoading(false);
+      if (!updateStatusRoom) {
+        updateStatusRoom = new UpdateStatusRoom(
+          () => {
+            loadDataRoom();
+          },
+          (lId) => {
+            if (locationId === lId) {
+              window.location = `#/?floor=${floor}&locationId=${lId}`;
+            }
+          }
+        );
+      }
     }
   }, [floor, user]);
 
@@ -66,7 +110,6 @@ export const HomeScreen = React.memo(() => {
       <section
         className={(() => {
           if (room) {
-            // return "lg:mx-[60px] 2xl:mx-[100px] mt-[-40px]";
             return "lg:mx-[60px] 2xl:mx-[100px] mt-[40px]";
           }
         })()}
@@ -108,7 +151,9 @@ export const HomeScreen = React.memo(() => {
                       );
                       return (
                         <React.Fragment>
-                          <p className="bg-white w-[320px] h-[48px] leading-[48px] tracking-wide text-[#212529] text-center my-[6px] shadow-md rounded-md drop-shadow-md">{`CHECK IN AT ${dateCheckIn.getHours()}:${dateCheckIn.getMinutes()} - ${dateCheckIn.getDay()}/${dateCheckIn.getMonth()}/${dateCheckIn.getFullYear()}`}</p>
+                          <p className="bg-white w-[320px] h-[48px] leading-[48px] tracking-wide text-[#212529] text-center my-[6px] shadow-md rounded-md drop-shadow-md">{`CHECK IN AT ${dateCheckIn.getHours()}:${dateCheckIn.getMinutes()} - ${dateCheckIn.getDate()}/${
+                            dateCheckIn.getMonth() + 1
+                          }/${dateCheckIn.getFullYear()}`}</p>
                           <div className="flex flex-row items-center">
                             {(() => {
                               if (edit) {
@@ -147,7 +192,9 @@ export const HomeScreen = React.memo(() => {
                               } else {
                                 return (
                                   <React.Fragment>
-                                    <p className="bg-[#212529] w-[320px] h-[48px] leading-[48px] tracking-wide text-white text-center my-[6px] shadow-md rounded-md drop-shadow-md">{`CHECK OUT AT ${dateCheckOut.getHours()}:${dateCheckOut.getMinutes()} - ${dateCheckOut.getDay()}/${dateCheckOut.getMonth()}/${dateCheckOut.getFullYear()}`}</p>
+                                    <p className="bg-[#212529] w-[320px] h-[48px] leading-[48px] tracking-wide text-white text-center my-[6px] shadow-md rounded-md drop-shadow-md">{`CHECK OUT AT ${dateCheckOut.getHours()}:${dateCheckOut.getMinutes()} - ${dateCheckOut.getDate()}/${
+                                      dateCheckOut.getMonth() + 1
+                                    }/${dateCheckOut.getFullYear()}`}</p>
                                     <button
                                       className="mx-[12px] drop-shadow-md shadow-md rounded-md h-[48px] w-[48px] bg-[#212529] duration-500 hover:opacity-90"
                                       onClick={(e) => {
@@ -196,8 +243,8 @@ export const HomeScreen = React.memo(() => {
                 <div className="flex flex-col justify-between items-end">
                   <button
                     onClick={() => {
-                      setRoom(null);
-                      setEdit(false);
+                      window.location = `#/?floor=${floor}`;
+                      window.location.reload();
                     }}
                     className="bg-[#212529] w-[48px] h-[48px] shadow-md rounded-md md:block hidden duration-500 drop-shadow-md hover:opacity-90"
                   >
@@ -211,15 +258,22 @@ export const HomeScreen = React.memo(() => {
                             <button
                               className="tracking-[4px] bg-[#FFC764] px-[16px] text-center rounded-md shadow-md drop-shadow-md hover:opacity-90 h-[48px] leading-[48px]"
                               onClick={() => {
-                                auth.currentUser.getIdToken().then((token) => {
-                                  BookingApi.checkOut(token, room?.id).then(
-                                    (response) => {
-                                      if (response.ok) {
-                                        window.location.reload();
-                                      }
-                                    }
-                                  );
-                                });
+                                const confirm = window.confirm(
+                                  "Are you sure about this action?"
+                                );
+                                if (confirm) {
+                                  auth.currentUser
+                                    .getIdToken()
+                                    .then((token) => {
+                                      BookingApi.checkOut(token, room?.id).then(
+                                        (response) => {
+                                          if (response.ok) {
+                                            window.location.reload();
+                                          }
+                                        }
+                                      );
+                                    });
+                                }
                               }}
                             >
                               CHECK OUT
@@ -279,29 +333,30 @@ export const HomeScreen = React.memo(() => {
           return (
             <section className="lg:mx-[60px] 2xl:mx-[100px] mx-[20px] my-[32px]">
               <div className="grid 2xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-[16px] gap-y-[12px]">
-                {rooms?.get(floor)?.map((room, index) => {
+                {rooms?.get(floor)?.map((roomFor, index) => {
                   return (
                     <React.Fragment key={index}>
                       <div
-                        className="bg-white rounded-md shadow-md my-[16px] border-[1px] flex "
+                        className="bg-white rounded-md shadow-md my-[16px] border-[1px] flex"
                         onClick={() => {
-                          setRoom(room);
+                          window.location = `#/?floor=${floor}&locationId=${roomFor.rogo_location_id}`;
+                          window.location.reload();
                         }}
                       >
                         <div className="flex flex-1 p-[16px] flex-col">
                           <p
                             className={(() => {
-                              if (room?.is_available) {
+                              if (roomFor?.is_available) {
                                 return "text-[54px] font-bold text-green-500 tracking-[4px]";
                               }
                               return "text-[54px] font-bold text-red-500 tracking-[4px]";
                             })()}
                           >
-                            {room?.name}
+                            {roomFor?.name}
                           </p>
                           <p className="font-bold py-[8px] text-[18px] text-[#212529] tracking-[2px]">
                             {(() => {
-                              if (room?.is_available) {
+                              if (roomFor?.is_available) {
                                 return "Available";
                               }
                               return "Busy";
@@ -309,15 +364,16 @@ export const HomeScreen = React.memo(() => {
                           </p>
                           {(() => {
                             if (
-                              room?.checkin_data?.length !== 0 &&
-                              room.checkin_data[room?.checkin_data?.length - 1]
-                                ?.not_disturb
+                              roomFor?.checkin_data?.length !== 0 &&
+                              roomFor.checkin_data[
+                                roomFor?.checkin_data?.length - 1
+                              ]?.not_disturb
                             ) {
                               return (
                                 <p className="text-[#212529] text-[24px]">
                                   {`NOT DISTURB ${
-                                    room?.checkin_data[
-                                      room?.checkin_data?.length - 1
+                                    roomFor?.checkin_data[
+                                      roomFor?.checkin_data?.length - 1
                                     ]?.time_not_disturb
                                   }M`}
                                 </p>
@@ -325,7 +381,7 @@ export const HomeScreen = React.memo(() => {
                             }
                           })()}
 
-                          <p className="text-[#212529]">{`${room?.price}$`}</p>
+                          <p className="text-[#212529]">{`${roomFor?.price}$`}</p>
                         </div>
                       </div>
                     </React.Fragment>
@@ -350,7 +406,13 @@ export const HomeScreen = React.memo(() => {
           className="text-[#212529] mx-[16px] disabled:opacity-60"
           onClick={() => {
             if (floor > 1) {
-              window.location = `#/?floor=${floor - 1}`;
+              if (locationId) {
+                window.location = `#/?floor=${
+                  floor - 1
+                }&locationId=${locationId}`;
+              } else {
+                window.location = `#/?floor=${floor - 1}`;
+              }
             }
           }}
           disabled={!(floor > 1)}
@@ -366,7 +428,13 @@ export const HomeScreen = React.memo(() => {
           className="text-[#212529] mx-[16px] disabled:opacity-60"
           onClick={() => {
             if (floor < maxFloor) {
-              window.location = `#/?floor=${floor + 1}`;
+              if (locationId) {
+                window.location = `#/?floor=${
+                  floor + 1
+                }&locationId=${locationId}`;
+              } else {
+                window.location = `#/?floor=${floor + 1}`;
+              }
             }
           }}
           disabled={!(floor < maxFloor)}

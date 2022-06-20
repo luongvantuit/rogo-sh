@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { sliderBarStore } from "./stores/slider-bar-store.js";
 import { auth } from "./firebase/firebase-auth.js";
 import { RoomApi } from "./api/room-api.js";
+import { updateStatusRoom } from "./screens/HomeScreen.jsx";
 
 class Mqtt {
   onMessage;
@@ -62,9 +63,7 @@ mqttClient.connect({
         };
       },
     });
-    mqttClient.subscribe("/dnd", {
-      onSuccess: () => {},
-    });
+    mqttClient.subscribe("/dnd");
   },
 });
 
@@ -72,8 +71,8 @@ export const App = React.memo(() => {
   React.useEffect(() => {
     if (!mqtt) {
       mqtt = new Mqtt((message) => {
+        const user = auth.currentUser;
         if (message.destinationName === "/call_reception") {
-          const user = auth.currentUser;
           if (user) {
             user.getIdToken().then((token) => {
               RoomApi.getFilterRoom(token, {
@@ -86,8 +85,22 @@ export const App = React.memo(() => {
               });
             });
           }
-        } else {
-          console.log(message.payloadString);
+        } else if (message.destinationName === "/dnd") {
+          const payload = JSON.parse(message.payloadString);
+          if (user) {
+            user.getIdToken().then((token) => {
+              RoomApi.getFilterRoom(token, {
+                rogo_location_id: payload.locationId,
+              }).then(async (response) => {
+                const data = (await response.json())["data"][0];
+                const date = new Date(payload.time_not_disturb);
+                new Notification(data.name, {
+                  body: `Do not disturb to ${date.toUTCString()}`,
+                });
+              });
+            });
+          }
+          updateStatusRoom.onChange(payload.locationId);
         }
       });
     }
