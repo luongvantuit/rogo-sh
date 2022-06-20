@@ -108,7 +108,9 @@ export const HomeScreen = React.memo(() => {
                       );
                       return (
                         <React.Fragment>
-                          <p className="bg-white w-[320px] h-[48px] leading-[48px] tracking-wide text-[#212529] text-center my-[6px] shadow-md rounded-md drop-shadow-md">{`CHECK IN AT ${dateCheckIn.getHours()}:${dateCheckIn.getMinutes()} - ${dateCheckIn.getDay()}/${dateCheckIn.getMonth()}/${dateCheckIn.getFullYear()}`}</p>
+                          <p className="bg-white w-[320px] h-[48px] leading-[48px] tracking-wide text-[#212529] text-center my-[6px] shadow-md rounded-md drop-shadow-md">{`CHECK IN AT ${dateCheckIn.getHours()}:${dateCheckIn.getMinutes()} - ${dateCheckIn.getDate()}/${
+                            dateCheckIn.getMonth() + 1
+                          }/${dateCheckIn.getFullYear()}`}</p>
                           <div className="flex flex-row items-center">
                             {(() => {
                               if (edit) {
@@ -147,7 +149,9 @@ export const HomeScreen = React.memo(() => {
                               } else {
                                 return (
                                   <React.Fragment>
-                                    <p className="bg-[#212529] w-[320px] h-[48px] leading-[48px] tracking-wide text-white text-center my-[6px] shadow-md rounded-md drop-shadow-md">{`CHECK OUT AT ${dateCheckOut.getHours()}:${dateCheckOut.getMinutes()} - ${dateCheckOut.getDay()}/${dateCheckOut.getMonth()}/${dateCheckOut.getFullYear()}`}</p>
+                                    <p className="bg-[#212529] w-[320px] h-[48px] leading-[48px] tracking-wide text-white text-center my-[6px] shadow-md rounded-md drop-shadow-md">{`CHECK OUT AT ${dateCheckOut.getHours()}:${dateCheckOut.getMinutes()} - ${dateCheckOut.getDate()}/${
+                                      dateCheckOut.getMonth() + 1
+                                    }/${dateCheckOut.getFullYear()}`}</p>
                                     <button
                                       className="mx-[12px] drop-shadow-md shadow-md rounded-md h-[48px] w-[48px] bg-[#212529] duration-500 hover:opacity-90"
                                       onClick={(e) => {
