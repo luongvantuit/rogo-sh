@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { sliderBarStore } from "./stores/slider-bar-store.js";
 import { auth } from "./firebase/firebase-auth.js";
 import { RoomApi } from "./api/room-api.js";
+import { updateStatusRoom } from "./screens/HomeScreen.jsx";
 
 class Mqtt {
   onMessage;
@@ -62,9 +63,7 @@ mqttClient.connect({
         };
       },
     });
-    mqttClient.subscribe("/dnd", {
-      onSuccess: () => {},
-    });
+    mqttClient.subscribe("/dnd");
   },
 });
 
@@ -101,6 +100,7 @@ export const App = React.memo(() => {
               });
             });
           }
+          updateStatusRoom.onChange(payload.locationId);
         }
       });
     }
