@@ -62,19 +62,22 @@ export const CheckInRoomScreen = React.memo(() => {
           className="shadow-sm flex flex-row"
           onSubmit={(event) => {
             event.preventDefault();
-            auth.currentUser.getIdToken().then((token) => {
-              BookingApi.checkIn(
-                token,
-                room?._id,
-                new Date(timeCheckIn).toISOString(),
-                new Date(timeCheckOut).toISOString()
-              ).then(async (response) => {
-                if (response.ok) {
-                  const data = await response.json();
-                  window.location = `#/qrcode/${roomId}?code=${data["code"]}`;
-                }
+            const confirm = window.confirm("Are you sure about this action?");
+            if (confirm) {
+              auth.currentUser.getIdToken().then((token) => {
+                BookingApi.checkIn(
+                  token,
+                  room?._id,
+                  new Date(timeCheckIn).toISOString(),
+                  new Date(timeCheckOut).toISOString()
+                ).then(async (response) => {
+                  if (response.ok) {
+                    const data = await response.json();
+                    window.location = `#/qrcode/${roomId}?code=${data["code"]}`;
+                  }
+                });
               });
-            });
+            }
           }}
         >
           <div className="bg-white flex flex-1 flex-col p-[32px]">

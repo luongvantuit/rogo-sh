@@ -2,9 +2,9 @@ import React from "react";
 import { RoomApi } from "../api/room-api.js";
 import { useSearchParams } from "react-router-dom";
 import { AppContext } from "../contexts/AppContext.jsx";
-import { BookingApi } from "../api/booking-api.js";
 import { Container } from "../components/Container.jsx";
 import { auth } from "../firebase/firebase-auth.js";
+import {BookingApi} from "../api/booking-api.js"
 
 export class UpdateStatusRoom {
   hasChange;
@@ -258,15 +258,22 @@ export const HomeScreen = React.memo(() => {
                             <button
                               className="tracking-[4px] bg-[#FFC764] px-[16px] text-center rounded-md shadow-md drop-shadow-md hover:opacity-90 h-[48px] leading-[48px]"
                               onClick={() => {
-                                auth.currentUser.getIdToken().then((token) => {
-                                  BookingApi.checkOut(token, room?.id).then(
-                                    (response) => {
-                                      if (response.ok) {
-                                        window.location.reload();
-                                      }
-                                    }
-                                  );
-                                });
+                                const confirm = window.confirm(
+                                  "Are you sure about this action?"
+                                );
+                                if (confirm) {
+                                  auth.currentUser
+                                    .getIdToken()
+                                    .then((token) => {
+                                      BookingApi.checkOut(token, room?.id).then(
+                                        (response) => {
+                                          if (response.ok) {
+                                            window.location.reload();
+                                          }
+                                        }
+                                      );
+                                    });
+                                }
                               }}
                             >
                               CHECK OUT

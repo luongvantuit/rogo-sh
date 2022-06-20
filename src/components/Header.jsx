@@ -11,7 +11,7 @@ export const Header = React.memo(() => {
 
 
     return (
-        <header className="flex flex-row p-[16px] sticky top-0 justify-between items-center bg-white">
+        <header className="flex flex-row p-[16px] sticky top-0 justify-between items-center bg-white z-50">
             <div className="flex flex-row justify-center items-center">
                 <button
                     onClick={() => {
