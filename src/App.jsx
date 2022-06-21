@@ -103,7 +103,7 @@ export const App = React.memo(() => {
                 const date = new Date(payload.time_not_disturb);
                 if (payload.time_not_disturb > Date.now()) {
                   new Notification(data.name, {
-                    body: `Do not disturb to ${date.toUTCString()}`,
+                    body: `Do not disturb to ${date.toLocaleString()}`,
                   });
                 } else {
                   new Notification(data.name, {

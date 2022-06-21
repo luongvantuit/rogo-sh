@@ -52,11 +52,9 @@ export const RoomsNotDisturbScreen = React.memo(() => {
 
   React.useEffect(() => {
     loadData();
-    if (!updateState) {
-      updateState = new UpdateStateRequest(() => {
-        loadData();
-      });
-    }
+    updateState = new UpdateStateRequest(() => {
+      loadData();
+    });
   }, [user]);
 
   React.useEffect(() => {

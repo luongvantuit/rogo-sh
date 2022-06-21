@@ -87,18 +87,16 @@ export const HomeScreen = React.memo(() => {
     if (user) {
       loadDataRoom();
       setLoading(false);
-      if (!updateStatusRoom) {
-        updateStatusRoom = new UpdateStatusRoom(
-          () => {
-            loadDataRoom();
-          },
-          (lId) => {
-            if (locationId === lId) {
-              window.location = `#/?floor=${floor}&locationId=${lId}`;
-            }
+      updateStatusRoom = new UpdateStatusRoom(
+        () => {
+          loadDataRoom();
+        },
+        (lId) => {
+          if (locationId === lId) {
+            window.location = `#/?floor=${floor}&locationId=${lId}`;
           }
-        );
-      }
+        }
+      );
     }
   }, [floor, user]);
 
@@ -234,6 +232,14 @@ export const HomeScreen = React.memo(() => {
                                     type="submit"
                                   >
                                     CONFIRM
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      setEdit(false);
+                                    }}
+                                    className="bg-[#212529] w-[48px] h-[48px] shadow-md rounded-md md:block hidden duration-500 drop-shadow-md hover:opacity-90"
+                                  >
+                                    <i className="fa-solid fa-x text-white"></i>
                                   </button>
                                 </form>
                               );
