@@ -3,13 +3,31 @@ import { RoomApi } from "../api/room-api.js";
 import { Container } from "../components/Container.jsx";
 import { AppContext } from "../contexts/AppContext.jsx";
 import { auth } from "../firebase/firebase-auth.js";
+import DoNotDisturb from "../assets/do-not-disturb-mode.svg";
+
+export class UpdateStateRequest {
+  onChange;
+
+  constructor(onChange) {
+    this.onChange = onChange;
+  }
+
+  hasChange() {
+    this.onChange();
+  }
+}
+
+/**
+ * @type {UpdateStateRequest}
+ */
+export var updateState;
 
 export const RoomsNotDisturbScreen = React.memo(() => {
   const [rooms, setRooms] = React.useState([]);
 
   const user = React.useContext(AppContext);
 
-  React.useEffect(() => {
+  const loadData = () => {
     if (user) {
       auth.currentUser.getIdToken().then((token) => {
         RoomApi.getRoomWithCheckInData(token).then(async (response) => {
@@ -28,6 +46,15 @@ export const RoomsNotDisturbScreen = React.memo(() => {
             setRooms(roomsTemp);
           }
         });
+      });
+    }
+  };
+
+  React.useEffect(() => {
+    loadData();
+    if (!updateState) {
+      updateState = new UpdateStateRequest(() => {
+        loadData();
       });
     }
   }, [user]);
@@ -60,12 +87,28 @@ export const RoomsNotDisturbScreen = React.memo(() => {
                 );
               } else {
                 return rooms?.map((room, index) => {
+                  const timeDoNotDisturb = new Date(
+                    room?.checkin_data[
+                      room?.checkin_data?.length - 1
+                    ]?.time_not_disturb
+                  );
                   return (
                     <React.Fragment key={index}>
                       <div className="w-[600px] flex flex-row justify-between p-[16px] shadow-md bg-white drop-shadow-md rounded-md">
                         <div className="flex flex-col">
-                          <p className="tracking-[4px] text-[48px] font-bold text-[#212529]">{room.name}</p>
-                          <p className="text-[#212529] text-[18px] tracking-[4px]">{`${room?.checkin_data[room?.checkin_data?.length - 1]?.time_not_disturb}M`}</p>
+                          <p className="tracking-[4px] text-[48px] font-bold text-[#212529]">
+                            {room.name}
+                          </p>
+                          <div className="flex flex-row items-center">
+                            <img
+                              src={DoNotDisturb}
+                              alt=""
+                              className="w-[48px] h-[48px] mr-[8px]"
+                            />
+                            <p className="text-[#212529] text-[18px]">
+                              {timeDoNotDisturb.toLocaleString()}
+                            </p>
+                          </div>
                         </div>
                         <div></div>
                       </div>

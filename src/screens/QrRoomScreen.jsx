@@ -16,7 +16,6 @@ export const QrRoomScreen = React.memo(() => {
   React.useEffect(() => {
     if (user) {
       auth.currentUser.getIdToken().then((token) => {
-        console.log("Test" + roomId);
         RoomApi.getDetailRoom(token, roomId).then(async (response) => {
           if (response.ok) {
             const data = (await response.json())["data"];

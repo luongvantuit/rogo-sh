@@ -7,6 +7,7 @@ import { sliderBarStore } from "./stores/slider-bar-store.js";
 import { auth } from "./firebase/firebase-auth.js";
 import { RoomApi } from "./api/room-api.js";
 import { updateStatusRoom } from "./screens/HomeScreen.jsx";
+import { updateState } from "./screens/RoomsNotDisturbScreen.jsx";
 
 class Mqtt {
   onMessage;
@@ -112,7 +113,8 @@ export const App = React.memo(() => {
               });
             });
           }
-          updateStatusRoom.onChange(payload.locationId);
+          updateStatusRoom?.onChange(payload.locationId);
+          updateState?.hasChange();
         }
       });
     }

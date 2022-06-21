@@ -37,6 +37,7 @@ export const HomeScreen = React.memo(() => {
   const [rooms, setRooms] = React.useState();
   const [room, setRoom] = React.useState();
   const [maxFloor, setMaxFloor] = React.useState(0);
+  const [newTimeCheckOut, setNewTimeCheckOut] = React.useState();
   const user = React.useContext(AppContext);
 
   const currentDate = (() => {
@@ -154,60 +155,109 @@ export const HomeScreen = React.memo(() => {
                           <p className="bg-white w-[320px] h-[48px] leading-[48px] tracking-wide text-[#212529] text-center my-[6px] shadow-md rounded-md drop-shadow-md">{`CHECK IN AT ${dateCheckIn.getHours()}:${dateCheckIn.getMinutes()} - ${dateCheckIn.getDate()}/${
                             dateCheckIn.getMonth() + 1
                           }/${dateCheckIn.getFullYear()}`}</p>
-                          <div className="flex flex-row items-center">
-                            {(() => {
-                              if (edit) {
-                                return (
-                                  <React.Fragment>
-                                    <input
-                                      type="datetime-local"
-                                      className="my-[16px] px-[16px] py-[12px] border-2 rounded-none border-[#FFC764] outline-none focus:ring-[2px] focus:ring-[#FBD083] focus:rounded-sm tracking-widest text-[#212529]"
-                                      onChange={(event) => {}}
-                                      min={currentDate}
-                                      defaultValue={`${dateCheckOut?.getFullYear()}-${
-                                        dateCheckOut?.getMonth() + 1 < 10
-                                          ? "0"
-                                          : ""
-                                      }${dateCheckOut?.getMonth() + 1}-${
-                                        dateCheckOut?.getDate() < 10 ? "0" : ""
-                                      }${dateCheckOut?.getDate()}T${
-                                        dateCheckOut?.getHours() < 10 ? "0" : ""
-                                      }${dateCheckOut?.getHours()}:${
-                                        dateCheckOut?.getMinutes() < 10
-                                          ? "0"
-                                          : ""
-                                      }${dateCheckOut?.getMinutes()}`}
-                                    />
-                                    <button
-                                      className="mx-[12px] drop-shadow-md shadow-md rounded-md h-[48px] px-[16px] bg-[#FFC764] duration-500 hover:opacity-90 text-[#212529]"
-                                      onClick={(e) => {
-                                        // NEED API FOR UPDATE TIME OUT
-                                        setEdit(false);
-                                      }}
-                                    >
-                                      CONFIRM
-                                    </button>
-                                  </React.Fragment>
-                                );
-                              } else {
-                                return (
-                                  <React.Fragment>
-                                    <p className="bg-[#212529] w-[320px] h-[48px] leading-[48px] tracking-wide text-white text-center my-[6px] shadow-md rounded-md drop-shadow-md">{`CHECK OUT AT ${dateCheckOut.getHours()}:${dateCheckOut.getMinutes()} - ${dateCheckOut.getDate()}/${
-                                      dateCheckOut.getMonth() + 1
-                                    }/${dateCheckOut.getFullYear()}`}</p>
-                                    <button
-                                      className="mx-[12px] drop-shadow-md shadow-md rounded-md h-[48px] w-[48px] bg-[#212529] duration-500 hover:opacity-90"
-                                      onClick={(e) => {
-                                        setEdit(true);
-                                      }}
-                                    >
-                                      <i className="fa-solid fa-pen-to-square text-white"></i>
-                                    </button>
-                                  </React.Fragment>
-                                );
-                              }
-                            })()}
-                          </div>
+
+                          {(() => {
+                            if (edit) {
+                              return (
+                                <form
+                                  className="flex flex-row items-center"
+                                  onSubmit={(e) => {
+                                    e.preventDefault();
+                                    if (
+                                      new Date(
+                                        newTimeCheckOut
+                                      ).toISOString() !==
+                                      dateCheckOut.toISOString()
+                                    ) {
+                                      const confirm = window.confirm(
+                                        "Are you sure about this action?"
+                                      );
+                                      setEdit(false);
+                                      if (confirm) {
+                                        auth.currentUser
+                                          .getIdToken()
+                                          .then((token) => {
+                                            BookingApi.checkOut(
+                                              token,
+                                              room?.id
+                                            ).then((response) => {
+                                              if (response.ok) {
+                                                BookingApi.checkIn(
+                                                  token,
+                                                  room?.id,
+                                                  dateCheckIn.toISOString(),
+                                                  new Date(
+                                                    newTimeCheckOut
+                                                  ).toISOString()
+                                                ).then(
+                                                  async (responseCheckIn) => {
+                                                    if (response.ok) {
+                                                      const code = (
+                                                        await responseCheckIn.json()
+                                                      )["code"];
+                                                      window.location = `#/qrcode/${room?.id}?code=${code}`;
+                                                    }
+                                                  }
+                                                );
+                                              } else {
+                                                window.alert(
+                                                  `Error! ${response.status}`
+                                                );
+                                              }
+                                            });
+                                          });
+                                      }
+                                    }
+                                  }}
+                                >
+                                  <input
+                                    type="datetime-local"
+                                    className="my-[16px] px-[16px] py-[12px] border-2 rounded-none border-[#FFC764] outline-none focus:ring-[2px] focus:ring-[#FBD083] focus:rounded-sm tracking-widest text-[#212529]"
+                                    onChange={(event) => {
+                                      setNewTimeCheckOut(event.target.value);
+                                    }}
+                                    min={currentDate}
+                                    defaultValue={`${dateCheckOut?.getFullYear()}-${
+                                      dateCheckOut?.getMonth() + 1 < 10
+                                        ? "0"
+                                        : ""
+                                    }${dateCheckOut?.getMonth() + 1}-${
+                                      dateCheckOut?.getDate() < 10 ? "0" : ""
+                                    }${dateCheckOut?.getDate()}T${
+                                      dateCheckOut?.getHours() < 10 ? "0" : ""
+                                    }${dateCheckOut?.getHours()}:${
+                                      dateCheckOut?.getMinutes() < 10 ? "0" : ""
+                                    }${dateCheckOut?.getMinutes()}`}
+                                  />
+                                  <button
+                                    className="mx-[12px] drop-shadow-md shadow-md rounded-md h-[48px] px-[16px] bg-[#FFC764] duration-500 hover:opacity-90 text-[#212529]"
+                                    type="submit"
+                                  >
+                                    CONFIRM
+                                  </button>
+                                </form>
+                              );
+                            } else {
+                              return (
+                                <div className="flex flex-row items-center">
+                                  <p className="bg-[#212529] w-[320px] h-[48px] leading-[48px] tracking-wide text-white text-center my-[6px] shadow-md rounded-md drop-shadow-md">{`CHECK OUT AT ${dateCheckOut.getHours()}:${dateCheckOut.getMinutes()} - ${dateCheckOut.getDate()}/${
+                                    dateCheckOut.getMonth() + 1
+                                  }/${dateCheckOut.getFullYear()}`}</p>
+                                  <button
+                                    className="mx-[12px] drop-shadow-md shadow-md rounded-md h-[48px] w-[48px] bg-[#212529] duration-500 hover:opacity-90"
+                                    onClick={(e) => {
+                                      setEdit(true);
+                                      setNewTimeCheckOut(
+                                        dateCheckOut.toISOString()
+                                      );
+                                    }}
+                                  >
+                                    <i className="fa-solid fa-pen-to-square text-white"></i>
+                                  </button>
+                                </div>
+                              );
+                            }
+                          })()}
                         </React.Fragment>
                       );
                     }
@@ -287,7 +337,53 @@ export const HomeScreen = React.memo(() => {
                             >
                               CHECK OUT
                             </button>
-                            <button className="h-[48px] w-[48px] bg-[#212529] rounded-md drop-shadow-sm mx-[8px] shadow-md">
+                            <button
+                              className="h-[48px] w-[48px] bg-[#212529] rounded-md drop-shadow-sm mx-[8px] shadow-md"
+                              onClick={(e) => {
+                                const dateCheckIn = new Date(
+                                  room?.checkin_data[
+                                    room?.checkin_data.length - 1
+                                  ]?.checkin
+                                );
+                                const dateCheckOut = new Date(
+                                  room?.checkin_data[
+                                    room?.checkin_data.length - 1
+                                  ]?.checkout
+                                );
+                                const confirm = window.confirm(
+                                  "Are you sure about this action?"
+                                );
+                                if (confirm) {
+                                  auth.currentUser
+                                    .getIdToken()
+                                    .then((token) => {
+                                      BookingApi.checkOut(token, room?.id).then(
+                                        (response) => {
+                                          if (response.ok) {
+                                            BookingApi.checkIn(
+                                              token,
+                                              room?.id,
+                                              dateCheckIn.toISOString(),
+                                              dateCheckOut.toISOString()
+                                            ).then(async (responseCheckIn) => {
+                                              if (response.ok) {
+                                                const code = (
+                                                  await responseCheckIn.json()
+                                                )["code"];
+                                                window.location = `#/qrcode/${room?.id}?code=${code}`;
+                                              }
+                                            });
+                                          } else {
+                                            window.alert(
+                                              `Error! ${response.status}`
+                                            );
+                                          }
+                                        }
+                                      );
+                                    });
+                                }
+                              }}
+                            >
                               <i className="fa-solid fa-qrcode text-white"></i>
                             </button>
                           </div>
@@ -348,8 +444,10 @@ export const HomeScreen = React.memo(() => {
                       <div
                         className="bg-white rounded-md shadow-md my-[16px] border-[1px] flex"
                         onClick={() => {
-                          window.location = `#/?floor=${floor}&locationId=${roomFor.rogo_location_id}`;
-                          window.location.reload();
+                          if (locationId != roomFor.rogo_location_id) {
+                            window.location = `#/?floor=${floor}&locationId=${roomFor.rogo_location_id}`;
+                            window.location.reload();
+                          }
                         }}
                       >
                         <div className="flex flex-1 p-[16px] flex-col">
