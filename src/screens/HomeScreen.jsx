@@ -4,8 +4,8 @@ import { useSearchParams } from "react-router-dom";
 import { AppContext } from "../contexts/AppContext.jsx";
 import { Container } from "../components/Container.jsx";
 import { auth } from "../firebase/firebase-auth.js";
-import {BookingApi} from "../api/booking-api.js"
-
+import { BookingApi } from "../api/booking-api.js";
+import DoNotDisturbMode from "../assets/do-not-disturb-mode.svg";
 export class UpdateStatusRoom {
   hasChange;
   notify;
@@ -218,13 +218,22 @@ export const HomeScreen = React.memo(() => {
                       room?.checkin_data[room?.checkin_data?.length - 1]
                         ?.not_disturb
                     ) {
+                      const timeDoNotDisturb = new Date(
+                        room?.checkin_data[
+                          room?.checkin_data?.length - 1
+                        ]?.time_not_disturb
+                      );
                       return (
-                        <p className="tracking-[4px] text-[#212529] text-[24px] mt-[8px]">
-                          {`NOT DISTURB ${
-                            room?.checkin_data[room?.checkin_data?.length - 1]
-                              ?.time_not_disturb
-                          }M`}
-                        </p>
+                        <div className="flex flex-row items-center mt-[8px]">
+                          <img
+                            src={DoNotDisturbMode}
+                            alt=""
+                            className="w-[48px] h-[48px] mr-[6px]"
+                          />
+                          <p className="text-[#212529] text-[24px]">
+                            {`Not disturb to ${timeDoNotDisturb.toLocaleString()}`}
+                          </p>
+                        </div>
                       );
                     }
                   })()}
@@ -369,14 +378,22 @@ export const HomeScreen = React.memo(() => {
                                 roomFor?.checkin_data?.length - 1
                               ]?.not_disturb
                             ) {
+                              const timeDoNotDisturb = new Date(
+                                roomFor?.checkin_data[
+                                  roomFor?.checkin_data?.length - 1
+                                ]?.time_not_disturb
+                              );
                               return (
-                                <p className="text-[#212529] text-[24px]">
-                                  {`NOT DISTURB ${
-                                    roomFor?.checkin_data[
-                                      roomFor?.checkin_data?.length - 1
-                                    ]?.time_not_disturb
-                                  }M`}
-                                </p>
+                                <div className="flex flex-row items-center mb-[8px]">
+                                  <img
+                                    src={DoNotDisturbMode}
+                                    alt=""
+                                    className="w-[48px] h-[48px] mr-[6px]"
+                                  />
+                                  <p className="text-[#212529] text-[24px]">
+                                    {`Not disturb to ${timeDoNotDisturb.toLocaleString()}`}
+                                  </p>
+                                </div>
                               );
                             }
                           })()}

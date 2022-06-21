@@ -79,8 +79,14 @@ export const App = React.memo(() => {
                 rogo_location_id: message.payloadString.split(":")[1].trim(),
               }).then(async (response) => {
                 const data = (await response.json())["data"][0];
-                new Notification(data.name, {
+                /**
+                 * @type {Notification}
+                 */
+                const notify = new Notification(data.name, {
                   body: "Call Reception!",
+                });
+                notify.addEventListener("show", () => {
+                  window.alert(`${data.name} call reception!`);
                 });
               });
             });
@@ -94,9 +100,15 @@ export const App = React.memo(() => {
               }).then(async (response) => {
                 const data = (await response.json())["data"][0];
                 const date = new Date(payload.time_not_disturb);
-                new Notification(data.name, {
-                  body: `Do not disturb to ${date.toUTCString()}`,
-                });
+                if (payload.time_not_disturb > Date.now()) {
+                  new Notification(data.name, {
+                    body: `Do not disturb to ${date.toUTCString()}`,
+                  });
+                } else {
+                  new Notification(data.name, {
+                    body: `Turn off Do not disturb`,
+                  });
+                }
               });
             });
           }
