@@ -270,6 +270,7 @@ export const HomeScreen = React.memo(() => {
                   })()}
                   {(() => {
                     if (
+                      room?.is_available === false &&
                       room?.checkin_data?.length !== 0 &&
                       room?.checkin_data[room?.checkin_data?.length - 1]
                         ?.not_disturb
@@ -477,6 +478,7 @@ export const HomeScreen = React.memo(() => {
                           </p>
                           {(() => {
                             if (
+                              roomFor?.is_available === false &&
                               roomFor?.checkin_data?.length !== 0 &&
                               roomFor.checkin_data[
                                 roomFor?.checkin_data?.length - 1
