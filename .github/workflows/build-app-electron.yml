@@ -1,5 +1,8 @@
-name: Build
-on: [push, pull_request]
+name: Build application Electron
+on:
+  push:
+    branches:
+      - "master"
 
 jobs:
   build_on_linux:
