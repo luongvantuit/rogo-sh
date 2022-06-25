@@ -1,51 +1,56 @@
 import React from "react";
-import Logo from "../assets/logo.svg";
-import { AppContext } from "../contexts/AppContext.jsx";
-import { useSelector, useDispatch } from "react-redux";
 import { SliderBarNavItem } from "./SliderBarNavItem.jsx";
+import { SliderBarNavItemFooter } from "./SliderBarNavItemFooter.jsx";
 
 export const SliderBar = React.memo(({ navActivate }) => {
-    const user = React.useContext(AppContext);
+  return (
+    <React.Fragment>
+      <nav className="md:w-[240px] w-[80px] fixed top-[84px] left-0 bottom-0 bg-[#272B3F] transition py-[8px] flex flex-col justify-between">
+        <div className="flex flex-col">
+          <SliderBarNavItem
+            icon="fa-solid fa-house"
+            href="#/"
+            text="Trang chủ"
+            activate={navActivate === "home"}
+          />
+          <SliderBarNavItem
+            icon="fa-solid fa-chart-pie"
+            href="#"
+            text="Phân tích"
+            activate={navActivate === "analytics"}
+          />
+          <SliderBarNavItem
+            icon="fa-solid fa-moon"
+            href="#/not-disturb"
+            text="Không làm phiền"
+            activate={navActivate === "not-disturb"}
+          />
+        </div>
+        <div className="flex flex-col">
+          <SliderBarNavItemFooter color="#E92A35" text="Phòng đang sử dụng" />
+          <SliderBarNavItemFooter color="#FBA90D" text="Phòng đã đặt trước" />
+          <SliderBarNavItemFooter color="#5EAA4A" text="Phòng còn trống" />
+          <button className="text-center md:justify-start justify-center md:w-auto w-[48px] flex flex-row items-center mx-[16px] mb-[16px] duration-500 text-white md:px-[16px] h-[48px] p-0">
+            <svg
+              width="23"
+              height="24"
+              viewBox="0 0 23 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M20.5535 14.3766C20.5525 13.537 20.2185 12.7321 19.6249 12.1383C19.0313 11.5446 18.2265 11.2104 17.3869 11.2092H6.30353C5.8838 11.2086 5.48143 11.0415 5.18464 10.7447C4.88784 10.4479 4.72082 10.0456 4.7202 9.62585V7.13764C5.26435 6.99583 5.76086 6.71149 6.15856 6.31393C6.55626 5.91637 6.84077 5.41996 6.98278 4.87585H16.7076C16.9003 5.62212 17.3585 6.2725 17.9965 6.70508C18.6344 7.13766 19.4081 7.32273 20.1727 7.22561C20.9373 7.1285 21.6403 6.75585 22.1498 6.17754C22.6593 5.59922 22.9404 4.85493 22.9404 4.08419C22.9404 3.31344 22.6593 2.56915 22.1498 1.99084C21.6403 1.41252 20.9373 1.03988 20.1727 0.942758C19.4081 0.845641 18.6344 1.03072 17.9965 1.46329C17.3585 1.89587 16.9003 2.54625 16.7076 3.29252H6.98278C6.84434 2.75229 6.56542 2.25831 6.17432 1.86074C5.78323 1.46318 5.29389 1.17618 4.75601 1.02889C4.21812 0.881609 3.65084 0.879281 3.11176 1.02215C2.57269 1.16501 2.08101 1.44798 1.68667 1.84233C1.29233 2.23667 1.00935 2.72834 0.866489 3.26742C0.723623 3.8065 0.725951 4.37378 0.873237 4.91166C1.02052 5.44955 1.30752 5.93888 1.70509 6.32998C2.10265 6.72107 2.59663 7 3.13686 7.13844V9.62506C3.13791 10.4648 3.47196 11.2698 4.06575 11.8636C4.65953 12.4574 5.46458 12.7915 6.30432 12.7925H17.3869C17.8067 12.7931 18.2092 12.9603 18.506 13.2572C18.8029 13.5542 18.9698 13.9568 18.9702 14.3766V16.7509H16.5952V19.1259H6.98278C6.79009 18.3796 6.33185 17.7292 5.69394 17.2966C5.05603 16.864 4.28226 16.679 3.51765 16.7761C2.75305 16.8732 2.05011 17.2459 1.54061 17.8242C1.0311 18.4025 0.75 19.1468 0.75 19.9175C0.75 20.6883 1.0311 21.4326 1.54061 22.0109C2.05011 22.5892 2.75305 22.9618 3.51765 23.0589C4.28226 23.1561 5.05603 22.971 5.69394 22.5384C6.33185 22.1058 6.79009 21.4555 6.98278 20.7092H16.5952V23.0842H22.9285V16.7509H20.5535V14.3766ZM19.7619 2.50085C20.075 2.50085 20.3811 2.59371 20.6415 2.76769C20.9019 2.94167 21.1048 3.18895 21.2247 3.47827C21.3445 3.76759 21.3759 4.08594 21.3148 4.39308C21.2537 4.70022 21.1029 4.98234 20.8814 5.20377C20.66 5.4252 20.3779 5.576 20.0708 5.6371C19.7636 5.69819 19.4453 5.66683 19.1559 5.547C18.8666 5.42716 18.6193 5.22422 18.4454 4.96384C18.2714 4.70346 18.1785 4.39734 18.1785 4.08419C18.1789 3.66439 18.3459 3.2619 18.6427 2.96506C18.9396 2.66822 19.3421 2.50127 19.7619 2.50085V2.50085ZM2.3452 4.08419C2.3452 3.77103 2.43806 3.46491 2.61203 3.20453C2.78601 2.94416 3.0333 2.74122 3.32261 2.62138C3.61193 2.50154 3.93028 2.47018 4.23742 2.53128C4.54456 2.59237 4.82668 2.74317 5.04811 2.9646C5.26955 3.18603 5.42035 3.46816 5.48144 3.77529C5.54253 4.08243 5.51118 4.40078 5.39134 4.6901C5.2715 4.97942 5.06856 5.2267 4.80818 5.40068C4.5478 5.57466 4.24168 5.66752 3.92853 5.66752C3.50873 5.6671 3.10625 5.50015 2.80941 5.20331C2.51256 4.90647 2.34561 4.50398 2.3452 4.08419V4.08419ZM3.92853 21.5009C3.61537 21.5009 3.30925 21.408 3.04888 21.234C2.7885 21.06 2.58556 20.8128 2.46572 20.5234C2.34588 20.2341 2.31452 19.9158 2.37562 19.6086C2.43671 19.3015 2.58751 19.0194 2.80894 18.7979C3.03038 18.5765 3.3125 18.4257 3.61964 18.3646C3.92677 18.3035 4.24513 18.3349 4.53444 18.4547C4.82376 18.5745 5.07104 18.7775 5.24502 19.0379C5.419 19.2982 5.51186 19.6044 5.51186 19.9175C5.51144 20.3373 5.34449 20.7398 5.04765 21.0366C4.75081 21.3335 4.34833 21.5004 3.92853 21.5009V21.5009ZM21.3452 18.3342V21.5009H18.1785V18.3342H21.3452Z"
+                fill="white"
+              />
+            </svg>
+            <p className="hidden pl-[8px] md:block duration-500 text-[16px]">
+              Xem sơ đồ phòng
+            </p>
+          </button>
+        </div>
+      </nav>
 
-    const sliderBarState = useSelector((state) => state.sliderBarState.value);
-
-    return (
-        <nav
-            className={(() => {
-                if (!sliderBarState) {
-                    return "w-[80px] duration-500";
-                }
-                return "md:w-[240px] w-[80px] h-screen duration-500";
-            })()}
-        >
-            <img
-                src={Logo}
-                alt=""
-                className={(() => {
-                    if (!sliderBarState) {
-                        return "w-[48px] h-[48px] m-[16px] shadow-md drop-shadow-md p-[6px] duration-500 rounded-md";
-                    }
-                    return "w-[48px] h-[48px] m-[16px] md:shadow-none shadow-md md:drop-shadow-none drop-shadow-md md:p-0 p-[6px] duration-500 md:rounded-none rounded-md";
-                })()}
-            />
-            <SliderBarNavItem
-                icon="fa-solid fa-house"
-                href="#/"
-                text="Home"
-                activate={navActivate === "home"}
-            />
-            <SliderBarNavItem
-                icon="fa-solid fa-chart-pie"
-                href="#"
-                text="Analytics"
-                activate={navActivate === "analytics"}
-            />
-            <SliderBarNavItem
-                icon="fa-solid fa-moon"
-                href="#/not-disturb"
-                text="Not Disturb"
-                activate={navActivate === "not-disturb"}
-            />
-        </nav>
-    );
+      <span className="md:w-[240px] w-[80px] h-full top-[84px] left-0 bottom-0 bg-[#272B3F] transition"></span>
+    </React.Fragment>
+  );
 });

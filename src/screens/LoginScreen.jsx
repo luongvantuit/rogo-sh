@@ -17,7 +17,7 @@ export const LoginScreen = React.memo(() => {
         className="w-[86.39px] h-[130.85px]"
       />
       <p className="font-medium text-white text-[30.65px] py-[16px]">
-        Chào mừng đến với Rogo Hotel!
+        Chào mừng đến với Rogo Hotel
       </p>
     
       <form

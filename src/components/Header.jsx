@@ -8,7 +8,7 @@ export const Header = React.memo(() => {
   const user = React.useContext(AppContext);
 
   return (
-    <header className="flex flex-row h-[84px] px-[40px] sticky top-0 justify-between items-center bg-[#272B3F] z-10">
+    <header className="flex flex-row h-[84px] px-[40px] sticky top-0 justify-between items-center bg-[#272B3F] z-5">
       <div className="flex flex-row items-center">
         <img
           src={Logo}
@@ -26,7 +26,7 @@ export const Header = React.memo(() => {
           }
           window.location = "#/login";
         }}
-        className="text-white bg-[#212529] shadow-md drop-shadow-md rounded-md py-[8px] px-[16px] hover:opacity-90 select-none"
+        className="text-white bg-[#212529] rounded-md py-[8px] px-[16px] hover:opacity-90 select-none"
       >
         {user ? "Đăng xuất" : "Đăng nhập"}
       </button>

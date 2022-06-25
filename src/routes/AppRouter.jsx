@@ -18,17 +18,6 @@ export const AppRouter = React.memo(() => {
             element={<QrRoomScreen />}
             caseSensitive
           />
-          {/*  <Route
-                        path="/notifications"
-                        element={<NotificationsScreen />}
-                        caseSensitive
-                    />
-                    <Route
-                        path="/*"
-                        element={<NotFoundScreen />}
-                        caseSensitive
-                    />*/}
-
           <Route
             path="/checkin/:roomId"
             element={<CheckInRoomScreen />}

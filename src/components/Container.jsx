@@ -6,9 +6,9 @@ export const Container = React.memo(({ children, navActivate }) => {
   return (
     <React.Fragment>
       <Header />
-      <div className="flex flex-row w-screen h-screen">
+      <div className="flex flex-row">
         <SliderBar navActivate={navActivate} />
-        <div className="flex flex-1 flex-col h-screen overflow-y-scroll">
+        <div className="flex flex-1 flex-col overflow-y-scroll">
           {children}
         </div>
       </div>

@@ -4,8 +4,10 @@ import { useSearchParams } from "react-router-dom";
 import { AppContext } from "../contexts/AppContext.jsx";
 import { Container } from "../components/Container.jsx";
 import { auth } from "../firebase/firebase-auth.js";
-import { BookingApi } from "../api/booking-api.js";
 import DoNotDisturbMode from "../assets/do-not-disturb-mode.svg";
+import { DialogContainer } from "../components/DialogContainer.jsx";
+import { RoomInfo } from "../components/RoomInfo.jsx";
+import { CardRoom } from "../components/CardRoom.jsx";
 export class UpdateStatusRoom {
   hasChange;
   notify;
@@ -32,24 +34,11 @@ export const HomeScreen = React.memo(() => {
   const locationId = searchParams.get("locationId");
 
   const [loading, setLoading] = React.useState(true);
-  const [edit, setEdit] = React.useState(false);
 
   const [rooms, setRooms] = React.useState();
   const [room, setRoom] = React.useState();
   const [maxFloor, setMaxFloor] = React.useState(0);
-  const [newTimeCheckOut, setNewTimeCheckOut] = React.useState();
   const user = React.useContext(AppContext);
-
-  const currentDate = (() => {
-    const date = new Date();
-    return `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? "0" : ""}${
-      date.getMonth() + 1
-    }-${date.getDate() < 10 ? "0" : ""}${date.getDate()}T${
-      date.getHours() < 10 ? "0" : ""
-    }${date.getHours()}:${
-      date.getMinutes() < 10 ? "0" : ""
-    }${date.getMinutes()}`;
-  })();
 
   const loadDataRoom = () => {
     auth.currentUser.getIdToken().then(async (token) => {
@@ -116,301 +105,9 @@ export const HomeScreen = React.memo(() => {
         {(() => {
           if (room) {
             return (
-              <div className="p-[32px] shadow-md border-[1px] bg-white flex flex-row justify-between rounded-md">
-                <div className="flex flex-col">
-                  <p
-                    className={(() => {
-                      if (room?.is_available) {
-                        return "text-[54px] font-bold text-green-500 tracking-[4px]";
-                      }
-                      return "text-[54px] font-bold text-red-500 tracking-[4px]";
-                    })()}
-                  >
-                    {room?.name}
-                  </p>
-                  <p className="font-bold py-[8px] text-[18px] text-[#212529]">
-                    {(() => {
-                      if (room?.is_available) {
-                        return "Available";
-                      }
-                      return "Busy";
-                    })()}
-                  </p>
-                  {(() => {
-                    if (!room?.is_available) {
-                      const dateCheckIn = new Date(
-                        room?.checkin_data[
-                          room?.checkin_data.length - 1
-                        ]?.checkin
-                      );
-                      const dateCheckOut = new Date(
-                        room?.checkin_data[
-                          room?.checkin_data.length - 1
-                        ]?.checkout
-                      );
-                      return (
-                        <React.Fragment>
-                          <p className="bg-white w-[320px] h-[48px] leading-[48px] tracking-wide text-[#212529] text-center my-[6px] shadow-md rounded-md drop-shadow-md">{`CHECK IN AT ${dateCheckIn.getHours()}:${dateCheckIn.getMinutes()} - ${dateCheckIn.getDate()}/${
-                            dateCheckIn.getMonth() + 1
-                          }/${dateCheckIn.getFullYear()}`}</p>
-
-                          {(() => {
-                            if (edit) {
-                              return (
-                                <form
-                                  className="flex flex-row items-center"
-                                  onSubmit={(e) => {
-                                    e.preventDefault();
-                                    if (
-                                      new Date(
-                                        newTimeCheckOut
-                                      ).toISOString() !==
-                                      dateCheckOut.toISOString()
-                                    ) {
-                                      const confirm = window.confirm(
-                                        "Are you sure about this action?"
-                                      );
-                                      setEdit(false);
-                                      if (confirm) {
-                                        auth.currentUser
-                                          .getIdToken()
-                                          .then((token) => {
-                                            BookingApi.checkOut(
-                                              token,
-                                              room?.id
-                                            ).then((response) => {
-                                              if (response.ok) {
-                                                BookingApi.checkIn(
-                                                  token,
-                                                  room?.id,
-                                                  dateCheckIn.toISOString(),
-                                                  new Date(
-                                                    newTimeCheckOut
-                                                  ).toISOString()
-                                                ).then(
-                                                  async (responseCheckIn) => {
-                                                    if (response.ok) {
-                                                      const code = (
-                                                        await responseCheckIn.json()
-                                                      )["code"];
-                                                      window.location = `#/qrcode/${room?.id}?code=${code}`;
-                                                    }
-                                                  }
-                                                );
-                                              } else {
-                                                window.alert(
-                                                  `Error! ${response.status}`
-                                                );
-                                              }
-                                            });
-                                          });
-                                      }
-                                    }
-                                  }}
-                                >
-                                  <input
-                                    type="datetime-local"
-                                    className="my-[16px] px-[16px] py-[12px] border-2 rounded-none border-[#FFC764] outline-none focus:ring-[2px] focus:ring-[#FBD083] focus:rounded-sm tracking-widest text-[#212529]"
-                                    onChange={(event) => {
-                                      setNewTimeCheckOut(event.target.value);
-                                    }}
-                                    min={currentDate}
-                                    defaultValue={`${dateCheckOut?.getFullYear()}-${
-                                      dateCheckOut?.getMonth() + 1 < 10
-                                        ? "0"
-                                        : ""
-                                    }${dateCheckOut?.getMonth() + 1}-${
-                                      dateCheckOut?.getDate() < 10 ? "0" : ""
-                                    }${dateCheckOut?.getDate()}T${
-                                      dateCheckOut?.getHours() < 10 ? "0" : ""
-                                    }${dateCheckOut?.getHours()}:${
-                                      dateCheckOut?.getMinutes() < 10 ? "0" : ""
-                                    }${dateCheckOut?.getMinutes()}`}
-                                  />
-                                  <button
-                                    className="mx-[12px] drop-shadow-md shadow-md rounded-md h-[48px] px-[16px] bg-[#FFC764] duration-500 hover:opacity-90 text-[#212529]"
-                                    type="submit"
-                                  >
-                                    CONFIRM
-                                  </button>
-                                  <button
-                                    onClick={() => {
-                                      setEdit(false);
-                                    }}
-                                    className="bg-[#212529] w-[48px] h-[48px] shadow-md rounded-md md:block hidden duration-500 drop-shadow-md hover:opacity-90"
-                                  >
-                                    <i className="fa-solid fa-x text-white"></i>
-                                  </button>
-                                </form>
-                              );
-                            } else {
-                              return (
-                                <div className="flex flex-row items-center">
-                                  <p className="bg-[#212529] w-[320px] h-[48px] leading-[48px] tracking-wide text-white text-center my-[6px] shadow-md rounded-md drop-shadow-md">{`CHECK OUT AT ${dateCheckOut.getHours()}:${dateCheckOut.getMinutes()} - ${dateCheckOut.getDate()}/${
-                                    dateCheckOut.getMonth() + 1
-                                  }/${dateCheckOut.getFullYear()}`}</p>
-                                  <button
-                                    className="mx-[12px] drop-shadow-md shadow-md rounded-md h-[48px] w-[48px] bg-[#212529] duration-500 hover:opacity-90"
-                                    onClick={(e) => {
-                                      setEdit(true);
-                                      setNewTimeCheckOut(
-                                        dateCheckOut.toISOString()
-                                      );
-                                    }}
-                                  >
-                                    <i className="fa-solid fa-pen-to-square text-white"></i>
-                                  </button>
-                                </div>
-                              );
-                            }
-                          })()}
-                        </React.Fragment>
-                      );
-                    }
-                  })()}
-                  {(() => {
-                    if (
-                      room?.is_available === false &&
-                      room?.checkin_data?.length !== 0 &&
-                      room?.checkin_data[room?.checkin_data?.length - 1]
-                        ?.not_disturb
-                    ) {
-                      const timeDoNotDisturb = new Date(
-                        room?.checkin_data[
-                          room?.checkin_data?.length - 1
-                        ]?.time_not_disturb
-                      );
-                      return (
-                        <div className="flex flex-row items-center mt-[8px]">
-                          <img
-                            src={DoNotDisturbMode}
-                            alt=""
-                            className="w-[48px] h-[48px] mr-[6px]"
-                          />
-                          <p className="text-[#212529] text-[24px]">
-                            {`Not disturb to ${timeDoNotDisturb.toLocaleString()}`}
-                          </p>
-                        </div>
-                      );
-                    }
-                  })()}
-                  <p className="text-[#212529] my-[8px]">{`${room?.price}$`}</p>
-                  {(() => {
-                    if (!room?.is_available) {
-                      return (
-                        <div className="flex flex-row my-[8px] text-[#212529] items-center">
-                          <p>1</p>
-                          <i className="fa-solid fa-users mx-[8px]"></i>
-                        </div>
-                      );
-                    }
-                  })()}
-                </div>
-                <div className="flex flex-col justify-between items-end">
-                  <button
-                    onClick={() => {
-                      window.location = `#/?floor=${floor}`;
-                      window.location.reload();
-                    }}
-                    className="bg-[#212529] w-[48px] h-[48px] shadow-md rounded-md md:block hidden duration-500 drop-shadow-md hover:opacity-90"
-                  >
-                    <i className="fa-solid fa-x text-white"></i>
-                  </button>
-                  {(() => {
-                    if (!room?.is_available) {
-                      return (
-                        <React.Fragment>
-                          <div className="flex flex-row">
-                            <button
-                              className="tracking-[4px] bg-[#FFC764] px-[16px] text-center rounded-md shadow-md drop-shadow-md hover:opacity-90 h-[48px] leading-[48px]"
-                              onClick={() => {
-                                const confirm = window.confirm(
-                                  "Are you sure about this action?"
-                                );
-                                if (confirm) {
-                                  auth.currentUser
-                                    .getIdToken()
-                                    .then((token) => {
-                                      BookingApi.checkOut(token, room?.id).then(
-                                        (response) => {
-                                          if (response.ok) {
-                                            window.location.reload();
-                                          }
-                                        }
-                                      );
-                                    });
-                                }
-                              }}
-                            >
-                              CHECK OUT
-                            </button>
-                            <button
-                              className="h-[48px] w-[48px] bg-[#212529] rounded-md drop-shadow-sm mx-[8px] shadow-md"
-                              onClick={(e) => {
-                                const dateCheckIn = new Date(
-                                  room?.checkin_data[
-                                    room?.checkin_data.length - 1
-                                  ]?.checkin
-                                );
-                                const dateCheckOut = new Date(
-                                  room?.checkin_data[
-                                    room?.checkin_data.length - 1
-                                  ]?.checkout
-                                );
-                                const confirm = window.confirm(
-                                  "Are you sure about this action?"
-                                );
-                                if (confirm) {
-                                  auth.currentUser
-                                    .getIdToken()
-                                    .then((token) => {
-                                      BookingApi.checkOut(token, room?.id).then(
-                                        (response) => {
-                                          if (response.ok) {
-                                            BookingApi.checkIn(
-                                              token,
-                                              room?.id,
-                                              dateCheckIn.toISOString(),
-                                              dateCheckOut.toISOString()
-                                            ).then(async (responseCheckIn) => {
-                                              if (response.ok) {
-                                                const code = (
-                                                  await responseCheckIn.json()
-                                                )["code"];
-                                                window.location = `#/qrcode/${room?.id}?code=${code}`;
-                                              }
-                                            });
-                                          } else {
-                                            window.alert(
-                                              `Error! ${response.status}`
-                                            );
-                                          }
-                                        }
-                                      );
-                                    });
-                                }
-                              }}
-                            >
-                              <i className="fa-solid fa-qrcode text-white"></i>
-                            </button>
-                          </div>
-                        </React.Fragment>
-                      );
-                    } else {
-                      return (
-                        <React.Fragment>
-                          <a
-                            href={`#/checkin/${room.id}`}
-                            className="tracking-[4px] bg-[#FFC764] px-[16px] text-center rounded-md shadow-md drop-shadow-md hover:opacity-90 h-[48px] leading-[48px]"
-                          >
-                            CHECK IN
-                          </a>
-                        </React.Fragment>
-                      );
-                    }
-                  })()}
-                </div>
-              </div>
+              <DialogContainer zIndex="z-20" backgroundColor="bg-transparent">
+                <RoomInfo room={room} />
+              </DialogContainer>
             );
           }
         })()}
@@ -448,65 +145,7 @@ export const HomeScreen = React.memo(() => {
                 {rooms?.get(floor)?.map((roomFor, index) => {
                   return (
                     <React.Fragment key={index}>
-                      <div
-                        className="bg-white rounded-md shadow-md my-[16px] border-[1px] flex"
-                        onClick={() => {
-                          if (locationId != roomFor.rogo_location_id) {
-                            window.location = `#/?floor=${floor}&locationId=${roomFor.rogo_location_id}`;
-                            window.location.reload();
-                          }
-                        }}
-                      >
-                        <div className="flex flex-1 p-[16px] flex-col">
-                          <p
-                            className={(() => {
-                              if (roomFor?.is_available) {
-                                return "text-[54px] font-bold text-green-500 tracking-[4px]";
-                              }
-                              return "text-[54px] font-bold text-red-500 tracking-[4px]";
-                            })()}
-                          >
-                            {roomFor?.name}
-                          </p>
-                          <p className="font-bold py-[8px] text-[18px] text-[#212529] tracking-[2px]">
-                            {(() => {
-                              if (roomFor?.is_available) {
-                                return "Available";
-                              }
-                              return "Busy";
-                            })()}
-                          </p>
-                          {(() => {
-                            if (
-                              roomFor?.is_available === false &&
-                              roomFor?.checkin_data?.length !== 0 &&
-                              roomFor.checkin_data[
-                                roomFor?.checkin_data?.length - 1
-                              ]?.not_disturb
-                            ) {
-                              const timeDoNotDisturb = new Date(
-                                roomFor?.checkin_data[
-                                  roomFor?.checkin_data?.length - 1
-                                ]?.time_not_disturb
-                              );
-                              return (
-                                <div className="flex flex-row items-center mb-[8px]">
-                                  <img
-                                    src={DoNotDisturbMode}
-                                    alt=""
-                                    className="w-[48px] h-[48px] mr-[6px]"
-                                  />
-                                  <p className="text-[#212529] text-[24px]">
-                                    {`Not disturb to ${timeDoNotDisturb.toLocaleString()}`}
-                                  </p>
-                                </div>
-                              );
-                            }
-                          })()}
-
-                          <p className="text-[#212529]">{`${roomFor?.price}$`}</p>
-                        </div>
-                      </div>
+                      <CardRoom room={roomFor} />
                     </React.Fragment>
                   );
                 })}
