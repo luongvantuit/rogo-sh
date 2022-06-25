@@ -1,8 +1,7 @@
 import React from "react";
-import Logo from "../assets/logo.png";
+import Logo from "../assets/logo.svg";
 import { AppContext } from "../contexts/AppContext.jsx";
 import { useSelector, useDispatch } from "react-redux";
-import { auth } from "../firebase/firebase-auth";
 import { SliderBarNavItem } from "./SliderBarNavItem.jsx";
 
 export const SliderBar = React.memo(({ navActivate }) => {

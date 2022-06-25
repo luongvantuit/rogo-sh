@@ -16,7 +16,11 @@
   "license": "MIT",
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "icon": "favicon.icns",
+        "name": "Reception",
+        "appBundleId": "org.rogo.sh"
+      },
       "publishers": [
         {
           "name": "@electron-forge/publisher-github",
