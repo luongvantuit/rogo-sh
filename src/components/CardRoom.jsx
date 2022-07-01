@@ -1,16 +1,12 @@
 import React from "react";
+import DoNotDisturbMode from "../assets/do-not-disturb-mode.svg";
 
-export function CardRoom({ room }) {
+export function CardRoom({ room, onSelectedItem }) {
   return (
     <React.Fragment>
       <div
-        className="bg-white rounded-md shadow-md my-[16px] border-[1px] flex"
-        onClick={() => {
-          if (locationId != room.rogo_location_id) {
-            window.location = `#/?floor=${floor}&locationId=${room.rogo_location_id}`;
-            window.location.reload();
-          }
-        }}
+        className="w-[323px] h-[162px] rounded-[38.5668px] bg-white"
+        onClick={onSelectedItem}
       >
         <div className="flex flex-1 p-[16px] flex-col">
           <p

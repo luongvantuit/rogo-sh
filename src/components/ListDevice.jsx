@@ -20,7 +20,7 @@ export default function ListDevice() {
                 cy="18.6483"
                 r="16.9287"
                 stroke="white"
-                stroke-width="2.41839"
+                strokeWidth="2.41839"
               />
               <rect x="11" y="25" width="15" height="3" rx="1.5" fill="white" />
               <rect
@@ -87,42 +87,42 @@ export default function ListDevice() {
               <path
                 d="M18.5027 26.9205V32.0816"
                 stroke="#A8B4C1"
-                stroke-width="3"
-                stroke-miterlimit="10"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="3"
+                strokeMiterlimit="10"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
               <path
                 d="M24.84 26.592L26.9841 31.2866"
                 stroke="#A8B4C1"
-                stroke-width="3"
-                stroke-miterlimit="10"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="3"
+                strokeMiterlimit="10"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
               <path
                 d="M12.1653 26.592L10.0211 31.2866"
                 stroke="#A8B4C1"
-                stroke-width="3"
-                stroke-miterlimit="10"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="3"
+                strokeMiterlimit="10"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
               <path
                 d="M6.5479 25.582L3.72107 29.8999"
                 stroke="#A8B4C1"
-                stroke-width="3"
-                stroke-miterlimit="10"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="3"
+                strokeMiterlimit="10"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
               <path
                 d="M29.7816 25.582L32.6084 29.8999"
                 stroke="#A8B4C1"
-                stroke-width="3"
-                stroke-miterlimit="10"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="3"
+                strokeMiterlimit="10"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
               <rect
                 y="18.6051"
@@ -166,7 +166,7 @@ export default function ListDevice() {
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <g clip-path="url(#clip0_3_373)">
+              <g clipPath="url(#clip0_3_373)">
                 <path
                   d="M33.2689 16.0203C23.1509 16.0203 13.1727 16.0203 2.95698 16.0203C3.40012 17.2015 3.68319 18.3523 4.2628 19.3279C4.53745 19.7895 5.35969 20.0204 5.97807 20.1552C6.62171 20.2967 7.32096 20.1653 7.99156 20.2125C8.7144 20.263 9.23167 20.6303 9.26369 21.4088C9.2957 22.1805 8.83234 22.6405 8.10445 22.7062C5.93594 22.9016 3.80956 22.8881 2.25099 20.9858C2.10946 20.814 1.94265 20.6404 1.8702 20.4366C1.02941 18.1012 -0.0152453 15.8198 -8.09408e-05 13.2537C0.0201383 9.80126 -0.0219851 6.34714 0.0285629 2.89471C0.0386725 2.22748 0.212221 1.46757 0.577852 0.933447C0.876085 0.497049 1.55848 0.296542 2.10272 0.0623358C2.34198 -0.0404452 2.65706 0.0269522 2.93676 0.0269522C13.0716 0.0269522 23.2048 0.0606509 33.3397 -6.75933e-06C35.5369 -0.0134862 36.3001 1.15586 36.2799 2.95874C36.2412 6.49541 36.2951 10.0338 36.2496 13.5705C36.2378 14.4517 36.0626 15.3464 35.8486 16.2074C35.5655 17.3464 35.2117 18.4736 34.814 19.5789C34.1569 21.4088 32.8342 22.4703 30.8949 22.6859C30.1181 22.7719 29.3262 22.7938 28.5444 22.7651C27.5503 22.7298 27.0195 22.2175 27.0431 21.4273C27.0667 20.6556 27.5638 20.2344 28.5427 20.1956C29.1594 20.1703 29.7778 20.1973 30.3944 20.1821C31.4458 20.1552 32.1316 19.6109 32.4619 18.632C32.7449 17.7929 32.9859 16.942 33.2689 16.0203ZM2.55259 2.58131C2.53574 2.91661 2.51553 3.13566 2.51553 3.35638C2.51384 6.44318 2.53406 9.5283 2.49868 12.6151C2.49025 13.3329 2.73625 13.5081 3.41697 13.5081C13.2654 13.4896 23.1122 13.4896 32.9606 13.5081C33.5924 13.5098 33.7778 13.3245 33.7727 12.6977C33.7458 9.55525 33.7609 6.41285 33.7576 3.27045C33.7576 3.05309 33.7239 2.83574 33.702 2.58131C23.3127 2.58131 12.9722 2.58131 2.55259 2.58131Z"
                   fill="white"

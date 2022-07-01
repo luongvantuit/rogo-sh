@@ -1,10 +1,11 @@
 import React from "react";
-import { BookingApi } from "../api/booking-api";
-import { auth } from "../firebase/firebase-auth";
-import OffDialogRoomInfo from "../assets/off-dialog-room-info.svg";
+import { BookingApi } from "../api/booking-api.js";
+import { auth } from "../firebase/firebase-auth.js";
 import ListDevice from "./ListDevice.jsx";
+import OffDialog from "../assets/off-dialog-room-info.svg";
+import { TimeNotDisturbRoomInfo } from "./TimeNotDisturbRoomInfo.jsx";
 
-export function RoomInfo({ room, resetQrCodeFunc }) {
+export function RoomInfo({ room, resetQrCodeFunc, onExit }) {
   const currentDate = (() => {
     const date = new Date();
     return `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? "0" : ""}${
@@ -18,20 +19,23 @@ export function RoomInfo({ room, resetQrCodeFunc }) {
 
   const [edit, setEdit] = React.useState(false);
   const [newTimeCheckOut, setNewTimeCheckOut] = React.useState();
+
   return (
     <React.Fragment>
-      <div className="bg-[#344650] w-[1310px] p-[60px] rounded-xl relative">
-        <button className="absolute top-[-24px] right-[-24px]">
-          <img src={OffDialogRoomInfo} alt="" srcset="" />
-        </button>
+      <div className="bg-[#344650] w-[1310px] p-[60px] pt-[30px] rounded-xl">
+        <div className="flex justify-end">
+          <button onClick={onExit} className="my-4">
+            <img src={OffDialog} alt="" />
+          </button>
+        </div>
         <div className="flex flex-row justify-between">
-          <p className="text-white text-[70px] font-bold">{room.name}</p>
+          <p className="text-white text-[70px] font-bold">{room?.name}</p>
           <div className="flex flex-col">
             <div className="flex flex-row justify-end items-center">
               <i className="fa-solid fa-users mx-[8px] text-[40px] text-[#57C3FF]"></i>
               <p className="text-[40px] text-[#57C3FF] ml-2">1</p>
             </div>
-            <p className="text-white text-[30.6337px] font-semibold">{`${room.price} VNĐ/ĐÊM`}</p>
+            <p className="text-white text-[30.6337px] font-semibold">{`${room?.price} VNĐ/ĐÊM`}</p>
           </div>
         </div>
 
@@ -65,117 +69,124 @@ export function RoomInfo({ room, resetQrCodeFunc }) {
                     dateCheckIn.getMonth() + 1
                   }/${dateCheckIn.getFullYear()}`}</p>
                 </div>
-                {(() => {
-                  if (edit) {
-                    return (
-                      <form
-                        className="flex flex-row items-center h-[56px] my-[6px]"
-                        onSubmit={(e) => {
-                          e.preventDefault();
-                          if (
-                            new Date(newTimeCheckOut).toISOString() !==
-                            dateCheckOut.toISOString()
-                          ) {
-                            const confirm = window.confirm(
-                              "Are you sure about this action?"
-                            );
-                            setEdit(false);
-                            if (confirm) {
-                              auth.currentUser.getIdToken().then((token) => {
-                                BookingApi.checkOut(token, room?.id).then(
-                                  (response) => {
-                                    if (response.ok) {
-                                      BookingApi.checkIn(
-                                        token,
-                                        room?.id,
-                                        dateCheckIn.toISOString(),
-                                        new Date(newTimeCheckOut).toISOString()
-                                      ).then(async (responseCheckIn) => {
-                                        if (response.ok) {
-                                          const code = (
-                                            await responseCheckIn.json()
-                                          )["code"];
-                                          window.location = `#/qrcode/${room?.id}?code=${code}`;
-                                        }
-                                      });
-                                    } else {
-                                      window.alert(`Error! ${response.status}`);
+                <div className="flex flex-row justify-start">
+                  {(() => {
+                    if (edit) {
+                      return (
+                        <form
+                          className="flex flex-row items-center h-[56px] my-[6px]"
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            if (
+                              new Date(newTimeCheckOut).toISOString() !==
+                              dateCheckOut.toISOString()
+                            ) {
+                              const confirm = window.confirm(
+                                "Are you sure about this action?"
+                              );
+                              setEdit(false);
+                              if (confirm) {
+                                auth.currentUser.getIdToken().then((token) => {
+                                  BookingApi.checkOut(token, room?.id).then(
+                                    (response) => {
+                                      if (response.ok) {
+                                        BookingApi.checkIn(
+                                          token,
+                                          room?.id,
+                                          dateCheckIn.toISOString(),
+                                          new Date(
+                                            newTimeCheckOut
+                                          ).toISOString()
+                                        ).then(async (responseCheckIn) => {
+                                          if (response.ok) {
+                                            const code = (
+                                              await responseCheckIn.json()
+                                            )["code"];
+                                            window.location = `#/qrcode/${room?.id}?code=${code}`;
+                                          }
+                                        });
+                                      } else {
+                                        window.alert(
+                                          `Error! ${response.status}`
+                                        );
+                                      }
                                     }
-                                  }
-                                );
-                              });
+                                  );
+                                });
+                              }
                             }
-                          }
-                        }}
-                      >
-                        <input
-                          type="datetime-local"
-                          className="my-[16px] px-[16px] h-[48px] drop-shadow-md shadow-md border-2 border-[#FFC764] outline-none focus:ring-[2px] focus:ring-[#FBD083] focus:rounded-sm tracking-widest text-[#212529]"
-                          onChange={(event) => {
-                            setNewTimeCheckOut(event.target.value);
                           }}
-                          min={currentDate}
-                          defaultValue={`${dateCheckOut?.getFullYear()}-${
-                            dateCheckOut?.getMonth() + 1 < 10 ? "0" : ""
-                          }${dateCheckOut?.getMonth() + 1}-${
-                            dateCheckOut?.getDate() < 10 ? "0" : ""
-                          }${dateCheckOut?.getDate()}T${
-                            dateCheckOut?.getHours() < 10 ? "0" : ""
-                          }${dateCheckOut?.getHours()}:${
-                            dateCheckOut?.getMinutes() < 10 ? "0" : ""
-                          }${dateCheckOut?.getMinutes()}`}
-                        />
-                        <button
-                          className="mx-[12px] drop-shadow-md shadow-md rounded-md h-[48px] px-[16px] bg-[#FFC764] duration-500 hover:opacity-90 text-[#212529]"
-                          type="submit"
                         >
-                          CONFIRM
-                        </button>
-                        <button
-                          onClick={() => {
-                            setEdit(false);
-                          }}
-                          className="bg-[#212529] w-[48px] h-[48px] shadow-md rounded-md md:block hidden duration-500 drop-shadow-md hover:opacity-90"
-                        >
-                          <i className="fa-solid fa-x text-white"></i>
-                        </button>
-                      </form>
-                    );
-                  } else {
-                    return (
-                      <React.Fragment>
-                        <div className="flex flex-row items-center">
-                          <div className="w-[320px] h-[48px] my-[6px] drop-shadow-md shadow-md rounded-md flex flex-row justify-between items-center px-[16px] bg-[#212529]">
-                            <svg
-                              width="28"
-                              height="28"
-                              viewBox="0 0 38 38"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M18.9329 37.9622C13.9476 37.9622 9.16642 35.9818 5.64125 32.4566C2.1161 28.9315 0.135682 24.1503 0.135683 19.165C0.135683 14.1797 2.1161 9.39853 5.64126 5.87337C9.16642 2.34821 13.9476 0.367796 18.9329 0.367796C23.9182 0.367797 28.6994 2.34821 32.2245 5.87337C35.7497 9.39853 37.7301 14.1797 37.7301 19.165C37.7301 24.1503 35.7497 28.9315 32.2245 32.4566C28.6994 35.9818 23.9182 37.9622 18.9329 37.9622V37.9622ZM27.1567 20.3398C27.4683 20.3398 27.7671 20.2161 27.9874 19.9957C28.2077 19.7754 28.3315 19.4766 28.3315 19.165C28.3315 18.8534 28.2077 18.5546 27.9874 18.3343C27.7671 18.114 27.4683 17.9902 27.1567 17.9902L13.5451 17.9902L18.5898 12.9478C18.6991 12.8386 18.7857 12.7089 18.8448 12.5662C18.904 12.4235 18.9344 12.2705 18.9344 12.1161C18.9344 11.9616 18.904 11.8086 18.8448 11.6659C18.7857 11.5232 18.6991 11.3935 18.5898 11.2843C18.4806 11.175 18.3509 11.0884 18.2082 11.0293C18.0655 10.9702 17.9125 10.9397 17.7581 10.9397C17.6036 10.9397 17.4506 10.9702 17.3079 11.0293C17.1652 11.0884 17.0355 11.175 16.9263 11.2843L9.87734 18.3332C9.76793 18.4424 9.68113 18.572 9.6219 18.7147C9.56268 18.8575 9.53219 19.0105 9.53219 19.165C9.53219 19.3195 9.56268 19.4725 9.6219 19.6153C9.68113 19.758 9.76793 19.8877 9.87734 19.9968L16.9263 27.0457C17.0355 27.155 17.1652 27.2416 17.3079 27.3007C17.4506 27.3598 17.6036 27.3903 17.7581 27.3903C17.9125 27.3903 18.0655 27.3598 18.2082 27.3007C18.3509 27.2416 18.4806 27.155 18.5898 27.0457C18.6991 26.9365 18.7857 26.8068 18.8448 26.6641C18.904 26.5214 18.9344 26.3684 18.9344 26.214C18.9344 26.0595 18.904 25.9065 18.8448 25.7638C18.7857 25.6211 18.6991 25.4914 18.5898 25.3822L13.5451 20.3398L27.1567 20.3398Z"
-                                fill="#E92A35"
-                              />
-                            </svg>
-                            <p className="text-[20px] text-white text-center">{`${dateCheckOut.getHours()}:${dateCheckOut.getMinutes()} - ${dateCheckOut.getDate()}/${
-                              dateCheckOut.getMonth() + 1
-                            }/${dateCheckOut.getFullYear()}`}</p>
-                          </div>
-                          <button
-                            className="mx-[12px] drop-shadow-md shadow-md rounded-md h-[48px] w-[48px] bg-[#212529] duration-500 hover:opacity-90"
-                            onClick={(e) => {
-                              setEdit(true);
-                              setNewTimeCheckOut(dateCheckOut.toISOString());
+                          <input
+                            type="datetime-local"
+                            className="my-[16px] px-[16px] h-[48px] drop-shadow-md shadow-md border-2 border-[#FFC764] outline-none focus:ring-[2px] focus:ring-[#FBD083] focus:rounded-sm tracking-widest text-[#212529]"
+                            onChange={(event) => {
+                              setNewTimeCheckOut(event.target.value);
                             }}
+                            min={currentDate}
+                            defaultValue={`${dateCheckOut?.getFullYear()}-${
+                              dateCheckOut?.getMonth() + 1 < 10 ? "0" : ""
+                            }${dateCheckOut?.getMonth() + 1}-${
+                              dateCheckOut?.getDate() < 10 ? "0" : ""
+                            }${dateCheckOut?.getDate()}T${
+                              dateCheckOut?.getHours() < 10 ? "0" : ""
+                            }${dateCheckOut?.getHours()}:${
+                              dateCheckOut?.getMinutes() < 10 ? "0" : ""
+                            }${dateCheckOut?.getMinutes()}`}
+                          />
+                          <button
+                            className="mx-[12px] drop-shadow-md shadow-md rounded-md h-[48px] px-[16px] bg-[#FFC764] duration-500 hover:opacity-90 text-[#212529]"
+                            type="submit"
                           >
-                            <i className="fa-solid fa-pen-to-square text-white"></i>
+                            CONFIRM
                           </button>
-                        </div>
-                      </React.Fragment>
-                    );
-                  }
-                })()}
+                          <button
+                            onClick={() => {
+                              setEdit(false);
+                            }}
+                            className="bg-[#212529] w-[48px] h-[48px] shadow-md rounded-md md:block hidden duration-500 drop-shadow-md hover:opacity-90"
+                          >
+                            <i className="fa-solid fa-x text-white"></i>
+                          </button>
+                        </form>
+                      );
+                    } else {
+                      return (
+                        <React.Fragment>
+                          <div className="flex flex-row items-center">
+                            <div className="w-[320px] h-[48px] my-[6px] drop-shadow-md shadow-md rounded-md flex flex-row justify-between items-center px-[16px] bg-[#212529]">
+                              <svg
+                                width="28"
+                                height="28"
+                                viewBox="0 0 38 38"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M18.9329 37.9622C13.9476 37.9622 9.16642 35.9818 5.64125 32.4566C2.1161 28.9315 0.135682 24.1503 0.135683 19.165C0.135683 14.1797 2.1161 9.39853 5.64126 5.87337C9.16642 2.34821 13.9476 0.367796 18.9329 0.367796C23.9182 0.367797 28.6994 2.34821 32.2245 5.87337C35.7497 9.39853 37.7301 14.1797 37.7301 19.165C37.7301 24.1503 35.7497 28.9315 32.2245 32.4566C28.6994 35.9818 23.9182 37.9622 18.9329 37.9622V37.9622ZM27.1567 20.3398C27.4683 20.3398 27.7671 20.2161 27.9874 19.9957C28.2077 19.7754 28.3315 19.4766 28.3315 19.165C28.3315 18.8534 28.2077 18.5546 27.9874 18.3343C27.7671 18.114 27.4683 17.9902 27.1567 17.9902L13.5451 17.9902L18.5898 12.9478C18.6991 12.8386 18.7857 12.7089 18.8448 12.5662C18.904 12.4235 18.9344 12.2705 18.9344 12.1161C18.9344 11.9616 18.904 11.8086 18.8448 11.6659C18.7857 11.5232 18.6991 11.3935 18.5898 11.2843C18.4806 11.175 18.3509 11.0884 18.2082 11.0293C18.0655 10.9702 17.9125 10.9397 17.7581 10.9397C17.6036 10.9397 17.4506 10.9702 17.3079 11.0293C17.1652 11.0884 17.0355 11.175 16.9263 11.2843L9.87734 18.3332C9.76793 18.4424 9.68113 18.572 9.6219 18.7147C9.56268 18.8575 9.53219 19.0105 9.53219 19.165C9.53219 19.3195 9.56268 19.4725 9.6219 19.6153C9.68113 19.758 9.76793 19.8877 9.87734 19.9968L16.9263 27.0457C17.0355 27.155 17.1652 27.2416 17.3079 27.3007C17.4506 27.3598 17.6036 27.3903 17.7581 27.3903C17.9125 27.3903 18.0655 27.3598 18.2082 27.3007C18.3509 27.2416 18.4806 27.155 18.5898 27.0457C18.6991 26.9365 18.7857 26.8068 18.8448 26.6641C18.904 26.5214 18.9344 26.3684 18.9344 26.214C18.9344 26.0595 18.904 25.9065 18.8448 25.7638C18.7857 25.6211 18.6991 25.4914 18.5898 25.3822L13.5451 20.3398L27.1567 20.3398Z"
+                                  fill="#E92A35"
+                                />
+                              </svg>
+                              <p className="text-[20px] text-white text-center">{`${dateCheckOut.getHours()}:${dateCheckOut.getMinutes()} - ${dateCheckOut.getDate()}/${
+                                dateCheckOut.getMonth() + 1
+                              }/${dateCheckOut.getFullYear()}`}</p>
+                            </div>
+                            <button
+                              className="mx-[12px] drop-shadow-md shadow-md rounded-md h-[48px] w-[48px] bg-[#212529] duration-500 hover:opacity-90"
+                              onClick={(e) => {
+                                setEdit(true);
+                                setNewTimeCheckOut(dateCheckOut.toISOString());
+                              }}
+                            >
+                              <i className="fa-solid fa-pen-to-square text-white"></i>
+                            </button>
+                          </div>
+                        </React.Fragment>
+                      );
+                    }
+                  })()}
+                  <TimeNotDisturbRoomInfo room={room} />
+                </div>
               </React.Fragment>
             );
           }
