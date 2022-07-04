@@ -4,20 +4,30 @@ import { useSearchParams } from "react-router-dom";
 import { AppContext } from "../contexts/AppContext.jsx";
 import { Container } from "../components/Container.jsx";
 import { auth } from "../firebase/firebase-auth.js";
-import { BookingApi } from "../api/booking-api.js";
-import DoNotDisturbMode from "../assets/do-not-disturb-mode.svg";
+import { RoomInfo } from "../components/RoomInfo.jsx";
+import { CardRoom } from "../components/CardRoom.jsx";
+import { Box, Button, Dialog, Menu, MenuItem } from "@mui/material";
+import PhongDangSuDung from "../assets/phong-dang-su-dung.png";
+import PhongDatTruoc from "../assets/phong-dat-truoc.png";
+import PhongTrong from "../assets/phong-trong.png";
+import { ContainerCounterRoom } from "../components/ContainerCounterRoom.jsx";
+import { LoadingRoomInfo } from "../components/LoadingRoomInfo.jsx";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  clearRoom,
+  roomInfoStack,
+  setRoom,
+} from "../slices/room-info-slice.js";
+
 export class UpdateStatusRoom {
   hasChange;
-  notify;
-
-  constructor(hasChange, notify) {
+  constructor(hasChange) {
     this.hasChange = hasChange;
-    this.notify = notify;
   }
 
-  onChange = (locationId) => {
+  onChange = () => {
     this.hasChange();
-    this.notify(locationId);
   };
 }
 
@@ -26,30 +36,29 @@ export class UpdateStatusRoom {
  */
 export var updateStatusRoom;
 
-export const HomeScreen = React.memo(() => {
+export const HomeScreen = () => {
+  const dispatch = useDispatch();
+
   const [searchParams] = useSearchParams();
   const floor = parseInt(searchParams.get("floor") ?? "1");
-  const locationId = searchParams.get("locationId");
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const [loading, setLoading] = React.useState(true);
-  const [edit, setEdit] = React.useState(false);
 
   const [rooms, setRooms] = React.useState();
-  const [room, setRoom] = React.useState();
-  const [maxFloor, setMaxFloor] = React.useState(0);
-  const [newTimeCheckOut, setNewTimeCheckOut] = React.useState();
-  const user = React.useContext(AppContext);
+  let room = useSelector((state) => state.roomInfoState.value);
 
-  const currentDate = (() => {
-    const date = new Date();
-    return `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? "0" : ""}${
-      date.getMonth() + 1
-    }-${date.getDate() < 10 ? "0" : ""}${date.getDate()}T${
-      date.getHours() < 10 ? "0" : ""
-    }${date.getHours()}:${
-      date.getMinutes() < 10 ? "0" : ""
-    }${date.getMinutes()}`;
-  })();
+  const [roomEmpty, setRoomEmpty] = React.useState(0);
+  const [roomUsed, setRoomUsed] = React.useState(0);
+  const [maxFloor, setMaxFloor] = React.useState(0);
+  const user = React.useContext(AppContext);
 
   const loadDataRoom = () => {
     auth.currentUser.getIdToken().then(async (token) => {
@@ -59,10 +68,12 @@ export const HomeScreen = React.memo(() => {
           const roomsMap = new Map();
           let roomTemp = null;
           let temp = 0;
+          let __roomEmpty = 0;
+          let __roomUsed = 0;
           for (let index = 0; index < data.length; index++) {
             const element = data[index];
-            if (locationId) {
-              if (element.rogo_location_id === locationId) {
+            if (roomInfoStack) {
+              if (element.rogo_location_id == roomInfoStack?.rogo_location_id) {
                 roomTemp = element;
               }
             }
@@ -74,10 +85,17 @@ export const HomeScreen = React.memo(() => {
             } else {
               roomsMap.set(element?.floor, [element]);
             }
+            if (element?.is_available) {
+              __roomEmpty++;
+            } else {
+              __roomUsed++;
+            }
           }
-          setRoom(roomTemp);
+          dispatch(setRoom(roomTemp));
           setMaxFloor(temp);
           setRooms(roomsMap);
+          setRoomEmpty(__roomEmpty);
+          setRoomUsed(__roomUsed);
         }
       });
     });
@@ -87,16 +105,9 @@ export const HomeScreen = React.memo(() => {
     if (user) {
       loadDataRoom();
       setLoading(false);
-      updateStatusRoom = new UpdateStatusRoom(
-        () => {
-          loadDataRoom();
-        },
-        (lId) => {
-          if (locationId === lId) {
-            window.location = `#/?floor=${floor}&locationId=${lId}`;
-          }
-        }
-      );
+      updateStatusRoom = new UpdateStatusRoom(() => {
+        loadDataRoom();
+      });
     }
   }, [floor, user]);
 
@@ -106,465 +117,115 @@ export const HomeScreen = React.memo(() => {
 
   return (
     <Container navActivate="home">
-      <section
-        className={(() => {
-          if (room) {
-            return "lg:mx-[60px] 2xl:mx-[100px] mt-[40px]";
-          }
-        })()}
+      <Dialog
+        open={Boolean(room)}
+        onClose={() => {
+          dispatch(clearRoom());
+        }}
+        maxWidth={"xl"}
+        PaperComponent={Box}
       >
-        {(() => {
-          if (room) {
-            return (
-              <div className="p-[32px] shadow-md border-[1px] bg-white flex flex-row justify-between rounded-md">
-                <div className="flex flex-col">
-                  <p
-                    className={(() => {
-                      if (room?.is_available) {
-                        return "text-[54px] font-bold text-green-500 tracking-[4px]";
-                      }
-                      return "text-[54px] font-bold text-red-500 tracking-[4px]";
-                    })()}
-                  >
-                    {room?.name}
-                  </p>
-                  <p className="font-bold py-[8px] text-[18px] text-[#212529]">
-                    {(() => {
-                      if (room?.is_available) {
-                        return "Available";
-                      }
-                      return "Busy";
-                    })()}
-                  </p>
-                  {(() => {
-                    if (!room?.is_available) {
-                      const dateCheckIn = new Date(
-                        room?.checkin_data[
-                          room?.checkin_data.length - 1
-                        ]?.checkin
-                      );
-                      const dateCheckOut = new Date(
-                        room?.checkin_data[
-                          room?.checkin_data.length - 1
-                        ]?.checkout
-                      );
-                      return (
-                        <React.Fragment>
-                          <p className="bg-white w-[320px] h-[48px] leading-[48px] tracking-wide text-[#212529] text-center my-[6px] shadow-md rounded-md drop-shadow-md">{`CHECK IN AT ${dateCheckIn.getHours()}:${dateCheckIn.getMinutes()} - ${dateCheckIn.getDate()}/${
-                            dateCheckIn.getMonth() + 1
-                          }/${dateCheckIn.getFullYear()}`}</p>
+        <RoomInfo
+          room={room}
+          onExit={() => {
+            dispatch(clearRoom());
+          }}
+        />
+      </Dialog>
+      <div className="flex flex-row justify-between mt-[65px] mx-[38px]">
+        <ContainerCounterRoom
+          text="Đang sử dụng"
+          counter={roomUsed}
+          fill="bg-[#E92A35]"
+          backgroundImage={PhongDangSuDung}
+        />
+        <ContainerCounterRoom
+          text="Đặt trước"
+          counter={1}
+          fill="bg-[#F09819]"
+          backgroundImage={PhongDatTruoc}
+        />
+        <ContainerCounterRoom
+          text="Đang trống"
+          counter={roomEmpty}
+          fill="bg-[#5EAA4A]"
+          backgroundImage={PhongTrong}
+        />
+      </div>
+      <LoadingRoomInfo loading={loading} />
 
-                          {(() => {
-                            if (edit) {
-                              return (
-                                <form
-                                  className="flex flex-row items-center"
-                                  onSubmit={(e) => {
-                                    e.preventDefault();
-                                    if (
-                                      new Date(
-                                        newTimeCheckOut
-                                      ).toISOString() !==
-                                      dateCheckOut.toISOString()
-                                    ) {
-                                      const confirm = window.confirm(
-                                        "Are you sure about this action?"
-                                      );
-                                      setEdit(false);
-                                      if (confirm) {
-                                        auth.currentUser
-                                          .getIdToken()
-                                          .then((token) => {
-                                            BookingApi.checkOut(
-                                              token,
-                                              room?.id
-                                            ).then((response) => {
-                                              if (response.ok) {
-                                                BookingApi.checkIn(
-                                                  token,
-                                                  room?.id,
-                                                  dateCheckIn.toISOString(),
-                                                  new Date(
-                                                    newTimeCheckOut
-                                                  ).toISOString()
-                                                ).then(
-                                                  async (responseCheckIn) => {
-                                                    if (response.ok) {
-                                                      const code = (
-                                                        await responseCheckIn.json()
-                                                      )["code"];
-                                                      window.location = `#/qrcode/${room?.id}?code=${code}`;
-                                                    }
-                                                  }
-                                                );
-                                              } else {
-                                                window.alert(
-                                                  `Error! ${response.status}`
-                                                );
-                                              }
-                                            });
-                                          });
-                                      }
-                                    }
-                                  }}
-                                >
-                                  <input
-                                    type="datetime-local"
-                                    className="my-[16px] px-[16px] py-[12px] border-2 rounded-none border-[#FFC764] outline-none focus:ring-[2px] focus:ring-[#FBD083] focus:rounded-sm tracking-widest text-[#212529]"
-                                    onChange={(event) => {
-                                      setNewTimeCheckOut(event.target.value);
-                                    }}
-                                    min={currentDate}
-                                    defaultValue={`${dateCheckOut?.getFullYear()}-${
-                                      dateCheckOut?.getMonth() + 1 < 10
-                                        ? "0"
-                                        : ""
-                                    }${dateCheckOut?.getMonth() + 1}-${
-                                      dateCheckOut?.getDate() < 10 ? "0" : ""
-                                    }${dateCheckOut?.getDate()}T${
-                                      dateCheckOut?.getHours() < 10 ? "0" : ""
-                                    }${dateCheckOut?.getHours()}:${
-                                      dateCheckOut?.getMinutes() < 10 ? "0" : ""
-                                    }${dateCheckOut?.getMinutes()}`}
-                                  />
-                                  <button
-                                    className="mx-[12px] drop-shadow-md shadow-md rounded-md h-[48px] px-[16px] bg-[#FFC764] duration-500 hover:opacity-90 text-[#212529]"
-                                    type="submit"
-                                  >
-                                    CONFIRM
-                                  </button>
-                                  <button
-                                    onClick={() => {
-                                      setEdit(false);
-                                    }}
-                                    className="bg-[#212529] w-[48px] h-[48px] shadow-md rounded-md md:block hidden duration-500 drop-shadow-md hover:opacity-90"
-                                  >
-                                    <i className="fa-solid fa-x text-white"></i>
-                                  </button>
-                                </form>
-                              );
-                            } else {
-                              return (
-                                <div className="flex flex-row items-center">
-                                  <p className="bg-[#212529] w-[320px] h-[48px] leading-[48px] tracking-wide text-white text-center my-[6px] shadow-md rounded-md drop-shadow-md">{`CHECK OUT AT ${dateCheckOut.getHours()}:${dateCheckOut.getMinutes()} - ${dateCheckOut.getDate()}/${
-                                    dateCheckOut.getMonth() + 1
-                                  }/${dateCheckOut.getFullYear()}`}</p>
-                                  <button
-                                    className="mx-[12px] drop-shadow-md shadow-md rounded-md h-[48px] w-[48px] bg-[#212529] duration-500 hover:opacity-90"
-                                    onClick={(e) => {
-                                      setEdit(true);
-                                      setNewTimeCheckOut(
-                                        dateCheckOut.toISOString()
-                                      );
-                                    }}
-                                  >
-                                    <i className="fa-solid fa-pen-to-square text-white"></i>
-                                  </button>
-                                </div>
-                              );
-                            }
-                          })()}
-                        </React.Fragment>
-                      );
-                    }
-                  })()}
-                  {(() => {
-                    if (
-                      room?.is_available === false &&
-                      room?.checkin_data?.length !== 0 &&
-                      room?.checkin_data[room?.checkin_data?.length - 1]
-                        ?.not_disturb
-                    ) {
-                      const timeDoNotDisturb = new Date(
-                        room?.checkin_data[
-                          room?.checkin_data?.length - 1
-                        ]?.time_not_disturb
-                      );
-                      return (
-                        <div className="flex flex-row items-center mt-[8px]">
-                          <img
-                            src={DoNotDisturbMode}
-                            alt=""
-                            className="w-[48px] h-[48px] mr-[6px]"
-                          />
-                          <p className="text-[#212529] text-[24px]">
-                            {`Not disturb to ${timeDoNotDisturb.toLocaleString()}`}
-                          </p>
-                        </div>
-                      );
-                    }
-                  })()}
-                  <p className="text-[#212529] my-[8px]">{`${room?.price}$`}</p>
-                  {(() => {
-                    if (!room?.is_available) {
-                      return (
-                        <div className="flex flex-row my-[8px] text-[#212529] items-center">
-                          <p>1</p>
-                          <i className="fa-solid fa-users mx-[8px]"></i>
-                        </div>
-                      );
-                    }
-                  })()}
-                </div>
-                <div className="flex flex-col justify-between items-end">
-                  <button
-                    onClick={() => {
-                      window.location = `#/?floor=${floor}`;
-                      window.location.reload();
-                    }}
-                    className="bg-[#212529] w-[48px] h-[48px] shadow-md rounded-md md:block hidden duration-500 drop-shadow-md hover:opacity-90"
-                  >
-                    <i className="fa-solid fa-x text-white"></i>
-                  </button>
-                  {(() => {
-                    if (!room?.is_available) {
-                      return (
-                        <React.Fragment>
-                          <div className="flex flex-row">
-                            <button
-                              className="tracking-[4px] bg-[#FFC764] px-[16px] text-center rounded-md shadow-md drop-shadow-md hover:opacity-90 h-[48px] leading-[48px]"
-                              onClick={() => {
-                                const confirm = window.confirm(
-                                  "Are you sure about this action?"
-                                );
-                                if (confirm) {
-                                  auth.currentUser
-                                    .getIdToken()
-                                    .then((token) => {
-                                      BookingApi.checkOut(token, room?.id).then(
-                                        (response) => {
-                                          if (response.ok) {
-                                            window.location.reload();
-                                          }
-                                        }
-                                      );
-                                    });
-                                }
-                              }}
-                            >
-                              CHECK OUT
-                            </button>
-                            <button
-                              className="h-[48px] w-[48px] bg-[#212529] rounded-md drop-shadow-sm mx-[8px] shadow-md"
-                              onClick={(e) => {
-                                const dateCheckIn = new Date(
-                                  room?.checkin_data[
-                                    room?.checkin_data.length - 1
-                                  ]?.checkin
-                                );
-                                const dateCheckOut = new Date(
-                                  room?.checkin_data[
-                                    room?.checkin_data.length - 1
-                                  ]?.checkout
-                                );
-                                const confirm = window.confirm(
-                                  "Are you sure about this action?"
-                                );
-                                if (confirm) {
-                                  auth.currentUser
-                                    .getIdToken()
-                                    .then((token) => {
-                                      BookingApi.checkOut(token, room?.id).then(
-                                        (response) => {
-                                          if (response.ok) {
-                                            BookingApi.checkIn(
-                                              token,
-                                              room?.id,
-                                              dateCheckIn.toISOString(),
-                                              dateCheckOut.toISOString()
-                                            ).then(async (responseCheckIn) => {
-                                              if (response.ok) {
-                                                const code = (
-                                                  await responseCheckIn.json()
-                                                )["code"];
-                                                window.location = `#/qrcode/${room?.id}?code=${code}`;
-                                              }
-                                            });
-                                          } else {
-                                            window.alert(
-                                              `Error! ${response.status}`
-                                            );
-                                          }
-                                        }
-                                      );
-                                    });
-                                }
-                              }}
-                            >
-                              <i className="fa-solid fa-qrcode text-white"></i>
-                            </button>
-                          </div>
-                        </React.Fragment>
-                      );
-                    } else {
-                      return (
-                        <React.Fragment>
-                          <a
-                            href={`#/checkin/${room.id}`}
-                            className="tracking-[4px] bg-[#FFC764] px-[16px] text-center rounded-md shadow-md drop-shadow-md hover:opacity-90 h-[48px] leading-[48px]"
-                          >
-                            CHECK IN
-                          </a>
-                        </React.Fragment>
-                      );
-                    }
-                  })()}
-                </div>
-              </div>
-            );
-          }
-        })()}
-      </section>
-      {(() => {
-        if (loading) {
-          return (
-            <div className="w-full h-[504px] justify-center items-center flex">
-              <svg
-                role="status"
-                className="w-[48px] h-[48px] mr-2 text-gray-200 animate-spin dark:text-gray-300 fill-blue-400"
-                viewBox="0 0 100 101"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                  fill="currentFill"
-                />
-              </svg>
-            </div>
-          );
-        }
-      })()}
+      <div className="flex flex-row justify-start mx-[38px] items-center mt-[73px]">
+        <p className="text-[#B9B9B9] text-[25.7112px] font-semibold mr-[31px]">
+          Chọn tầng
+        </p>
+        <Button
+          id="demo-positioned-button"
+          aria-controls={open ? "demo-positioned-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? "true" : undefined}
+          onClick={handleClick}
+          endIcon={<KeyboardArrowDownIcon />}
+        >
+          {`Tầng ${floor}`}
+        </Button>
+        <Menu
+          id="demo-positioned-menu"
+          aria-labelledby="demo-positioned-button"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+        >
+          {[...Array(maxFloor + 1).keys()].map((value) => {
+            if (value != 0) {
+              return (
+                <MenuItem
+                  key={value}
+                  onClick={() => {
+                    handleClose();
+                    window.location = `#/?floor=${value}`;
+                  }}
+                >{`Tầng ${value}`}</MenuItem>
+              );
+            }
+          })}
+        </Menu>
+      </div>
 
       {(() => {
         if (rooms?.get(floor)) {
           return (
-            <section className="lg:mx-[60px] 2xl:mx-[100px] mx-[20px] my-[32px]">
-              <div className="grid 2xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-[16px] gap-y-[12px]">
-                {rooms?.get(floor)?.map((roomFor, index) => {
-                  return (
-                    <React.Fragment key={index}>
-                      <div
-                        className="bg-white rounded-md shadow-md my-[16px] border-[1px] flex"
-                        onClick={() => {
-                          if (locationId != roomFor.rogo_location_id) {
-                            window.location = `#/?floor=${floor}&locationId=${roomFor.rogo_location_id}`;
-                            window.location.reload();
-                          }
-                        }}
-                      >
-                        <div className="flex flex-1 p-[16px] flex-col">
-                          <p
-                            className={(() => {
-                              if (roomFor?.is_available) {
-                                return "text-[54px] font-bold text-green-500 tracking-[4px]";
-                              }
-                              return "text-[54px] font-bold text-red-500 tracking-[4px]";
-                            })()}
-                          >
-                            {roomFor?.name}
-                          </p>
-                          <p className="font-bold py-[8px] text-[18px] text-[#212529] tracking-[2px]">
-                            {(() => {
-                              if (roomFor?.is_available) {
-                                return "Available";
-                              }
-                              return "Busy";
-                            })()}
-                          </p>
-                          {(() => {
-                            if (
-                              roomFor?.is_available === false &&
-                              roomFor?.checkin_data?.length !== 0 &&
-                              roomFor.checkin_data[
-                                roomFor?.checkin_data?.length - 1
-                              ]?.not_disturb
-                            ) {
-                              const timeDoNotDisturb = new Date(
-                                roomFor?.checkin_data[
-                                  roomFor?.checkin_data?.length - 1
-                                ]?.time_not_disturb
-                              );
-                              return (
-                                <div className="flex flex-row items-center mb-[8px]">
-                                  <img
-                                    src={DoNotDisturbMode}
-                                    alt=""
-                                    className="w-[48px] h-[48px] mr-[6px]"
-                                  />
-                                  <p className="text-[#212529] text-[24px]">
-                                    {`Not disturb to ${timeDoNotDisturb.toLocaleString()}`}
-                                  </p>
-                                </div>
-                              );
-                            }
-                          })()}
-
-                          <p className="text-[#212529]">{`${roomFor?.price}$`}</p>
-                        </div>
-                      </div>
-                    </React.Fragment>
-                  );
-                })}
-              </div>
+            <section className="py-[32px] grid 2xl:grid-cols-4 grid-cols-3 gap-y-[38px] gap-x-8 place-content-between px-[38px] flex-1 box-border">
+              {rooms?.get(floor)?.map((roomFor, index) => {
+                return (
+                  <CardRoom
+                    key={index}
+                    room={roomFor}
+                    onSelectedItem={() => {
+                      dispatch(setRoom(roomFor));
+                    }}
+                  />
+                );
+              })}
             </section>
           );
         } else if (!loading) {
           return (
             <div className="w-full h-[504px] justify-center items-center flex">
-              <p className="text-[24px] tracking-[4px] text-[#212529]">
+              <p className="text-[24px] tracking-[4px] text-white uppercase">
                 {`NOT FOUND ROOM IN FLOOR ${floor}`}
               </p>
             </div>
           );
         }
       })()}
-
-      <div className="flex flex-row justify-center items-center my-[32px] ">
-        <button
-          className="text-[#212529] mx-[16px] disabled:opacity-60"
-          onClick={() => {
-            if (floor > 1) {
-              if (locationId) {
-                window.location = `#/?floor=${
-                  floor - 1
-                }&locationId=${locationId}`;
-              } else {
-                window.location = `#/?floor=${floor - 1}`;
-              }
-            }
-          }}
-          disabled={!(floor > 1)}
-        >
-          <i className="fa-solid fa-arrow-left-long" />
-        </button>
-        <div className="bg-[#212529] w-[48px] h-[48px] rounded-md shadow-md drop-shadow-md">
-          <p className="text-white text-center leading-[48px] text-[18px] font-bold">
-            {floor}
-          </p>
-        </div>
-        <button
-          className="text-[#212529] mx-[16px] disabled:opacity-60"
-          onClick={() => {
-            if (floor < maxFloor) {
-              if (locationId) {
-                window.location = `#/?floor=${
-                  floor + 1
-                }&locationId=${locationId}`;
-              } else {
-                window.location = `#/?floor=${floor + 1}`;
-              }
-            }
-          }}
-          disabled={!(floor < maxFloor)}
-        >
-          <i className="fa-solid fa-arrow-right-long" />
-        </button>
-      </div>
     </Container>
   );
-});
+};

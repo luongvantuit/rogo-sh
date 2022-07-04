@@ -2,7 +2,6 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { RoomApi } from "../api/room-api.js";
 // import { HeaderNav } from "../components/HeaderNav.jsx";
-import Hero from "../assets/hero.jpg";
 import { BookingApi } from "../api/booking-api.js";
 import { AppContext } from "../contexts/AppContext.jsx";
 import { auth } from "../firebase/firebase-auth.js";
@@ -48,14 +47,9 @@ export const CheckInRoomScreen = React.memo(() => {
   return (
     <React.Fragment>
       {/* <HeaderNav /> */}
-      <section
-        className="w-auto h-[720px] bg-cover bg-no-repeat flex flex-col justify-center items-center"
-        style={{
-          backgroundImage: `url(${Hero})`,
-        }}
-      >
+      <section className="w-auto h-[720px] bg-cover bg-no-repeat flex flex-col justify-center items-center">
         <p className="text-[#FFC764] my-[64px] font-medium tracking-[4px] text-[48px]">
-          BOOK ROOM {room?.name?.toUpperCase()}
+          ROOM {room?.name?.toUpperCase()}
         </p>
         <form
           action=""
