@@ -182,7 +182,38 @@ export function RoomInfo({ room, resetQrCodeFunc, onExit }) {
         </p>
         <ListDevice />
         <div className="flex justify-end">
-          <button onClick={resetQrCodeFunc}>
+          <button
+            onClick={(e) => {
+              const dateCheckIn = new Date(
+                room?.checkin_data[room?.checkin_data.length - 1]?.checkin
+              );
+              const dateCheckOut = new Date(
+                room?.checkin_data[room?.checkin_data.length - 1]?.checkout
+              );
+              const confirm = window.confirm("Are you sure about this action?");
+              if (confirm) {
+                auth.currentUser.getIdToken().then((token) => {
+                  BookingApi.checkOut(token, room?.id).then((response) => {
+                    if (response.ok) {
+                      BookingApi.checkIn(
+                        token,
+                        room?.id,
+                        dateCheckIn.toISOString(),
+                        dateCheckOut.toISOString()
+                      ).then(async (responseCheckIn) => {
+                        if (response.ok) {
+                          const code = (await responseCheckIn.json())["code"];
+                          window.location = `#/qrcode/${room?.id}?code=${code}`;
+                        }
+                      });
+                    } else {
+                      window.alert(`Error! ${response.status}`);
+                    }
+                  });
+                });
+              }
+            }}
+          >
             <img src={IconQr} width={54} height={54} alt="" />
           </button>
         </div>

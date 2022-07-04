@@ -14,7 +14,11 @@ import { ContainerCounterRoom } from "../components/ContainerCounterRoom.jsx";
 import { LoadingRoomInfo } from "../components/LoadingRoomInfo.jsx";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useSelector, useDispatch } from "react-redux";
-import { clearRoom, setRoom } from "../slices/room-info-slice.js";
+import {
+  clearRoom,
+  roomInfoStack,
+  setRoom,
+} from "../slices/room-info-slice.js";
 
 export class UpdateStatusRoom {
   hasChange;
@@ -50,6 +54,7 @@ export const HomeScreen = () => {
 
   const [rooms, setRooms] = React.useState();
   let room = useSelector((state) => state.roomInfoState.value);
+
   const [roomEmpty, setRoomEmpty] = React.useState(0);
   const [roomUsed, setRoomUsed] = React.useState(0);
   const [maxFloor, setMaxFloor] = React.useState(0);
@@ -67,8 +72,8 @@ export const HomeScreen = () => {
           let __roomUsed = 0;
           for (let index = 0; index < data.length; index++) {
             const element = data[index];
-            if (room) {
-              if (element.rogo_location_id == room?.rogo_location_id) {
+            if (roomInfoStack) {
+              if (element.rogo_location_id == roomInfoStack?.rogo_location_id) {
                 roomTemp = element;
               }
             }

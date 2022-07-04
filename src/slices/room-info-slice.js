@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+export let roomInfoStack = null;
+
 export const roomInfoSlide = createSlice({
   name: "room-info",
   initialState: {
@@ -7,9 +9,11 @@ export const roomInfoSlide = createSlice({
   },
   reducers: {
     setRoom: (state, action) => {
+      roomInfoStack = action.payload;
       state.value = action.payload;
     },
     clearRoom: (state) => {
+      roomInfoStack = null;
       state.value = null;
     },
   },
