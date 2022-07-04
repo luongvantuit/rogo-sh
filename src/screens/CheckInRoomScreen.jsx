@@ -47,12 +47,9 @@ export const CheckInRoomScreen = React.memo(() => {
   return (
     <React.Fragment>
       {/* <HeaderNav /> */}
-      <section
-        className="w-auto h-[720px] bg-cover bg-no-repeat flex flex-col justify-center items-center"
-     
-      >
+      <section className="w-auto h-[720px] bg-cover bg-no-repeat flex flex-col justify-center items-center">
         <p className="text-[#FFC764] my-[64px] font-medium tracking-[4px] text-[48px]">
-          BOOK ROOM {room?.name?.toUpperCase()}
+          ROOM {room?.name?.toUpperCase()}
         </p>
         <form
           action=""

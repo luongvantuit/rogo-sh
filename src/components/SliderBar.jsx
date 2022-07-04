@@ -10,7 +10,7 @@ export const SliderBar = React.memo(({ navActivate }) => {
           <SliderBarNavItem
             icon="fa-solid fa-house"
             href="#/"
-            text="Trang chủ"
+            text="Màn hình chính"
             activate={navActivate === "home"}
           />
           <SliderBarNavItem

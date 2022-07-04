@@ -3,11 +3,10 @@ import { AppRouter } from "./routes/AppRouter.jsx";
 import pahoMqtt from "paho-mqtt";
 import { AppContextComponent } from "./contexts/AppContext.jsx";
 import { Provider } from "react-redux";
-import { sliderBarStore } from "./stores/slider-bar-store.js";
 import { auth } from "./firebase/firebase-auth.js";
 import { RoomApi } from "./api/room-api.js";
 import { updateStatusRoom } from "./screens/HomeScreen.jsx";
-import { updateState } from "./screens/RoomsNotDisturbScreen.jsx";
+import { roomInfoStore } from "./stores/room-info-store.js";
 
 class Mqtt {
   onMessage;
@@ -113,8 +112,7 @@ export const App = React.memo(() => {
               });
             });
           }
-          updateStatusRoom?.onChange(payload.locationId);
-          updateState?.hasChange();
+          updateStatusRoom?.onChange();
         }
       });
     }
@@ -123,7 +121,7 @@ export const App = React.memo(() => {
   return (
     <React.Fragment>
       <AppContextComponent>
-        <Provider store={sliderBarStore}>
+        <Provider store={roomInfoStore}>
           <AppRouter />
         </Provider>
       </AppContextComponent>

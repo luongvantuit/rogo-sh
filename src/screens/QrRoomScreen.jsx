@@ -40,7 +40,7 @@ export const QrRoomScreen = React.memo(() => {
           backgroundImage: `url(${BreadcrumbBg})`,
         }}
       >
-        <p className="text-[#FFC764] text-[64px] font-normal tracking-widest">
+        <p className="text-[#FFC764] text-[64px] font-bold tracking-widest uppercase">
           {`Room ${room?.name}`}
         </p>
 

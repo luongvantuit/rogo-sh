@@ -13,19 +13,17 @@ import PhongTrong from "../assets/phong-trong.png";
 import { ContainerCounterRoom } from "../components/ContainerCounterRoom.jsx";
 import { LoadingRoomInfo } from "../components/LoadingRoomInfo.jsx";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { useSelector, useDispatch } from "react-redux";
+import { clearRoom, setRoom } from "../slices/room-info-slice.js";
 
 export class UpdateStatusRoom {
   hasChange;
-  notify;
-
-  constructor(hasChange, notify) {
+  constructor(hasChange) {
     this.hasChange = hasChange;
-    this.notify = notify;
   }
 
-  onChange = (locationId) => {
+  onChange = () => {
     this.hasChange();
-    this.notify(locationId);
   };
 }
 
@@ -34,11 +32,11 @@ export class UpdateStatusRoom {
  */
 export var updateStatusRoom;
 
-export const HomeScreen = React.memo(() => {
+export const HomeScreen = () => {
+  const dispatch = useDispatch();
+
   const [searchParams] = useSearchParams();
   const floor = parseInt(searchParams.get("floor") ?? "1");
-  const locationId = searchParams.get("locationId");
-
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -51,7 +49,7 @@ export const HomeScreen = React.memo(() => {
   const [loading, setLoading] = React.useState(true);
 
   const [rooms, setRooms] = React.useState();
-  const [room, setRoom] = React.useState();
+  let room = useSelector((state) => state.roomInfoState.value);
   const [roomEmpty, setRoomEmpty] = React.useState(0);
   const [roomUsed, setRoomUsed] = React.useState(0);
   const [maxFloor, setMaxFloor] = React.useState(0);
@@ -69,8 +67,8 @@ export const HomeScreen = React.memo(() => {
           let __roomUsed = 0;
           for (let index = 0; index < data.length; index++) {
             const element = data[index];
-            if (locationId) {
-              if (element.rogo_location_id === locationId) {
+            if (room) {
+              if (element.rogo_location_id == room?.rogo_location_id) {
                 roomTemp = element;
               }
             }
@@ -88,7 +86,7 @@ export const HomeScreen = React.memo(() => {
               __roomUsed++;
             }
           }
-          setRoom(roomTemp);
+          dispatch(setRoom(roomTemp));
           setMaxFloor(temp);
           setRooms(roomsMap);
           setRoomEmpty(__roomEmpty);
@@ -102,16 +100,9 @@ export const HomeScreen = React.memo(() => {
     if (user) {
       loadDataRoom();
       setLoading(false);
-      updateStatusRoom = new UpdateStatusRoom(
-        () => {
-          loadDataRoom();
-        },
-        (lId) => {
-          if (locationId === lId) {
-            window.location = `#/?floor=${floor}&locationId=${lId}`;
-          }
-        }
-      );
+      updateStatusRoom = new UpdateStatusRoom(() => {
+        loadDataRoom();
+      });
     }
   }, [floor, user]);
 
@@ -122,9 +113,9 @@ export const HomeScreen = React.memo(() => {
   return (
     <Container navActivate="home">
       <Dialog
-        open={room != null}
+        open={Boolean(room)}
         onClose={() => {
-          setRoom(null);
+          dispatch(clearRoom());
         }}
         maxWidth={"xl"}
         PaperComponent={Box}
@@ -132,7 +123,7 @@ export const HomeScreen = React.memo(() => {
         <RoomInfo
           room={room}
           onExit={() => {
-            setRoom(null);
+            dispatch(clearRoom());
           }}
         />
       </Dialog>
@@ -206,14 +197,14 @@ export const HomeScreen = React.memo(() => {
       {(() => {
         if (rooms?.get(floor)) {
           return (
-            <section className="py-[32px] grid 2xl:grid-cols-5 xl:grid-cols-4 grid-cols-3 gap-y-[38px] gap-x-8 place-content-between px-[38px] flex-1 box-border">
+            <section className="py-[32px] grid 2xl:grid-cols-4 grid-cols-3 gap-y-[38px] gap-x-8 place-content-between px-[38px] flex-1 box-border">
               {rooms?.get(floor)?.map((roomFor, index) => {
                 return (
                   <CardRoom
                     key={index}
                     room={roomFor}
                     onSelectedItem={() => {
-                      setRoom(roomFor);
+                      dispatch(setRoom(roomFor));
                     }}
                   />
                 );
@@ -232,4 +223,4 @@ export const HomeScreen = React.memo(() => {
       })()}
     </Container>
   );
-});
+};

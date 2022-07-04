@@ -8,7 +8,7 @@ export function CardRoom({ room, onSelectedItem }) {
       onClick={onSelectedItem}
     >
       <div className="flex flex-row justify-between">
-        <p className="text-[55.1515px] text-[#62718E] font-bold">
+        <p className="text-[55.1515px] text-[#62718E] font-bold p-0 mt-[-18px]">
           {room?.name}
         </p>
         <p

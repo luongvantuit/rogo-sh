@@ -55,13 +55,13 @@ export function RoomInfo({ room, resetQrCodeFunc, onExit }) {
                 <p className="text-[25.5385px] font-semibold text-[#C6C6C6] uppercase">
                   THÔNG TIN CHECK IN - CHECK OUT
                 </p>
-                <div className="w-[320px] h-[48px] my-[6px] rounded-md flex flex-row justify-between items-center px-[16px] border-2 border-[#C6C6C6]">
+                <div className="w-[320px] h-[68px] my-[6px] rounded-md flex flex-row justify-between items-center px-[16px] border-2 border-[#C6C6C6]">
                   <img src={IconTimeCheckIn} alt="" width={28} height={28} />
                   <p className="text-[20px] text-[#C6C6C6] text-center">{`${dateCheckIn.getHours()}:${dateCheckIn.getMinutes()} - ${dateCheckIn.getDate()}/${
                     dateCheckIn.getMonth() + 1
                   }/${dateCheckIn.getFullYear()}`}</p>
                 </div>
-                <div className="flex flex-row justify-start">
+                <div className="flex flex-row justify-start items-center">
                   {(() => {
                     if (edit) {
                       return (
@@ -111,7 +111,7 @@ export function RoomInfo({ room, resetQrCodeFunc, onExit }) {
                         >
                           <input
                             type="datetime-local"
-                            className="my-[16px] px-[16px] h-[48px] drop-shadow-md shadow-md border-2 border-[#FFC764] outline-none focus:ring-[2px] focus:ring-[#FBD083] focus:rounded-sm tracking-widest text-[#212529]"
+                            className="my-[16px] px-[16px] h-[68px] drop-shadow-md shadow-md border-2 border-[#FFC764] outline-none focus:ring-[2px] focus:ring-[#FBD083] focus:rounded-sm tracking-widest text-[#212529]"
                             onChange={(event) => {
                               setNewTimeCheckOut(event.target.value);
                             }}
@@ -127,7 +127,7 @@ export function RoomInfo({ room, resetQrCodeFunc, onExit }) {
                             }${dateCheckOut?.getMinutes()}`}
                           />
                           <button
-                            className="mx-[12px] drop-shadow-md shadow-md rounded-md h-[48px] px-[16px] bg-[#FFC764] duration-500 hover:opacity-90 text-[#212529]"
+                            className="mx-[12px] drop-shadow-md shadow-md rounded-md h-[68px] px-[24px] bg-[#FFC764] duration-500 hover:opacity-90 text-[#212529]"
                             type="submit"
                           >
                             CONFIRM
@@ -136,7 +136,7 @@ export function RoomInfo({ room, resetQrCodeFunc, onExit }) {
                             onClick={() => {
                               setEdit(false);
                             }}
-                            className="bg-[#212529] w-[48px] h-[48px] shadow-md rounded-md md:block hidden duration-500 drop-shadow-md hover:opacity-90"
+                            className="bg-[#212529] w-[68px] h-[68px] shadow-md rounded-md md:block hidden duration-500 drop-shadow-md hover:opacity-90 mr-[12px]"
                           >
                             <i className="fa-solid fa-x text-white"></i>
                           </button>
@@ -146,7 +146,7 @@ export function RoomInfo({ room, resetQrCodeFunc, onExit }) {
                       return (
                         <React.Fragment>
                           <div className="flex flex-row items-center">
-                            <div className="w-[320px] h-[48px] my-[6px] drop-shadow-md shadow-md rounded-md flex flex-row justify-between items-center px-[16px] bg-[#212529]">
+                            <div className="w-[320px] h-[68px] my-[6px] drop-shadow-md shadow-md rounded-md flex flex-row justify-between items-center px-[16px] bg-[#212529]">
                               <img
                                 src={IconTimeCheckOut}
                                 alt=""
@@ -158,7 +158,7 @@ export function RoomInfo({ room, resetQrCodeFunc, onExit }) {
                               }/${dateCheckOut.getFullYear()}`}</p>
                             </div>
                             <button
-                              className="mx-[12px] drop-shadow-md shadow-md rounded-md h-[48px] w-[48px] bg-[#212529] duration-500 hover:opacity-90"
+                              className="mx-[12px] drop-shadow-md shadow-md rounded-md h-[68px] w-[68px] bg-[#212529] duration-500 hover:opacity-90"
                               onClick={(e) => {
                                 setEdit(true);
                                 setNewTimeCheckOut(dateCheckOut.toISOString());
@@ -188,9 +188,40 @@ export function RoomInfo({ room, resetQrCodeFunc, onExit }) {
         </div>
       </div>
       <div className="w-[1310px] flex flex-row justify-end my-[16px]">
-        <button className="uppercase text-white rounded-md bg-[#E92A35] px-[16px] py-[8px] text-[24px] font-bold">
-          Check Out
-        </button>
+        {(() => {
+          if (room?.is_available) {
+            return (
+              <a
+                href={`#/checkin/${room.id}`}
+                className="uppercase text-white rounded-md px-[16px] py-[8px] text-[24px] font-bold bg-[#52FF27]"
+              >
+                CHECK IN
+              </a>
+            );
+          } else {
+            return (
+              <button
+                className="uppercase text-white rounded-md px-[16px] py-[8px] text-[24px] font-bold bg-[#E92A35]"
+                onClick={() => {
+                  const confirm = window.confirm(
+                    "Are you sure about this action?"
+                  );
+                  if (confirm) {
+                    auth.currentUser.getIdToken().then((token) => {
+                      BookingApi.checkOut(token, room?.id).then((response) => {
+                        if (response.ok) {
+                          window.location.reload();
+                        }
+                      });
+                    });
+                  }
+                }}
+              >
+                Check Out
+              </button>
+            );
+          }
+        })()}
       </div>
     </React.Fragment>
   );
