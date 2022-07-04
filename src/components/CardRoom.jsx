@@ -1,61 +1,43 @@
 import React from "react";
-import DoNotDisturbMode from "../assets/do-not-disturb-mode.svg";
+import IconDoNotDisturb from "../assets/icon-not-disturb.svg";
 
 export function CardRoom({ room, onSelectedItem }) {
   return (
-    <React.Fragment>
-      <div
-        className="w-[323px] h-[162px] rounded-[38.5668px] bg-white"
-        onClick={onSelectedItem}
-      >
-        <div className="flex flex-1 p-[16px] flex-col">
-          <p
-            className={(() => {
-              if (room?.is_available) {
-                return "text-[54px] font-bold text-green-500 tracking-[4px]";
-              }
-              return "text-[54px] font-bold text-red-500 tracking-[4px]";
-            })()}
-          >
-            {room?.name}
-          </p>
-          <p className="font-bold py-[8px] text-[18px] text-[#212529] tracking-[2px]">
-            {(() => {
-              if (room?.is_available) {
-                return "Available";
-              }
-              return "Busy";
-            })()}
-          </p>
-          {(() => {
-            if (
-              room?.is_available === false &&
-              room?.checkin_data?.length !== 0 &&
-              room.checkin_data[room?.checkin_data?.length - 1]?.not_disturb
-            ) {
-              const timeDoNotDisturb = new Date(
-                room?.checkin_data[
-                  room?.checkin_data?.length - 1
-                ]?.time_not_disturb
-              );
-              return (
-                <div className="flex flex-row items-center mb-[8px]">
-                  <img
-                    src={DoNotDisturbMode}
-                    alt=""
-                    className="w-[48px] h-[48px] mr-[6px]"
-                  />
-                  <p className="text-[#212529] text-[24px]">
-                    {`Not disturb to ${timeDoNotDisturb.toLocaleString()}`}
-                  </p>
-                </div>
-              );
-            }
-          })()}
-
-          <p className="text-[#212529]">{`${room?.price}$`}</p>
-        </div>
+    <div
+      className="h-[162px] rounded-[38.5668px] bg-white px-[32px] py-[22px] flex flex-col justify-between"
+      onClick={onSelectedItem}
+    >
+      <div className="flex flex-row justify-between">
+        <p className="text-[55.1515px] text-[#62718E] font-bold">
+          {room?.name}
+        </p>
+        <p
+          className={`w-[110px] h-[20px] text-[13px] text-center text-white rounded-[7px] ${
+            room?.is_available ? "bg-[#5EAA4A]" : "bg-[#E92A35]"
+          }`}
+        >
+          {room?.is_available ? "Đang trống" : "Đang sử dụng"}
+        </p>
       </div>
-    </React.Fragment>
+      <div className="flex flex-row justify-between items-center">
+        <div className="flex flex-row items-center">
+          <div className="flex flex-row justify-end items-center">
+            <p className="text-[#57C3FF] ml-2 font-semibold text-[27.1004px]">
+              1
+            </p>
+            <i className="fa-solid fa-users mx-[8px] text-[#57C3FF]"></i>
+          </div>
+        </div>
+        {(() => {
+          if (
+            room?.is_available === false &&
+            room?.checkin_data?.length !== 0 &&
+            room.checkin_data[room?.checkin_data?.length - 1]?.not_disturb
+          ) {
+            return <img src={IconDoNotDisturb} alt="" />;
+          }
+        })()}
+      </div>
+    </div>
   );
 }

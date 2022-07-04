@@ -50,7 +50,7 @@ export const SliderBar = React.memo(({ navActivate }) => {
         </div>
       </nav>
 
-      <span className="md:w-[240px] w-[80px] h-full top-[84px] left-0 bottom-0 bg-[#272B3F] transition"></span>
+      <span className="md:w-[240px] w-[80px] h-full mt-[84px] bg-[#272B3F] transition py-[8px]"></span>
     </React.Fragment>
   );
 });

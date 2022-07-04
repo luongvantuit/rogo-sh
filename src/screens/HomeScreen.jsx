@@ -206,27 +206,24 @@ export const HomeScreen = React.memo(() => {
       {(() => {
         if (rooms?.get(floor)) {
           return (
-            <section className="my-[32px]">
-              <div className="grid grid-cols-3 gap-y-[38px] place-items-center">
-                {rooms?.get(floor)?.map((roomFor, index) => {
-                  return (
-                    <React.Fragment key={index}>
-                      <CardRoom
-                        room={roomFor}
-                        onSelectedItem={() => {
-                          setRoom(roomFor);
-                        }}
-                      />
-                    </React.Fragment>
-                  );
-                })}
-              </div>
+            <section className="py-[32px] grid 2xl:grid-cols-5 xl:grid-cols-4 grid-cols-3 gap-y-[38px] gap-x-8 place-content-between px-[38px] flex-1 box-border">
+              {rooms?.get(floor)?.map((roomFor, index) => {
+                return (
+                  <CardRoom
+                    key={index}
+                    room={roomFor}
+                    onSelectedItem={() => {
+                      setRoom(roomFor);
+                    }}
+                  />
+                );
+              })}
             </section>
           );
         } else if (!loading) {
           return (
             <div className="w-full h-[504px] justify-center items-center flex">
-              <p className="text-[24px] tracking-[4px] text-white">
+              <p className="text-[24px] tracking-[4px] text-white uppercase">
                 {`NOT FOUND ROOM IN FLOOR ${floor}`}
               </p>
             </div>
