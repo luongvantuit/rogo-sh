@@ -6,12 +6,13 @@ import { Container } from "../components/Container.jsx";
 import { auth } from "../firebase/firebase-auth.js";
 import { RoomInfo } from "../components/RoomInfo.jsx";
 import { CardRoom } from "../components/CardRoom.jsx";
-import { Box, Dialog } from "@mui/material";
+import { Box, Button, Dialog, Menu, MenuItem } from "@mui/material";
 import PhongDangSuDung from "../assets/phong-dang-su-dung.png";
 import PhongDatTruoc from "../assets/phong-dat-truoc.png";
 import PhongTrong from "../assets/phong-trong.png";
 import { ContainerCounterRoom } from "../components/ContainerCounterRoom.jsx";
 import { LoadingRoomInfo } from "../components/LoadingRoomInfo.jsx";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 export class UpdateStatusRoom {
   hasChange;
@@ -37,6 +38,15 @@ export const HomeScreen = React.memo(() => {
   const [searchParams] = useSearchParams();
   const floor = parseInt(searchParams.get("floor") ?? "1");
   const locationId = searchParams.get("locationId");
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const [loading, setLoading] = React.useState(true);
 
@@ -126,7 +136,7 @@ export const HomeScreen = React.memo(() => {
           }}
         />
       </Dialog>
-      <div className="grid grid-cols-3 place-items-center w-full mt-[65px]">
+      <div className="flex flex-row justify-between mt-[65px] mx-[38px]">
         <ContainerCounterRoom
           text="Đang sử dụng"
           counter={roomUsed}
@@ -148,11 +158,56 @@ export const HomeScreen = React.memo(() => {
       </div>
       <LoadingRoomInfo loading={loading} />
 
+      <div className="flex flex-row justify-start mx-[38px] items-center mt-[73px]">
+        <p className="text-[#B9B9B9] text-[25.7112px] font-semibold mr-[31px]">
+          Chọn tầng
+        </p>
+        <Button
+          id="demo-positioned-button"
+          aria-controls={open ? "demo-positioned-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? "true" : undefined}
+          onClick={handleClick}
+          endIcon={<KeyboardArrowDownIcon />}
+        >
+          {`Tầng ${floor}`}
+        </Button>
+        <Menu
+          id="demo-positioned-menu"
+          aria-labelledby="demo-positioned-button"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+        >
+          {[...Array(maxFloor + 1).keys()].map((value) => {
+            if (value != 0) {
+              return (
+                <MenuItem
+                  key={value}
+                  onClick={() => {
+                    handleClose();
+                    window.location = `#/?floor=${value}`;
+                  }}
+                >{`Tầng ${value}`}</MenuItem>
+              );
+            }
+          })}
+        </Menu>
+      </div>
+
       {(() => {
         if (rooms?.get(floor)) {
           return (
             <section className="my-[32px]">
-              <div className="grid 2xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-y-[38px] place-items-center">
+              <div className="grid grid-cols-3 gap-y-[38px] place-items-center">
                 {rooms?.get(floor)?.map((roomFor, index) => {
                   return (
                     <React.Fragment key={index}>

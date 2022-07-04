@@ -1,4 +1,3 @@
-import { async } from "@firebase/util";
 import React from "react";
 import Logo from "../assets/logo.svg";
 import { AppContext } from "../contexts/AppContext.jsx";
@@ -8,7 +7,7 @@ export const Header = React.memo(() => {
   const user = React.useContext(AppContext);
 
   return (
-    <header className="flex flex-row h-[84px] px-[40px] sticky top-0 justify-between items-center bg-[#272B3F] z-5">
+    <header className="flex flex-row h-[84px] px-[40px] sticky top-0 justify-between items-center bg-[#272B3F] z-[10]">
       <div className="flex flex-row items-center">
         <img
           src={Logo}
