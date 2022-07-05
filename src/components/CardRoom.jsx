@@ -4,15 +4,15 @@ import IconDoNotDisturb from "../assets/icon-not-disturb.svg";
 export function CardRoom({ room, onSelectedItem }) {
   return (
     <div
-      className="h-[162px] rounded-[38.5668px] bg-white px-[32px] py-[22px] flex flex-col justify-between"
+      className="h-[162px] 2xl:rounded-[38.5668px] xl:rounded-[30px] rounded-[24px] bg-white 2xl:px-[32px] xl:px-[26px] px-[20px] 2xl:py-[22px] xl:py-[18px] py-[16px] flex flex-col justify-between"
       onClick={onSelectedItem}
     >
-      <div className="flex flex-row justify-between">
-        <p className="text-[55.1515px] text-[#62718E] font-bold p-0 mt-[-18px]">
+      <div className="flex 2xl:flex-row flex-col-reverse justify-between">
+        <p className="text-[46px] text-[#62718E] font-bold p-0 2xl:mt-[-18px] mt-[-6px]">
           {room?.name}
         </p>
         <p
-          className={`w-[110px] h-[20px] text-[13px] text-center text-white rounded-[7px] ${
+          className={`w-[110px] h-[20px]  2xl:text-[13px] text-[11px] text-center text-white rounded-[7px] leading-[20px]  ${
             room?.is_available ? "bg-[#5EAA4A]" : "bg-[#E92A35]"
           }`}
         >
@@ -21,10 +21,8 @@ export function CardRoom({ room, onSelectedItem }) {
       </div>
       <div className="flex flex-row justify-between items-center">
         <div className="flex flex-row items-center">
-          <div className="flex flex-row justify-end items-center">
-            <p className="text-[#57C3FF] ml-2 font-semibold text-[27.1004px]">
-              1
-            </p>
+          <div className="flex flex-row justify-end items-center 2xl:text-[27.1004px] xl:text-[23px] text-[20px]">
+            <p className="text-[#57C3FF] font-semibold">1</p>
             <i className="fa-solid fa-users mx-[8px] text-[#57C3FF]"></i>
           </div>
         </div>

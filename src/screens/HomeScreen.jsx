@@ -132,7 +132,7 @@ export const HomeScreen = () => {
           }}
         />
       </Dialog>
-      <div className="flex flex-row justify-between mt-[65px] mx-[38px]">
+      <div className="flex flex-row justify-between 2xl:pt-[48px] xl:pt-[40px] pt-[32px]  2xl:pb-[23px] xl:pb-[18px] pb-[14px] mx-[38px] bg-[#202125]">
         <ContainerCounterRoom
           text="Đang sử dụng"
           counter={roomUsed}
@@ -154,8 +154,8 @@ export const HomeScreen = () => {
       </div>
       <LoadingRoomInfo loading={loading} />
 
-      <div className="flex flex-row justify-start mx-[38px] items-center mt-[73px]">
-        <p className="text-[#B9B9B9] text-[25.7112px] font-semibold mr-[31px]">
+      <div className="flex flex-row justify-start mx-[38px] items-center 2xl:mt-[42px] xl:mt-[35px] mt-[30px]">
+        <p className="text-[#B9B9B9] 2xl:text-[25.7112px] xl:text-[21px] text-[17px] xl:font-semibold font-medium mr-[31px]">
           Chọn tầng
         </p>
         <Button
@@ -202,7 +202,7 @@ export const HomeScreen = () => {
       {(() => {
         if (rooms?.get(floor)) {
           return (
-            <section className="py-[32px] grid 2xl:grid-cols-4 grid-cols-3 gap-y-[38px] gap-x-8 place-content-between px-[38px] flex-1 box-border">
+            <section className="py-[32px] grid 2xl:grid-cols-4 grid-cols-3 gap-y-[38px] 2xl:gap-x-8 xl:gap-x-6 gap-x-4 place-content-between px-[38px] flex-1 box-border">
               {rooms?.get(floor)?.map((roomFor, index) => {
                 return (
                   <CardRoom
@@ -218,7 +218,7 @@ export const HomeScreen = () => {
           );
         } else if (!loading) {
           return (
-            <div className="w-full h-[504px] justify-center items-center flex">
+            <div className="w-full 2xl:h-[504px] xl:h-[420px] h-[360px] justify-center items-center flex">
               <p className="text-[24px] tracking-[4px] text-white uppercase">
                 {`NOT FOUND ROOM IN FLOOR ${floor}`}
               </p>

@@ -25,9 +25,9 @@ export function RoomInfo({ room, resetQrCodeFunc, onExit }) {
 
   return (
     <React.Fragment>
-      <div className="bg-[#344650] w-[1310px] p-[60px] pt-[30px] rounded-xl">
+      <div className="bg-[#344650] xl:w-[1080px] w-[960px] xl:p-[60px] p-[30px] xl:pt-[30px] pt-[15px] rounded-xl">
         <div className="flex justify-end">
-          <button onClick={onExit} className="my-4">
+          <button onClick={onExit} className="mb-4">
             <img src={OffDialog} alt="" />
           </button>
         </div>
@@ -218,7 +218,7 @@ export function RoomInfo({ room, resetQrCodeFunc, onExit }) {
           </button>
         </div>
       </div>
-      <div className="w-[1310px] flex flex-row justify-end my-[16px]">
+      <div className="xl:w-[1080px] w-[960px] flex flex-row justify-end my-[16px]">
         {(() => {
           if (room?.is_available) {
             return (
