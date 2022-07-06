@@ -132,7 +132,7 @@ export const HomeScreen = () => {
           }}
         />
       </Dialog>
-      <div className="flex flex-row justify-between 2xl:pt-[48px] xl:pt-[40px] pt-[32px]  2xl:pb-[23px] xl:pb-[18px] pb-[14px] mx-[38px] bg-[#202125]">
+      <div className="flex flex-row justify-between 2xl:pb-[23px] xl:pb-[18px] pb-[14px] mx-[38px] bg-[#202125]">
         <ContainerCounterRoom
           text="Đang sử dụng"
           counter={roomUsed}

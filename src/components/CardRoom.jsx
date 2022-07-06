@@ -4,7 +4,7 @@ import IconDoNotDisturb from "../assets/icon-not-disturb.svg";
 export function CardRoom({ room, onSelectedItem }) {
   return (
     <div
-      className="h-[162px] 2xl:rounded-[38.5668px] xl:rounded-[30px] rounded-[24px] bg-white 2xl:px-[32px] xl:px-[26px] px-[20px] 2xl:py-[22px] xl:py-[18px] py-[16px] flex flex-col justify-between"
+      className="2xl:h-[130px] h-[150px] 2xl:rounded-[38.5668px] xl:rounded-[30px] rounded-[24px] bg-white 2xl:px-[32px] xl:px-[26px] px-[20px] 2xl:py-[22px] xl:py-[18px] py-[16px] flex flex-col justify-between"
       onClick={onSelectedItem}
     >
       <div className="flex 2xl:flex-row flex-col-reverse justify-between">
