@@ -1,6 +1,6 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import React from "react";
-import { auth } from "../firebase/firebase-auth";
+import { auth } from "../firebase/FirebaseAuth";
 import Logo from "../assets/logo.svg";
 import Google from "../assets/google.svg";
 import Apple from "../assets/apple.svg";

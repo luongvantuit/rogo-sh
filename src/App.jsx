@@ -1,12 +1,12 @@
 import React from "react";
 import { AppRouter } from "./routes/AppRouter.jsx";
 import pahoMqtt from "paho-mqtt";
-import { AppContextComponent } from "./contexts/AppContext.jsx";
+import { AppContextComponent } from "./manager/contexts/AppContext.jsx";
 import { Provider } from "react-redux";
-import { auth } from "./firebase/firebase-auth.js";
-import { RoomApi } from "./api/room-api.js";
+import { auth } from "./firebase/FirebaseAuth.js";
+import { RoomApi } from "./networks/api/room-api.js";
 import { updateStatusRoom } from "./screens/HomeScreen.jsx";
-import { roomInfoStore } from "./stores/room-info-store.js";
+import { roomInfoStore } from "./manager/stores/RoomInfoStore.js";
 
 class Mqtt {
   onMessage;

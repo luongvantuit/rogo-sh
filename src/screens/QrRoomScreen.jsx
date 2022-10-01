@@ -1,10 +1,10 @@
 import React from "react";
 import BreadcrumbBg from "../assets/breadcrumb-bg.jpg";
 import { useParams, useSearchParams } from "react-router-dom";
-import { RoomApi } from "../api/room-api.js";
+import { RoomApi } from "../networks/api/room-api.js";
 import QRCode from "react-qr-code";
-import { AppContext } from "../contexts/AppContext.jsx";
-import { auth } from "../firebase/firebase-auth";
+import { AppContext } from "../manager/contexts/AppContext.jsx";
+import { auth } from "../firebase/FirebaseAuth";
 
 export const QrRoomScreen = React.memo(() => {
   const { roomId } = useParams();

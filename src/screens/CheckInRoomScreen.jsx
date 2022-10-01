@@ -1,10 +1,10 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { RoomApi } from "../api/room-api.js";
+import { RoomApi } from "../networks/api/room-api.js";
 // import { HeaderNav } from "../components/HeaderNav.jsx";
-import { BookingApi } from "../api/booking-api.js";
-import { AppContext } from "../contexts/AppContext.jsx";
-import { auth } from "../firebase/firebase-auth.js";
+import { BookingApi } from "../networks/api/booking-api.js";
+import { AppContext } from "../manager/contexts/AppContext.jsx";
+import { auth } from "../firebase/FirebaseAuth.js";
 
 export const CheckInRoomScreen = React.memo(() => {
   const { roomId } = useParams();

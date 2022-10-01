@@ -1,7 +1,7 @@
 import React from "react";
-import { auth } from "../firebase/firebase-auth";
+import { auth } from "../../firebase/FirebaseAuth";
 import { User } from "firebase/auth";
-import Logo from "../assets/logo.svg";
+import Logo from "../../assets/logo.svg";
 
 class FbAuthentication {
   /**

@@ -1,6 +1,6 @@
 import React from "react";
-import { BookingApi } from "../api/booking-api.js";
-import { auth } from "../firebase/firebase-auth.js";
+import { BookingApi } from "../networks/api/booking-api.js";
+import { auth } from "../firebase/FirebaseAuth.js";
 import ListDevice from "./ListDevice.jsx";
 import OffDialog from "../assets/off-dialog-room-info.svg";
 import { TimeNotDisturbRoomInfo } from "./TimeNotDisturbRoomInfo.jsx";

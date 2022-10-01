@@ -33,6 +33,7 @@ export class BookingApi {
         });
     }
 
+
     // static async getDetailBooking(roomId) {
     //     return fetchApi({
     //         path: `/booking/get/626d51b5f78be771c6812dae/${roomId}`,

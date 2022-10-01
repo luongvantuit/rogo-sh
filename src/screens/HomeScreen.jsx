@@ -1,9 +1,9 @@
 import React from "react";
-import { RoomApi } from "../api/room-api.js";
+import { RoomApi } from "../networks/api/room-api.js";
 import { useSearchParams } from "react-router-dom";
-import { AppContext } from "../contexts/AppContext.jsx";
+import { AppContext } from "../manager/contexts/AppContext.jsx";
 import { Container } from "../components/Container.jsx";
-import { auth } from "../firebase/firebase-auth.js";
+import { auth } from "../firebase/FirebaseAuth.js";
 import { RoomInfo } from "../components/RoomInfo.jsx";
 import { CardRoom } from "../components/CardRoom.jsx";
 import { Box, Button, Dialog, Menu, MenuItem } from "@mui/material";
@@ -18,7 +18,7 @@ import {
   clearRoom,
   roomInfoStack,
   setRoom,
-} from "../slices/room-info-slice.js";
+} from "../manager/slices/RoomInfoSlice.js";
 
 export class UpdateStatusRoom {
   hasChange;

@@ -1,7 +1,7 @@
 import React from "react";
 import Logo from "../assets/logo.svg";
-import { AppContext } from "../contexts/AppContext.jsx";
-import { auth } from "../firebase/firebase-auth";
+import { AppContext } from "../manager/contexts/AppContext.jsx";
+import { auth } from "../firebase/FirebaseAuth";
 
 export const Header = React.memo(() => {
   const user = React.useContext(AppContext);
