@@ -18,13 +18,13 @@ export const QrRoomScreen = React.memo(() => {
       auth.currentUser.getIdToken().then((token) => {
         RoomApi.getDetailRoom(token, roomId).then(async (response) => {
           if (response.ok) {
-            const data = (await response.json())["data"];
+            const data = await response.json();
             setRoom(data);
           }
         });
       });
     }
-  }, [room?.is_available, roomId, user]);
+  }, [room?.isAvailable, roomId, user]);
 
   React.useEffect(() => {
     if (room) {
@@ -45,7 +45,7 @@ export const QrRoomScreen = React.memo(() => {
         </p>
 
         {(() => {
-          if (room?.is_available) {
+          if (room?.isAvailable) {
             return (
               <a
                 href={`#/book/${roomId}`}
@@ -62,14 +62,14 @@ export const QrRoomScreen = React.memo(() => {
       </section>
       <section
         className={(() => {
-          if (room?.is_available) {
+          if (room?.isAvailable) {
             return "mx-[320px] flex flex-col items-center my-[32px]";
           }
           return "mx-[320px] flex flex-col items-center mt-[-80px] mb-[32px] ";
         })()}
       >
         {(() => {
-          if (!room?.is_available) {
+          if (!room?.isAvailable) {
             return (
               <React.Fragment>
                 <div className="w-[300px] h-[300px] flex justify-center items-center bg-white shadow-lg">

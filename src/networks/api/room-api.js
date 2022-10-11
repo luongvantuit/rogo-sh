@@ -2,38 +2,47 @@ import { fetchApi } from "./base.js";
 
 export class RoomApi {
 
-
-
-    static async getDetailRoom(token, roomId, key = 'default') {
+    /**
+     * 
+     * @param {string} token 
+     * @param {string} roomId 
+     * @returns 
+     */
+    static async getDetailRoom(token, roomId) {
         return await fetchApi({
-            path: `/room/get_detail/${roomId}?key=${key}`,
+            path: `/room/get/${roomId}`,
             headers: {
                 'Authorization': 'Bearer ' + token
             }
         });
     }
-
-    static async getFilterRoom(token, filter, key = 'default') {
+    /**
+     * 
+     * @param {string} token 
+     * @param {any} filter 
+     * @returns 
+     */
+    static async getFilterRoom(token, filter) {
         return await fetchApi({
-            path: `/room/filter?key=${key}`,
+            path: `/room/filter`,
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
             },
             body: JSON.stringify(filter),
-            method: 'POST'
+            method: 'POST',
         });
     }
 
-    static async getRoomWithCheckInData(token, filter, key = 'default') {
+    static async getRoomWithCheckInData(token, filter) {
+        console.log(token);
         return await fetchApi({
-            path: `/room/checkin_data?key=${key}`,
+            path: "/room/getWithCheckinData",
             headers: {
+                "Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
             },
-            body: JSON.stringify(filter),
-            method: 'POST'
+            method: 'POST',
         });
     }
 

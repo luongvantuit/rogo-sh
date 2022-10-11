@@ -43,12 +43,12 @@ export function RoomInfo({ room, resetQrCodeFunc, onExit }) {
         </div>
 
         {(() => {
-          if (!room?.is_available) {
+          if (!room?.isAvailable) {
             const dateCheckIn = new Date(
-              room?.checkin_data[room?.checkin_data.length - 1]?.checkin
+              room?.checkinData[room?.checkinData.length - 1]?.checkIn
             );
             const dateCheckOut = new Date(
-              room?.checkin_data[room?.checkin_data.length - 1]?.checkout
+              room?.checkinData[room?.checkinData.length - 1]?.checkOut
             );
             return (
               <React.Fragment>
@@ -79,31 +79,17 @@ export function RoomInfo({ room, resetQrCodeFunc, onExit }) {
                               setEdit(false);
                               if (confirm) {
                                 auth.currentUser.getIdToken().then((token) => {
-                                  BookingApi.checkOut(token, room?.id).then(
-                                    (response) => {
-                                      if (response.ok) {
-                                        BookingApi.checkIn(
-                                          token,
-                                          room?.id,
-                                          dateCheckIn.toISOString(),
-                                          new Date(
-                                            newTimeCheckOut
-                                          ).toISOString()
-                                        ).then(async (responseCheckIn) => {
-                                          if (response.ok) {
-                                            const code = (
-                                              await responseCheckIn.json()
-                                            )["code"];
-                                            window.location = `#/qrcode/${room?.id}?code=${code}`;
-                                          }
-                                        });
-                                      } else {
-                                        window.alert(
-                                          `Error! ${response.status}`
-                                        );
-                                      }
+                                  BookingApi.updateCheckOutTime(
+                                    token,
+                                    room?.checkinData[room?.checkinData.length - 1]?.uuid,
+                                    new Date(newTimeCheckOut)
+                                  ).then(async (response) => {
+                                    if (response.ok) {
+                                      window.location.reload();
+                                    } else {
+                                      window.alert(`Error! ${response.status}`);
                                     }
-                                  );
+                                  });
                                 });
                               }
                             }
@@ -184,34 +170,34 @@ export function RoomInfo({ room, resetQrCodeFunc, onExit }) {
         <div className="flex justify-end">
           <button
             onClick={(e) => {
-              const dateCheckIn = new Date(
-                room?.checkin_data[room?.checkin_data.length - 1]?.checkin
-              );
-              const dateCheckOut = new Date(
-                room?.checkin_data[room?.checkin_data.length - 1]?.checkout
-              );
-              const confirm = window.confirm("Are you sure about this action?");
-              if (confirm) {
-                auth.currentUser.getIdToken().then((token) => {
-                  BookingApi.checkOut(token, room?.id).then((response) => {
-                    if (response.ok) {
-                      BookingApi.checkIn(
-                        token,
-                        room?.id,
-                        dateCheckIn.toISOString(),
-                        dateCheckOut.toISOString()
-                      ).then(async (responseCheckIn) => {
-                        if (response.ok) {
-                          const code = (await responseCheckIn.json())["code"];
-                          window.location = `#/qrcode/${room?.id}?code=${code}`;
-                        }
-                      });
-                    } else {
-                      window.alert(`Error! ${response.status}`);
-                    }
-                  });
-                });
-              }
+              // const dateCheckIn = new Date(
+              //   room?.checkinData[room?.checkinData.length - 1]?.checkIn
+              // );
+              // const dateCheckOut = new Date(
+              //   room?.checkinData[room?.checkinData.length - 1]?.checkOut
+              // );
+              // const confirm = window.confirm("Are you sure about this action?");
+              // if (confirm) {
+              //   auth.currentUser.getIdToken().then((token) => {
+              //     BookingApi.checkOut(token, room?.id).then((response) => {
+              //       if (response.ok) {
+              //         BookingApi.checkIn(
+              //           token,
+              //           room?.id,
+              //           dateCheckIn.toISOString(),
+              //           dateCheckOut.toISOString()
+              //         ).then(async (responseCheckIn) => {
+              //           if (response.ok) {
+              //             const code = (await responseCheckIn.json())["code"];
+              //             window.location = `#/qrcode/${room?.id}?code=${code}`;
+              //           }
+              //         });
+              //       } else {
+              //         window.alert(`Error! ${response.status}`);
+              //       }
+              //     });
+              //   });
+              // }
             }}
           >
             <img src={IconQr} width={54} height={54} alt="" />
@@ -220,10 +206,10 @@ export function RoomInfo({ room, resetQrCodeFunc, onExit }) {
       </div>
       <div className="xl:w-[1080px] w-[960px] flex flex-row justify-end my-[16px]">
         {(() => {
-          if (room?.is_available) {
+          if (room?.isAvailable) {
             return (
               <a
-                href={`#/checkin/${room.id}`}
+                href={`#/checkin/${room.uuid}`}
                 className="uppercase text-white rounded-md px-[16px] py-[8px] text-[24px] font-bold bg-[#52FF27]"
               >
                 CHECK IN
@@ -239,11 +225,13 @@ export function RoomInfo({ room, resetQrCodeFunc, onExit }) {
                   );
                   if (confirm) {
                     auth.currentUser.getIdToken().then((token) => {
-                      BookingApi.checkOut(token, room?.id).then((response) => {
-                        if (response.ok) {
-                          window.location.reload();
+                      BookingApi.checkOut(token, room?.uuid).then(
+                        (response) => {
+                          if (response.ok) {
+                            window.location.reload();
+                          }
                         }
-                      });
+                      );
                     });
                   }
                 }}

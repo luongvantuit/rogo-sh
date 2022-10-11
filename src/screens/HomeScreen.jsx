@@ -73,19 +73,19 @@ export const HomeScreen = () => {
           for (let index = 0; index < data.length; index++) {
             const element = data[index];
             if (roomInfoStack) {
-              if (element.rogo_location_id == roomInfoStack?.rogo_location_id) {
+              if (element.rogoLocationId == roomInfoStack?.rogoLocationId) {
                 roomTemp = element;
               }
             }
-            if (element?.floor > temp) {
-              temp = element?.floor;
+            if (element?.atFloor > temp) {
+              temp = element?.atFloor;
             }
-            if (roomsMap.get(element?.floor)) {
-              roomsMap.get(element?.floor).push(element);
+            if (roomsMap.get(element?.atFloor)) {
+              roomsMap.get(element?.atFloor).push(element);
             } else {
-              roomsMap.set(element?.floor, [element]);
+              roomsMap.set(element?.atFloor, [element]);
             }
-            if (element?.is_available) {
+            if (element?.isAvailable) {
               __roomEmpty++;
             } else {
               __roomUsed++;
@@ -141,7 +141,7 @@ export const HomeScreen = () => {
         />
         <ContainerCounterRoom
           text="Đặt trước"
-          counter={1}
+          counter={0}
           fill="bg-[#F09819]"
           backgroundImage={PhongDatTruoc}
         />

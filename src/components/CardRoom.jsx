@@ -13,10 +13,10 @@ export function CardRoom({ room, onSelectedItem }) {
         </p>
         <p
           className={`w-[110px] h-[20px]  2xl:text-[13px] text-[11px] text-center text-white rounded-[7px] leading-[20px]  ${
-            room?.is_available ? "bg-[#5EAA4A]" : "bg-[#E92A35]"
+            room?.isAvailable ? "bg-[#5EAA4A]" : "bg-[#E92A35]"
           }`}
         >
-          {room?.is_available ? "Đang trống" : "Đang sử dụng"}
+          {room?.isAvailable ? "Đang trống" : "Đang sử dụng"}
         </p>
       </div>
       <div className="flex flex-row justify-between items-center">
@@ -28,9 +28,9 @@ export function CardRoom({ room, onSelectedItem }) {
         </div>
         {(() => {
           if (
-            room?.is_available === false &&
-            room?.checkin_data?.length !== 0 &&
-            room.checkin_data[room?.checkin_data?.length - 1]?.not_disturb
+            room?.isAvailable === false &&
+            room?.checkinData?.length !== 0 &&
+            room.checkinData[room?.checkinData?.length - 1]?.notDisturb
           ) {
             return <img src={IconDoNotDisturb} alt="" />;
           }

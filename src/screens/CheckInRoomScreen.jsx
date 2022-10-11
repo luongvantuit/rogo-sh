@@ -36,7 +36,7 @@ export const CheckInRoomScreen = React.memo(() => {
       auth.currentUser.getIdToken().then((token) => {
         RoomApi.getDetailRoom(token, roomId).then(async (response) => {
           if (response.ok) {
-            const data = (await response.json())["data"];
+            const data = await response.json();
             setRoom(data);
           }
         });
@@ -61,13 +61,14 @@ export const CheckInRoomScreen = React.memo(() => {
               auth.currentUser.getIdToken().then((token) => {
                 BookingApi.checkIn(
                   token,
-                  room?._id,
+                  room?.uuid,
                   new Date(timeCheckIn).toISOString(),
-                  new Date(timeCheckOut).toISOString()
+                  new Date(timeCheckOut).toISOString(),
+                  person
                 ).then(async (response) => {
                   if (response.ok) {
                     const data = await response.json();
-                    window.location = `#/qrcode/${roomId}?code=${data["code"]}`;
+                    window.location = `#/qrcode/${roomId}?code=${data.code}`;
                   }
                 });
               });

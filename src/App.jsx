@@ -34,7 +34,7 @@ const clientId = (() => {
 })();
 
 const { mqttBrokerHost, mqttBrokerPort, mqttBrokerPath } = (() => {
-  const mqttBrokerHost = "hotel.rogo.com.vn";
+  const mqttBrokerHost = "hotelv2.rogo.com.vn";
   const mqttBrokerPort = 8083;
   const mqttBrokerPath = "/mqtt";
   return {
